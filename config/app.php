@@ -170,6 +170,7 @@ return [
         App\Providers\RouteServiceProvider::class,
         App\Providers\RepositoryServiceProvider::class,
         App\Providers\N11ServiceProvider::class,
+        Mavinoo\Batch\BatchServiceProvider::class,
     ])->toArray(),
 
     /*
@@ -185,6 +186,7 @@ return [
 
     'aliases' => Facade::defaultAliases()->merge([
         // 'Example' => App\Facades\Example::class,
+        'Batch' => Mavinoo\Batch\BatchFacade::class,
     ])->toArray(),
 
 ];

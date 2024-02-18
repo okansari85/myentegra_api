@@ -8,4 +8,17 @@ use Illuminate\Database\Eloquent\Model;
 class Products extends Model
 {
     use HasFactory;
+
+    protected $table = 'products';
+
+    protected $fillable = [
+        'productCode',
+        'price',
+        'desi',
+        'stock'
+    ];
+
+    protected $casts = [
+        'price' => 'decimal:2'
+    ];
 }

@@ -6,6 +6,9 @@ use Illuminate\Support\Facades\Route;
 use App\Models\User;
 use App\Http\Resources\UserResource;
 
+use App\Http\Controllers\ProductController;
+use App\Http\Controllers\ProductCategoryController;
+
 /*
 |--------------------------------------------------------------------------
 | API Routes
@@ -23,3 +26,11 @@ Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
     return response()->json(new UserResource(User::findOrFail($user->id)));
 });
 
+
+Route::group(['middleware' => ['auth:sanctum']], function () {
+    Route::apiResource('products',ProductController::class);
+
+});
+
+Route::resource('product_categories', ProductCategoryController::class)->shallow();
+Route::post('addCategory', [ProductCategoryController::class, 'addCategory']);
