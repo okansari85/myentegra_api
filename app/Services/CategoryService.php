@@ -45,7 +45,7 @@ class CategoryService implements ICategory
     public function getRelatedCategories($id,$search=null,$per_page=null){
 
         $nestedCategories = [];
-        $category = ProductCategory::with('parent')->find($id);
+        $category = ProductCategory::with('parent','children')->find($id);
 
         if (!$category) {
             return [];
@@ -79,6 +79,7 @@ class CategoryService implements ICategory
     public function addCategory($category_name,$parent_id){
         $category = new ProductCategory();
         $category->name = $category_name;
+        $category->parent_id = $parent_id;
         $category_order= ProductCategory::where('parent_id', (int)$parent_id)->max('order');
         $category_order++;
         $category->order=$category_order;
