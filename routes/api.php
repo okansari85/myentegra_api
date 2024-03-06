@@ -8,6 +8,7 @@ use App\Http\Resources\UserResource;
 
 use App\Http\Controllers\ProductController;
 use App\Http\Controllers\ProductCategoryController;
+use App\Http\Controllers\CargoController;
 
 /*
 |--------------------------------------------------------------------------
@@ -28,9 +29,13 @@ Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
 
 
 Route::group(['middleware' => ['auth:sanctum']], function () {
-    Route::apiResource('products',ProductController::class);
+
 
 });
 
 Route::resource('product_categories', ProductCategoryController::class)->shallow();
 Route::post('addCategory', [ProductCategoryController::class, 'addCategory']);
+Route::apiResource('products',ProductController::class);
+Route::post('addProductCoverImage', [ProductController::class, 'addProductCoverImage']);
+Route::get('getCargoPriceFromN11', [CargoController::class, 'getCargoPriceFromN11']);
+Route::post('importHbCargoPricesFromFile', [CargoController::class, 'importHbCargoPricesFromFile']);

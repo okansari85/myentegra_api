@@ -15,10 +15,29 @@ class Products extends Model
         'productCode',
         'price',
         'desi',
-        'stock'
+        'stock',
+        'category_id'
     ];
 
     protected $casts = [
         'price' => 'decimal:2'
     ];
+
+    public function images()
+    {
+        return $this->hasMany(ProductImages::class, 'product_id');
+    }
+
+    public function coverImage()
+    {
+        return $this->hasOne(ProductImages::class,'product_id')
+            ->ofMany('cover', 'max')
+            ->withDefault();
+    }
+
+    public function category()
+    {
+        return $this->belongsTo(ProductCategory::class);
+    }
+
 }

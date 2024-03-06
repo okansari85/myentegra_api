@@ -11,6 +11,10 @@ use App\Services\ProductService;
 use App\Interfaces\ICategory;
 use App\Services\CategoryService;
 
+use App\Interfaces\ICargo;
+use App\Services\CargoService;
+
+
 class AppServiceProvider extends ServiceProvider
 {
     /**
@@ -21,6 +25,7 @@ class AppServiceProvider extends ServiceProvider
         //
         $this->app->bind(IProducts::class, ProductService::class);
         $this->app->bind(ICategory::class, CategoryService::class);
+        $this->app->bind(ICargo::class, CargoService::class);
     }
 
     /**

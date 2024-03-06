@@ -11,13 +11,15 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('product_images', function (Blueprint $table) {
+        Schema::create('hb_cargo_prices', function (Blueprint $table) {
             $table->id();
+            $table->string('desi');
+            $table->float("aras_price",10,2);
+            $table->float("mng_price",10,2);
+            $table->float("yk_price",10,2);
+            $table->float("surat_price",10,2);
+            $table->float("ptt_price",10,2);
             $table->timestamps();
-            $table->foreignId('product_id')->constrained('products');
-            $table->boolean('cover')->default(false);
-            $table->integer('order')->default(0);
-            $table->string('url');
         });
     }
 
@@ -26,6 +28,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('product_images');
+        Schema::dropIfExists('hb_cargo_prices');
     }
 };

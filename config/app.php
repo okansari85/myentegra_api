@@ -171,6 +171,7 @@ return [
         App\Providers\RepositoryServiceProvider::class,
         App\Providers\N11ServiceProvider::class,
         Mavinoo\Batch\BatchServiceProvider::class,
+        Maatwebsite\Excel\ExcelServiceProvider::class,
     ])->toArray(),
 
     /*
@@ -187,6 +188,7 @@ return [
     'aliases' => Facade::defaultAliases()->merge([
         // 'Example' => App\Facades\Example::class,
         'Batch' => Mavinoo\Batch\BatchFacade::class,
+        'Excel' => Maatwebsite\Excel\Facades\Excel::class,
     ])->toArray(),
 
 ];

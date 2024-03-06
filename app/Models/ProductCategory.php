@@ -22,4 +22,11 @@ class ProductCategory extends Model
     public function parent() {
         return $this->belongsTo(ProductCategory::class, 'parent_id');
     }
+
+    public function descendants()
+    {
+        return $this->parent()->with('descendants');
+    }
+
+
 }

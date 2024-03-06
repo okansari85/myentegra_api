@@ -11,13 +11,11 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('product_images', function (Blueprint $table) {
+        Schema::create('n11_cargo_prices', function (Blueprint $table) {
             $table->id();
+            $table->string('desi');
+            $table->float("yk_price",10,2);
             $table->timestamps();
-            $table->foreignId('product_id')->constrained('products');
-            $table->boolean('cover')->default(false);
-            $table->integer('order')->default(0);
-            $table->string('url');
         });
     }
 
@@ -26,6 +24,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('product_images');
+        Schema::dropIfExists('n11_cargo_prices');
     }
 };
