@@ -48,11 +48,21 @@ class CargoService implements ICargo
 
                 if ($tr->getElementsByTagName('td')->length) {
                     $desi = ($tr->getElementsByTagName('td')->item(0)->nodeValue) == "Dosya" ? 0 : $tr->getElementsByTagName('td')->item(0)->nodeValue;
-                    $fiyat = str_replace(",",".",$tr->getElementsByTagName('td')->item(4)->nodeValue);
+                    $yk_fiyat = str_replace(",",".",$tr->getElementsByTagName('td')->item(4)->nodeValue);
+                    $aras_price = str_replace(",",".",$tr->getElementsByTagName('td')->item(1)->nodeValue);
+                    $ptt_price = str_replace(",",".",$tr->getElementsByTagName('td')->item(2)->nodeValue);
+                    $mng_price = str_replace(",",".",$tr->getElementsByTagName('td')->item(3)->nodeValue);
+                    $surat_price = str_replace(",",".",$tr->getElementsByTagName('td')->item(5)->nodeValue);
+                    $sendeo_price = str_replace(",",".",$tr->getElementsByTagName('td')->item(6)->nodeValue);
 
                     $data[] = [
                         'desi' => $desi,
-                        'yk_price' => number_format((float)$fiyat, 2, '.', ''),
+                        'yk_price' => number_format((float)$yk_fiyat, 2, '.', ''),
+                        'aras_price' => number_format((float)$aras_price, 2, '.', ''),
+                        'ptt_price' => number_format((float)$ptt_price, 2, '.', ''),
+                        'mng_price' => number_format((float)$mng_price, 2, '.', ''),
+                        'surat_price' => number_format((float)$surat_price, 2, '.', ''),
+                        'sendeo_price' => number_format((float)$sendeo_price, 2, '.', ''),
                         'created_at' => $timestamp,
                         'updated_at' => $timestamp,
                     ];
