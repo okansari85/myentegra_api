@@ -49,7 +49,8 @@ class CategoryCommisionService implements ICategoryCommision
                 $trs = $tables->getElementsByTagName('tr');
                 $data = [];
 
-                //sql den al
+                //sql den al kategorileri arraya at
+
 
 
 
