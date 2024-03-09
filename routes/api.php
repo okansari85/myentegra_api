@@ -9,6 +9,7 @@ use App\Http\Resources\UserResource;
 use App\Http\Controllers\ProductController;
 use App\Http\Controllers\ProductCategoryController;
 use App\Http\Controllers\CargoController;
+use App\Http\Controllers\CategoryComissionController;
 
 /*
 |--------------------------------------------------------------------------
@@ -39,3 +40,4 @@ Route::apiResource('products',ProductController::class);
 Route::post('addProductCoverImage', [ProductController::class, 'addProductCoverImage']);
 Route::get('getCargoPriceFromN11', [CargoController::class, 'getCargoPriceFromN11']);
 Route::post('importHbCargoPricesFromFile', [CargoController::class, 'importHbCargoPricesFromFile']);
+Route::get('getN11CategoryCommisions', [CategoryComissionController::class, 'getN11CategoryCommisions']);
