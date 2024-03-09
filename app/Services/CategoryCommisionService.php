@@ -8,6 +8,9 @@ use GuzzleHttp\Client;
 use DOMDocument;
 use Carbon\Carbon;
 use App\Models\N11CategoryCommission;
+use Illuminate\Support\Facades\Storage;
+
+
 
 class CategoryCommisionService implements ICategoryCommision
 {
@@ -46,6 +49,10 @@ class CategoryCommisionService implements ICategoryCommision
                 $trs = $tables->getElementsByTagName('tr');
                 $data = [];
 
+                //sql den al
+
+
+
                 foreach($trs as $tr){
 
                     if ($tr->getElementsByTagName('td')->length){
@@ -72,8 +79,6 @@ class CategoryCommisionService implements ICategoryCommision
                 return response()->json(['status' => 'error', 'message' => $e->getMessage()]);
             }
 
-
-
         }
 
         public function createCategoryNode($cat4,$cat3,$cat2,$cat1){
@@ -90,4 +95,6 @@ class CategoryCommisionService implements ICategoryCommision
             }
             return $combined;
         }
+
+
 }
