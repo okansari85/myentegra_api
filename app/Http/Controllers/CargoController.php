@@ -29,6 +29,11 @@ class CargoController extends Controller
         return $this->cargoservice->importHbCargoPricesFromFile(request()->file('file'));
     }
 
+    public function getN11CargoPrices(){
+
+        return $this->cargoservice->getN11CargoPrices();
+    }
+
 
     /**
      * Display a listing of the resource.

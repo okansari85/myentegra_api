@@ -15,6 +15,12 @@ use Maatwebsite\Excel\Facades\Excel;
 
 class CargoService implements ICargo
 {
+    public function getN11CargoPrices(){
+
+        $n11CargoPrices = N11CargoPrices::all();
+        return response()->json($n11CargoPrices,200);
+
+    }
 
     public function getCargoPricesFromN11(){
 
