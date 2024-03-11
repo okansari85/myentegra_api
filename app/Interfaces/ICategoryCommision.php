@@ -8,6 +8,6 @@ interface ICategoryCommision
 
     public function getN11CategoryCommisions();
     public function createCategoryNode($cat4,$cat3,$cat2,$cat1);
-    public function findN11CategoryId();
+    //public function findN11CategoryId();
 
 }

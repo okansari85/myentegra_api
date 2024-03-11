@@ -81,7 +81,7 @@ class CategoryCommisionService implements ICategoryCommision
             }
 
         }
-
+        
         public function createCategoryNode($cat4,$cat3,$cat2,$cat1){
 
             $combined = $cat4;
