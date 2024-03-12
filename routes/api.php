@@ -34,11 +34,17 @@ Route::group(['middleware' => ['auth:sanctum']], function () {
 
 });
 
-Route::resource('product_categories', ProductCategoryController::class)->shallow();
-Route::post('addCategory', [ProductCategoryController::class, 'addCategory']);
 Route::apiResource('products',ProductController::class);
+Route::post('addCategory', [ProductCategoryController::class, 'addCategory']);
+
+Route::resource('product_categories', ProductCategoryController::class)->shallow();
 Route::post('addProductCoverImage', [ProductController::class, 'addProductCoverImage']);
-Route::get('getCargoPriceFromN11', [CargoController::class, 'getCargoPriceFromN11']);
+
 Route::post('importHbCargoPricesFromFile', [CargoController::class, 'importHbCargoPricesFromFile']);
-Route::get('getN11CategoryCommisions', [CategoryComissionController::class, 'getN11CategoryCommisions']);
 Route::get('getN11CargoPrices', [CargoController::class, 'getN11CargoPrices']);
+Route::get('getCargoPriceFromN11', [CargoController::class, 'getCargoPriceFromN11']);
+
+Route::get('getN11CategoryCommisionsFromN11', [CategoryComissionController::class, 'getN11CategoryCommisionsFromN11']);
+Route::get('getN11CommissionRates', [CategoryComissionController::class, 'getN11CommissionRates']);
+
+

@@ -12,13 +12,12 @@ class N11CategoryCommission extends Model
     protected $table = 'n11_category_commision';
 
     protected $fillable = [
-        'cat4',
-        'cat3',
-        'cat2',
-        'cat1',
+        'category_name',
         'komsiyon_orani',
         'pazarlama_hizmet_orani',
         'pazaryeri_hizmet_orani',
         'n11_category_id',
     ];
+
+    
 }

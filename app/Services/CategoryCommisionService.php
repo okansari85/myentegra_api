@@ -14,7 +14,9 @@ use Illuminate\Support\Facades\Storage;
 
 class CategoryCommisionService implements ICategoryCommision
 {
-        public function getN11CategoryCommisions(){
+
+
+        public function getN11CategoryCommisionsFromN11(){
 
             $client = new Client([
                 'headers' => [
@@ -50,10 +52,6 @@ class CategoryCommisionService implements ICategoryCommision
                 $data = [];
 
                 //sql den al kategorileri arraya at
-
-
-
-
                 foreach($trs as $tr){
 
                     if ($tr->getElementsByTagName('td')->length){
@@ -64,22 +62,60 @@ class CategoryCommisionService implements ICategoryCommision
 
                         //kategori node oluştur
                         $combined = $this->createCategoryNode($cat4,$cat3,$cat2,$cat1);
+                        $komsiyon_orani = $tr->getElementsByTagName('td')->item(4)->nodeValue;
+                        $pazarlama_hizmet_orani = $this->format_and_add_kdv($tr->getElementsByTagName('td')->item(5)->nodeValue);
+                        $pazaryeri_hizmet_orani = $this->format_and_add_kdv($tr->getElementsByTagName('td')->item(6)->nodeValue);
 
 
+                    $data[] = [
+                        'category_name' => $combined,
+                        'komsiyon_orani' => number_format((float)$komsiyon_orani, 2, '.', ''),
+                        'pazarlama_hizmet_orani' => $pazarlama_hizmet_orani,
+                        'pazaryeri_hizmet_orani' => $pazaryeri_hizmet_orani,
+                    ];
+                        
                     }
 
                 }
 
+                N11CategoryCommission::truncate();
+                N11CategoryCommission::insert($data);
 
 
-
-                //return response()->json(['status' => 'success', 'data' => $html]);
+                $categories = DB::table('n11_category_commision')
+                ->leftJoin('n11_category_ids', 'n11_category_ids.name', '=', 'n11_category_commision.category_name')
+                ->select("n11_category_commision.*","n11_category_ids.n11_category_id")
+                ->get();
+           
+                return response()->json(['status' => 'success', 'data' => $categories]);
 
             } catch (\Exception $e) {
                 // Hata durumunda işlemler
                 return response()->json(['status' => 'error', 'message' => $e->getMessage()]);
             }
 
+        }
+
+        public function getN11CommissionRates($search,$per_page){
+
+            return response()->json(DB::table('n11_category_commision')
+            ->leftJoin('n11_category_ids', 'n11_category_ids.name', '=', 'n11_category_commision.category_name')
+            ->select("n11_category_commision.*","n11_category_ids.n11_category_id")
+            ->where(function ($query) use ($search) {
+                $query->where(DB::raw('lower(n11_category_commision.category_name)'), 'like', '%' . mb_strtolower($search) . '%');
+            })
+           ->orderBy('id','desc')
+           ->paginate(10)
+           ->appends(request()->query()),200);
+
+        }
+
+        private function format_and_add_kdv($str){
+            //yazıyı sil 
+            $str = str_replace("%","",str_replace(" + KDV","",$str));
+            //rakama çevir
+            $str = number_format((float)$str, 2, '.', '') * 1.2;
+            return number_format((float)$str, 2, '.', '');
         }
         
         public function createCategoryNode($cat4,$cat3,$cat2,$cat1){

@@ -20,9 +20,17 @@ class CategoryComissionController extends Controller
         $this->categorycommisionservice = $_categorycommisionservice;
     }
 
-    public function getN11CategoryCommisions(){
+    public function getN11CategoryCommisionsFromN11(){
 
-        return $this->categorycommisionservice->getN11CategoryCommisions();
+        return $this->categorycommisionservice->getN11CategoryCommisionsFromN11();
+    }
+
+    public function getN11CommissionRates(Request $request){
+
+        $search = $request->query('search');
+        $per_page = $request->query('per_page');
+
+        return $this->categorycommisionservice->getN11CommissionRates($search,$per_page);
     }
 
 }
