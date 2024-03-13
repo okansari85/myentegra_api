@@ -41,6 +41,7 @@ Route::resource('product_categories', ProductCategoryController::class)->shallow
 Route::post('addProductCoverImage', [ProductController::class, 'addProductCoverImage']);
 
 Route::post('importHbCargoPricesFromFile', [CargoController::class, 'importHbCargoPricesFromFile']);
+
 Route::get('getN11CargoPrices', [CargoController::class, 'getN11CargoPrices']);
 Route::get('getCargoPriceFromN11', [CargoController::class, 'getCargoPriceFromN11']);
 

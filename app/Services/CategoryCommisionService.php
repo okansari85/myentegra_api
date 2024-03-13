@@ -86,8 +86,8 @@ class CategoryCommisionService implements ICategoryCommision
                 ->leftJoin('n11_category_ids', 'n11_category_ids.name', '=', 'n11_category_commision.category_name')
                 ->select("n11_category_commision.*","n11_category_ids.n11_category_id")
                 ->get();
-           
-                return response()->json(['status' => 'success', 'data' => $categories]);
+
+                return response()->json(['status' => 'success'],200);
 
             } catch (\Exception $e) {
                 // Hata durumunda işlemler
@@ -105,7 +105,7 @@ class CategoryCommisionService implements ICategoryCommision
                 $query->where(DB::raw('lower(n11_category_commision.category_name)'), 'like', '%' . mb_strtolower($search) . '%');
             })
            ->orderBy('id','desc')
-           ->paginate(10)
+           ->paginate($per_page)
            ->appends(request()->query()),200);
 
         }
