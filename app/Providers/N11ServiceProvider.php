@@ -7,6 +7,9 @@ use Illuminate\Support\ServiceProvider;
 use App\Interfaces\IN11Api\IOrder;
 use App\Services\N11Services\OrderService;
 
+use App\Interfaces\IN11Api\IProduct;
+use App\Services\N11Services\ProductService;
+
 class N11ServiceProvider extends ServiceProvider
 {
     /**
@@ -16,6 +19,7 @@ class N11ServiceProvider extends ServiceProvider
     {
         //
         $this->app->bind(IOrder::class, OrderService::class);
+        $this->app->bind(IProduct::class, ProductService::class);
 
 
         $this->mergeConfigFrom(

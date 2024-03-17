@@ -10,6 +10,7 @@ use App\Http\Controllers\ProductController;
 use App\Http\Controllers\ProductCategoryController;
 use App\Http\Controllers\CargoController;
 use App\Http\Controllers\CategoryComissionController;
+use App\Http\Controllers\N11ProductController;
 
 /*
 |--------------------------------------------------------------------------
@@ -48,4 +49,4 @@ Route::get('getCargoPriceFromN11', [CargoController::class, 'getCargoPriceFromN1
 Route::get('getN11CategoryCommisionsFromN11', [CategoryComissionController::class, 'getN11CategoryCommisionsFromN11']);
 Route::get('getN11CommissionRates', [CategoryComissionController::class, 'getN11CommissionRates']);
 
-
+Route::get('getN11ProductBySellerCode/{sellerCode}',[N11ProductController::class, 'getN11ProductBySellerCode']);
