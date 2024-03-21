@@ -40,4 +40,8 @@ class Products extends Model
         return $this->belongsTo(ProductCategory::class);
     }
 
+    public function n11_product(){
+        return  $this->hasOne(RelProductsN11Products::class,"product_id");
+    }
+
 }

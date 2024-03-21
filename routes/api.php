@@ -40,6 +40,7 @@ Route::post('addCategory', [ProductCategoryController::class, 'addCategory']);
 
 Route::resource('product_categories', ProductCategoryController::class)->shallow();
 Route::post('addProductCoverImage', [ProductController::class, 'addProductCoverImage']);
+Route::post('matchN11Product', [ProductController::class, 'matchN11Product']);
 
 Route::post('importHbCargoPricesFromFile', [CargoController::class, 'importHbCargoPricesFromFile']);
 

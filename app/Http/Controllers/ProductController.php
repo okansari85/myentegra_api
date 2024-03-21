@@ -33,7 +33,16 @@ class ProductController extends Controller
         return response()->json($this->productservice->getAllProducts($search,$per_page));
     }
 
-    //servise geçirilecek
+    public function matchN11Product(Request $request){
+
+        $n11_product= $request->n11_product;
+        $db_product= $request->db_product;
+
+        return response()->json($this->productservice->matchN11Product($n11_product, $db_product));
+
+    }
+
+    //servise geçirilecekx
     public function addProductCoverImage(Request $request){
 
         $validator = Validator::make($request->all(),[
