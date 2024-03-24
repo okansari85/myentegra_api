@@ -105,13 +105,12 @@ class ProductService extends N11Service implements IProduct
         $this->_parameters["productId"] = $productId;
         $this->_parameters["price"] = $price;
         $this->_parameters["currencyType"] = $currencyType;
-        $this->_parameters["product"] = [
-            "stockItems" => [
+        $this->_parameters["stockItems"] = [
                 "stockItem" => [
                     "sellerStockCode" => $sellerStockCode,
                     "optionPrice" => $optionPrice,
                 ]
-            ]
+
         ];
         return $this->_client->UpdateProductPriceById($this->_parameters);
     }

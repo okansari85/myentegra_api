@@ -94,6 +94,10 @@ class CargoService implements ICargo
 
     }
 
+    public function getCargoPriceByDesi($desi){
+        return N11CargoPrices::where('desi',"=",$desi)->pluck('yk_price')->first();
+    }
+
 
 
 

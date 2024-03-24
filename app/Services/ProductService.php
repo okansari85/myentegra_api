@@ -8,6 +8,10 @@ use App\Models\N11Products;
 use App\Models\RelProductsN11Products;
 use Illuminate\Support\Facades\DB;
 
+use Illuminate\Support\Facades\Bus;
+use App\Jobs\SendProductsPriceToN11;
+
+
 class ProductService implements IProducts
 {
     public function getAllProducts($search,$per_page){
@@ -55,17 +59,22 @@ class ProductService implements IProducts
             'productCondition' => $n11_product['productCondition']
         ]);
 
-        //RelProductN11Product tablosuna kayıtları ekle ya da update et
-        //sadece product id kontrolü yapılacak
-        //eğer başka bir ürün ile eşleşmedi kontorlü yapılacak
-
-
         $relpn11 = RelProductsN11Products::updateOrCreate(
             ['product_id'=>$db_product['id']],
             ['n11_id'=>$n11_product['id']]);
 
         $product= Products::with('coverImage','category.descendants','n11_product.n11_product')->get()->find($db_product['id']);
+
+        //add job
+        $this->addJobUpdateOneProductQuantityAndPrice($product);
+
         return response()->json($product,200);
 
+    }
+
+    public function addJobUpdateOneProductQuantityAndPrice($product){
+        $batch = Bus::batch([])->name('n11pricestockupdate')->dispatch();
+        $batch->add(new SendProductsPriceToN11($product));
+        return $batch;
     }
 }

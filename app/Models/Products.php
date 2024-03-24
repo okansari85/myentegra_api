@@ -23,6 +23,7 @@ class Products extends Model
         'price' => 'decimal:2'
     ];
 
+
     public function images()
     {
         return $this->hasMany(ProductImages::class, 'product_id');
@@ -43,5 +44,28 @@ class Products extends Model
     public function n11_product(){
         return  $this->hasOne(RelProductsN11Products::class,"product_id");
     }
+
+    public function next(){
+        // get next user
+        return $this->where('id', '>', $this->id)->orderBy('id','asc')->first();
+
+    }
+    public  function previous(){
+        // get previous  user
+        return $this->where('id', '<', $this->id)->orderBy('id','desc')->first();
+
+    }
+
+    public function first(){
+        return $this->first();
+    }
+
+    public function maliyet(){
+        $price =  $this->price * 1.1 * 1.2;
+        $price = $price + 30 ;
+        $price = $price * $this->profit_rate;
+        return number_format((float)$price, 2, '.', '');
+    }
+
 
 }

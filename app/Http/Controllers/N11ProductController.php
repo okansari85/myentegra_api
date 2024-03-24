@@ -25,5 +25,4 @@ class N11ProductController extends Controller
         return $n11_products;
     }
 
-
 }

@@ -4,6 +4,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 
 use App\Models\User;
+use App\Models\Products;
 use App\Http\Resources\UserResource;
 
 use App\Http\Controllers\ProductController;
@@ -11,6 +12,14 @@ use App\Http\Controllers\ProductCategoryController;
 use App\Http\Controllers\CargoController;
 use App\Http\Controllers\CategoryComissionController;
 use App\Http\Controllers\N11ProductController;
+use App\Http\Controllers\ApiJobsController;
+
+
+use Illuminate\Bus\Batch;
+use Illuminate\Support\Facades\Bus;
+use App\Jobs\SendProductsPriceToN11;
+use Illuminate\Support\Facades\Queue;
+use Illuminate\Support\Facades\Schedule;
 
 /*
 |--------------------------------------------------------------------------
@@ -49,5 +58,19 @@ Route::get('getCargoPriceFromN11', [CargoController::class, 'getCargoPriceFromN1
 
 Route::get('getN11CategoryCommisionsFromN11', [CategoryComissionController::class, 'getN11CategoryCommisionsFromN11']);
 Route::get('getN11CommissionRates', [CategoryComissionController::class, 'getN11CommissionRates']);
+Route::get('getN11CategoryCommissionByCategoryId/{n11CategoryId}', [CategoryComissionController::class, 'getN11CategoryCommissionByCategoryId']);
 
 Route::get('getN11ProductBySellerCode/{sellerCode}',[N11ProductController::class, 'getN11ProductBySellerCode']);
+
+
+Route::get('products-price-update-to-n11-quee', function() {
+        $batch = Bus::batch([])->name('n11pricestockupdate')->dispatch();
+        $products=Products::with('n11_product.n11_product')->has('n11_product')->get()->map(function ($product) {
+            return new SendProductsPriceToN11($product);
+        });
+        $batch->add($products);
+        return $batch;
+});
+
+Route::get('batches/{batch_id}',[ApiJobsController::class, 'addUpdateN11ProductsPriceStock']);
+Route::get('findBatchIdByName/{name}',[ApiJobsController::class, 'findBatchIdByName']);

@@ -33,4 +33,9 @@ class CategoryComissionController extends Controller
         return $this->categorycommisionservice->getN11CommissionRates($search,$per_page);
     }
 
+    public function getN11CategoryCommissionByCategoryId($n11_category_id){
+
+        return $this->categorycommisionservice->getN11CategoryCommissionByCategoryId($n11_category_id);
+    }
+
 }

@@ -8,6 +8,7 @@ use GuzzleHttp\Client;
 use DOMDocument;
 use Carbon\Carbon;
 use App\Models\N11CategoryCommission;
+use App\Models\N11CategoryIds;
 use Illuminate\Support\Facades\Storage;
 
 
@@ -73,7 +74,7 @@ class CategoryCommisionService implements ICategoryCommision
                         'pazarlama_hizmet_orani' => $pazarlama_hizmet_orani,
                         'pazaryeri_hizmet_orani' => $pazaryeri_hizmet_orani,
                     ];
-                        
+
                     }
 
                 }
@@ -111,13 +112,13 @@ class CategoryCommisionService implements ICategoryCommision
         }
 
         private function format_and_add_kdv($str){
-            //yazıyı sil 
+            //yazıyı sil
             $str = str_replace("%","",str_replace(" + KDV","",$str));
             //rakama çevir
             $str = number_format((float)$str, 2, '.', '') * 1.2;
             return number_format((float)$str, 2, '.', '');
         }
-        
+
         public function createCategoryNode($cat4,$cat3,$cat2,$cat1){
 
             $combined = $cat4;
@@ -132,6 +133,30 @@ class CategoryCommisionService implements ICategoryCommision
             }
             return $combined;
         }
+
+        public function getN11CategoryCommissionByCategoryId($n11_category_id){
+
+            $ko = N11CategoryIds::leftJoin('n11_category_commision', function($join) {
+                $join->on('n11_category_ids.name', '=', 'n11_category_commision.category_name');
+              })
+              ->where ('n11_category_ids.n11_category_id', "=", $n11_category_id)
+              ->first([
+                'n11_category_commision.komsiyon_orani',
+                'n11_category_commision.pazarlama_hizmet_orani',
+                'n11_category_commision.pazaryeri_hizmet_orani',
+              ]);
+
+            $toplam_komisyon = number_format((float)$ko->komsiyon_orani, 2, '.', '') +
+                               number_format((float)$ko->pazarlama_hizmet_orani , 2, '.', '')+
+                               number_format((float)$ko->pazaryeri_hizmet_orani, 2, '.', '');
+
+
+            return $toplam_komisyon;
+
+
+        }
+
+
 
 
 }
