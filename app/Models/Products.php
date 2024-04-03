@@ -32,7 +32,7 @@ class Products extends Model
     public function coverImage()
     {
         return $this->hasOne(ProductImages::class,'product_id')
-            ->ofMany('cover', 'max')
+            ->ofMany('order', 'min')
             ->withDefault();
     }
 
@@ -44,6 +44,8 @@ class Products extends Model
     public function n11_product(){
         return  $this->hasOne(RelProductsN11Products::class,"product_id");
     }
+
+
 
     public function next(){
         // get next user

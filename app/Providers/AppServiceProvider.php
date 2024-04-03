@@ -17,6 +17,9 @@ use App\Services\CargoService;
 use App\Interfaces\ICategoryCommision;
 use App\Services\CategoryCommisionService;
 
+use App\Interfaces\IImages;
+use App\Services\ImageService;
+
 
 class AppServiceProvider extends ServiceProvider
 {
@@ -30,6 +33,7 @@ class AppServiceProvider extends ServiceProvider
         $this->app->bind(ICategory::class, CategoryService::class);
         $this->app->bind(ICargo::class, CargoService::class);
         $this->app->bind(ICategoryCommision::class, CategoryCommisionService::class);
+        $this->app->bind(IImages::class, ImageService::class);
     }
 
     /**

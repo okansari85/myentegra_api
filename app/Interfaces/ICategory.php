@@ -11,4 +11,6 @@ interface ICategory
     public function getSubCategories($parent_id,$search=null,$per_page=null);
     public function deleteCategory($id);
     public function updateCategory($id,$category_name);
+    public function changeCategoryOrder($categories);
+
 }

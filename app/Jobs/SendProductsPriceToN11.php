@@ -52,38 +52,12 @@ class SendProductsPriceToN11 implements ShouldQueue
             $commission = number_format((float)(100 - $totalCommission), 2, '.', '');
 
             $displayPrice = ($cost + $desiPrice) / ($commission / 100);
-            $displayPrice = number_format((float)$displayPrice, 2, '.', '');
-
-
-
+            $displayPrice = number_format((float)$s, 2, '.', '');
             $productService->updateProductPriceById($n11Id, $displayPrice, 1, $this->product['productCode'], $displayPrice);
         } catch (\Exception $e) {
             // Handle any errors gracefully
             \Log::error('Error updating product price: ' . $e->getMessage());
         }
-
-
-
-
-
-
-
-/*
-        $n11_id=$this->product['n11_product']['n11_product']['n11_id'];
-        $n11_category_id = $this->product['n11_product']['n11_product']['n11_category_id'];
-        $desi = $this->product['desi'];
-
-        $toplam_komisyon = $categorycommisionservice->getN11CategoryCommissionByCategoryId($n11_category_id);
-        $desi_price = number_format((float)$cargoservice->getCargoPriceByDesi($desi), 2, '.', '');
-
-        $maliyet = Products::find($this->product['id'])->maliyet();
-        $kom = number_format((float)(100 - $toplam_komisyon), 2, '.', '');
-
-        $display_price = ($maliyet + $desi_price) / ($kom /100);
-        $display_price = number_format((float)$display_price, 2, '.', '');
-
-        $a = $productservice->updateProductPriceById($n11_id,$display_price, 1 , $this->product['productCode'], $display_price);
-        */
 
     }
 

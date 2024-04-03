@@ -12,6 +12,9 @@ use Validator;
 
 use App\Models\Products;
 
+use Illuminate\Support\Facades\Storage;
+
+
 class ProductController extends Controller
 {
     private IProducts $productservice;
@@ -41,41 +44,6 @@ class ProductController extends Controller
         return response()->json($this->productservice->matchN11Product($n11_product, $db_product));
 
     }
-
-    //servise geçirilecekx
-    public function addProductCoverImage(Request $request){
-
-        $validator = Validator::make($request->all(),[
-            'file' => 'required|mimes:png,jpg,jpeg|max:2048',
-        ]);
-
-        if($validator->fails()) {
-            return response()->json(['error'=>$validator->errors()], 413);
-        }
-
-        $file = $request->file('file');
-
-        $path = $file->store('files', ['disk' => 'my_files']);//$file->store('files');
-        $name = $file->getClientOriginalName();
-
-        $filename = pathinfo($path, PATHINFO_FILENAME);
-        $extension = pathinfo($path, PATHINFO_EXTENSION);
-
-
-
-        $product = Products::find($request->product_id);
-
-
-        $product->images()->create([
-            'url' => $filename.".".$extension,
-            'cover' => true,
-        ]);
-
-
-        return response()->json($product,200);
-
-    }
-
 
     /**
      * Show the form for creating a new resource.

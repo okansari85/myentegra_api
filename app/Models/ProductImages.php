@@ -11,7 +11,7 @@ class ProductImages extends Model
 
     protected $table = 'product_images';
 
-    protected $fillable = ['cover','order','url','product_id'];
+    protected $fillable = ['name','type','order','url','product_id'];
 
 
     public function product(): BelongsTo

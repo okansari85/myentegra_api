@@ -24,7 +24,7 @@ class ApiJobsController extends Controller
         if ($pendingBatch)  {
         return Bus::findBatch($pendingBatch->id);
     } else{
-        return response()->json(['message' => "No pending batch found with the name: {$name}."],422);
+        return response()->json(['message' => "No pending batch found with the name: {$name}."],200);
     }
     }
 }

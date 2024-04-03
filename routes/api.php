@@ -13,6 +13,7 @@ use App\Http\Controllers\CargoController;
 use App\Http\Controllers\CategoryComissionController;
 use App\Http\Controllers\N11ProductController;
 use App\Http\Controllers\ApiJobsController;
+use App\Http\Controllers\ImageController;
 
 
 use Illuminate\Bus\Batch;
@@ -45,8 +46,8 @@ Route::group(['middleware' => ['auth:sanctum']], function () {
 });
 
 Route::apiResource('products',ProductController::class);
-Route::post('addCategory', [ProductCategoryController::class, 'addCategory']);
 
+Route::post('addCategory', [ProductCategoryController::class, 'addCategory']);
 Route::resource('product_categories', ProductCategoryController::class)->shallow();
 Route::post('addProductCoverImage', [ProductController::class, 'addProductCoverImage']);
 Route::post('matchN11Product', [ProductController::class, 'matchN11Product']);
@@ -74,3 +75,9 @@ Route::get('products-price-update-to-n11-quee', function() {
 
 Route::get('batches/{batch_id}',[ApiJobsController::class, 'addUpdateN11ProductsPriceStock']);
 Route::get('findBatchIdByName/{name}',[ApiJobsController::class, 'findBatchIdByName']);
+
+
+
+Route::post('uploadProductImages', [ImageController::class, 'uploadImages']);
+Route::delete('deleteProductImages/{image_id}', [ImageController::class, 'deleteImages']);
+Route::post('changeImageOrder', [ImageController::class, 'changeImageOrder']);
