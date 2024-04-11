@@ -3,9 +3,13 @@
 namespace App\Services;
 
 use App\Interfaces\IProducts;
+
 use App\Models\Products;
 use App\Models\N11Products;
 use App\Models\RelProductsN11Products;
+use App\Models\ProductImages;
+
+
 use Illuminate\Support\Facades\DB;
 
 use Illuminate\Support\Facades\Bus;
@@ -76,5 +80,34 @@ class ProductService implements IProducts
         $batch = Bus::batch([])->name('n11pricestockupdate')->dispatch();
         $batch->add(new SendProductsPriceToN11($product));
         return $batch;
+    }
+
+    public function addProduct($obj){
+
+
+        $product = Products::create([
+            'productTitle' => $obj['productTitle'],
+            'productCode' =>  $obj['productCode'],
+            'category_id' => $obj['category_id'],
+            'desi' => $obj['desi'],
+            'stock' => $obj['stock'],
+            'price' => $obj['price'],
+            'profit_rate' =>  $obj['profitRate'],
+            'description' =>  $obj['description'],
+        ]);
+
+        foreach ($obj['productImages'] as $image) {
+            // Her bir resmin id'sini al
+            $imageId = $image['file']['id'];
+
+            // Güncelleme yap
+            ProductImages::where('id', $imageId)
+                ->update(['product_id' => $product->id]);
+        }
+
+        return response()->json(['message' => 'Product and images created successfully'], 201);
+
+
+
     }
 }

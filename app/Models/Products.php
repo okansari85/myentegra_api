@@ -16,7 +16,10 @@ class Products extends Model
         'price',
         'desi',
         'stock',
-        'category_id'
+        'category_id',
+        'profit_rate',
+        'description',
+        'productTitle'
     ];
 
     protected $casts = [

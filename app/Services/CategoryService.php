@@ -10,8 +10,32 @@ class CategoryService implements ICategory
 {
     public function getMainCategories($search=null,$per_page=null){
 
+        $nestedCategories = [];
         $categories = ProductCategory::where('parent_id', 0)->orderBy('order', 'ASC')->get();
-        return response()->json($categories);
+
+        foreach ($categories as $category) {
+            $nestedCategory = $category->toArray();
+            $nestedCategory['children'] = $this->getAllChildrens($category, $category->id);
+            $nestedCategories[] = $nestedCategory;
+        }
+
+        return response()->json($nestedCategories);
+
+    }
+
+    protected function getAllChildrens($category,$id){
+
+        $nestedCategories = [];
+        $subCategories = ProductCategory::where('parent_id', $id)->orderBy('order', 'ASC')->get();
+
+        foreach ($subCategories as $subCategory) {
+            $nestedCategory = $subCategory->toArray();
+            // Eğer bu alt kategorinin alt kategorileri varsa, recursive olarak çağırarak tüm alt kategorileri alın
+            $nestedCategory['children'] = $this->getAllChildrens($subCategory, $subCategory->id);
+            $nestedCategories[] = $nestedCategory;
+        }
+
+        return $nestedCategories;
 
     }
 
@@ -58,9 +82,7 @@ class CategoryService implements ICategory
 
     public function changeCategoryOrder($categories){
 
-
         $arr = json_decode($categories, true);
-
         $arr2=[];
         $i=0;
         foreach ($arr as $b) {

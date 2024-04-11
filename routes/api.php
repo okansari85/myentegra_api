@@ -64,17 +64,9 @@ Route::get('getN11CategoryCommissionByCategoryId/{n11CategoryId}', [CategoryComi
 Route::get('getN11ProductBySellerCode/{sellerCode}',[N11ProductController::class, 'getN11ProductBySellerCode']);
 
 
-Route::get('products-price-update-to-n11-quee', function() {
-        $batch = Bus::batch([])->name('n11pricestockupdate')->dispatch();
-        $products=Products::with('n11_product.n11_product')->has('n11_product')->get()->map(function ($product) {
-            return new SendProductsPriceToN11($product);
-        });
-        $batch->add($products);
-        return $batch;
-});
-
 Route::get('batches/{batch_id}',[ApiJobsController::class, 'addUpdateN11ProductsPriceStock']);
 Route::get('findBatchIdByName/{name}',[ApiJobsController::class, 'findBatchIdByName']);
+Route::get('products-price-update-to-n11-quee',[ApiJobsController::class, 'updateN11Prices']);
 
 
 

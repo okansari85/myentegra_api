@@ -58,6 +58,8 @@ class ProductController extends Controller
      */
     public function store(Request $request)
     {
+        $product=$request->product;
+        return response()->json($this->productservice->addProduct($product));
         //
     }
 

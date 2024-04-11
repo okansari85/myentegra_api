@@ -40,20 +40,28 @@ class SendProductsPriceToN11 implements ShouldQueue
     {
 
         try {
+
+
             $n11Product = $this->product['n11_product']['n11_product'];
             $n11Id = $n11Product['n11_id'];
             $n11CategoryId = $n11Product['n11_category_id'];
             $desi = $this->product['desi'];
 
-            $totalCommission = $categoryCommissionService->getN11CategoryCommissionByCategoryId($n11CategoryId);
-            $desiPrice = number_format((float)$cargoService->getCargoPriceByDesi($desi), 2, '.', '');
+
+
+            $totalCommission = $categorycommisionservice->getN11CategoryCommissionByCategoryId($n11CategoryId);
+            $desiPrice = number_format((float)$cargoservice->getCargoPriceByDesi($desi), 2, '.', '');
+
+
 
             $cost = Products::find($this->product['id'])->maliyet();
             $commission = number_format((float)(100 - $totalCommission), 2, '.', '');
 
             $displayPrice = ($cost + $desiPrice) / ($commission / 100);
-            $displayPrice = number_format((float)$s, 2, '.', '');
-            $productService->updateProductPriceById($n11Id, $displayPrice, 1, $this->product['productCode'], $displayPrice);
+            $displayPrice = number_format((float)$displayPrice, 2, '.', '');
+
+            $productservice->updateProductPriceById($n11Id, $displayPrice, 1, $this->product['productCode'], $displayPrice);
+
         } catch (\Exception $e) {
             // Handle any errors gracefully
             \Log::error('Error updating product price: ' . $e->getMessage());
