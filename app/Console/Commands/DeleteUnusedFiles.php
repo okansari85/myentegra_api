@@ -18,14 +18,17 @@ class DeleteUnusedFiles extends Command
 
         echo "Kullanılmayan dosyaları silmeye başlanıyor...\n";
 
-        $images = ProductImages::whereNotNull('product_id')->pluck('name', 'type')->map(function ($name, $type) {
-            return 'files/' . $name . '.' . $type;
-        })->toArray();
+        $using_images=[];
+        $images = ProductImages::whereNotNull('product_id')->get();
+
+        foreach ($images as $image) {
+            $using_images[] = trim('files/'.$image->name.'.'.$image->type);
+        }
 
         $files = Storage::disk('my_files')->allFiles('files');
 
         foreach ($files as $file) {
-            if (!in_array($file, $images)) {
+            if (!in_array($file, $using_images)) {
                 try {
                     Storage::disk('my_files')->delete($file);
                     echo "Dosya {$file} başarıyla silindi.\n";
