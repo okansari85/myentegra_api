@@ -19,6 +19,9 @@ return [
     'sanctum/csrf-cookie',
     'api/public/api/*',
     'api/public/*',
+    'storage/*',
+    'public/storage/files/*',
+    '/public/storage/files/*',
     'login','logout'],
 
     'allowed_methods' => ['*'],
@@ -26,13 +29,9 @@ return [
     'allowed_origins' => ['*'],
 
     'allowed_origins_patterns' => [],
-
     'allowed_headers' => ['*'],
-
     'exposed_headers' => [],
-
     'max_age' => 0,
-
     'supports_credentials' => true,
 
 ];

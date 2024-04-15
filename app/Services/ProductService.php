@@ -21,7 +21,7 @@ class ProductService implements IProducts
     public function getAllProducts($search,$per_page){
 
         return response()->json(Products::with('coverImage','category.descendants','n11_product.n11_product','images')
-        ->select('id', 'category_id','productCode','stock', 'productTitle','profit_rate','price', 'desi', 'created_at', 'updated_at')
+        ->select('id','description', 'category_id','productCode','stock', 'productTitle','profit_rate','price', 'desi', 'created_at', 'updated_at')
         ->where(function ($query) use ($search) {
               $query->where(DB::raw('lower(productCode)'), 'like', '%' . mb_strtolower($search) . '%');
          })->orderBy('id','desc')

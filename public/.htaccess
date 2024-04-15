@@ -3,6 +3,7 @@
         Options -MultiViews -Indexes
     </IfModule>
 
+
     RewriteEngine On
 
     # Handle Authorization Header
@@ -18,4 +19,9 @@
     RewriteCond %{REQUEST_FILENAME} !-d
     RewriteCond %{REQUEST_FILENAME} !-f
     RewriteRule ^ index.php [L]
+</IfModule>
+<IfModule mod_headers.c>
+    <FilesMatch "\.(bmp|cur|gif|ico|jpe?g|png|svgz?|webp|pdf|eot|otf|tt[cf]|woff2?)$">
+        Header set Cross-Origin-Resource-Policy 'cross-origin'
+    </FilesMatch>
 </IfModule>
