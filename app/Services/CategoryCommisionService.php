@@ -20,10 +20,7 @@ class CategoryCommisionService implements ICategoryCommision
         public function getN11CategoryCommisionsFromN11(){
 
             $client = new Client([
-                'headers' => [
-                    'User-Agent' => $_SERVER['HTTP_USER_AGENT'],
-                    'Accept-Charset' => 'utf-8'
-                ],
+                'headers' => ['content-type' => 'application/json', 'Accept' => 'applicatipon/json', 'charset' => 'utf-8'],
                 'decode_content' => 'utf-8',
             ]);
 
