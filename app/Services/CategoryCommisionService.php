@@ -11,6 +11,9 @@ use App\Models\N11CategoryCommission;
 use App\Models\N11CategoryIds;
 use Illuminate\Support\Facades\Storage;
 
+use GuzzleHttp\Psr7;
+use GuzzleHttp\Exception\ClientException;
+
 
 
 class CategoryCommisionService implements ICategoryCommision
@@ -28,10 +31,17 @@ class CategoryCommisionService implements ICategoryCommision
                 'decode_content' => 'utf-8',
             ]);
 
+            try {
+                $client->request('GET', 'https://magazadestek.n11.com/s/komisyon-oranlari');
+            } catch (ClientException $e) {
+                echo Psr7\Message::toString($e->getRequest());
+                echo Psr7\Message::toString($e->getResponse());
+            }
+
 
             try {
                 // CURL isteğini gönderme
-                $response = $client->request('GET', 'https://magazadestek.n11.com/s/komisyon-oranlari',['http_errors' => false]);
+                $response = $client->request('GET', 'https://magazadestek.n11.com/s/komisyon-oranlari');
 
                 // Yanıtı alma ve işleme
                 $statusCode = $response->getStatusCode();
