@@ -21,6 +21,12 @@ use App\Interfaces\IImages;
 use App\Services\ImageService;
 
 
+use GuzzleHttp\BodySummarizer;
+use GuzzleHttp\Client;
+use GuzzleHttp\HandlerStack;
+use GuzzleHttp\Middleware;
+
+
 class AppServiceProvider extends ServiceProvider
 {
     /**
@@ -28,6 +34,12 @@ class AppServiceProvider extends ServiceProvider
      */
     public function register(): void
     {
+
+        $this->app->bind(\GuzzleHttp\Client::class, function (Application $app, array $parameters = []) {
+            $stack = \GuzzleHttp\HandlerStack::create();
+            $stack->push(\GuzzleHttp\Middleware::httpErrors(new \GuzzleHttp\BodySummarizer(999999)), 'http_errors');
+            return new \GuzzleHttp\Client(array_merge(['handler' => $stack], $parameters));
+        });
         //
         $this->app->bind(IProducts::class, ProductService::class);
         $this->app->bind(ICategory::class, CategoryService::class);
