@@ -15,7 +15,7 @@ use GuzzleHttp\Psr7;
 use GuzzleHttp\Exception\ClientException;
 
 use GuzzleHttp\Cookie\CookieJar;
-
+use Illuminate\Support\Facades\Http;
 
 class CategoryCommisionService implements ICategoryCommision
 {
@@ -35,19 +35,14 @@ class CategoryCommisionService implements ICategoryCommision
 
 
 
-            try {
 
-                $client->request('GET', 'https://magazadestek.n11.com/s/komisyon-oranlari');
-            } catch (ClientException $e) {
-                echo Psr7\Message::toString($e->getRequest());
-                echo Psr7\Message::toString($e->getResponse());
-            }
+
 
 
             try {
                 // CURL isteğini gönderme
-                $response = $client->request('GET', 'https://magazadestek.n11.com/s/komisyon-oranlari');
-
+                //$response = $client->request('GET', 'https://magazadestek.n11.com/s/komisyon-oranlari');
+                $response = Http::get('https://magazadestek.n11.com/s/komisyon-oranlari');
                 // Yanıtı alma ve işleme
                 $statusCode = $response->getStatusCode();
                 //$html = (string)$response->getBody(true)->getContents();
