@@ -14,6 +14,7 @@ use Illuminate\Support\Facades\Storage;
 use GuzzleHttp\Psr7;
 use GuzzleHttp\Exception\ClientException;
 
+use GuzzleHttp\Cookie\CookieJar;
 
 
 class CategoryCommisionService implements ICategoryCommision
@@ -23,6 +24,7 @@ class CategoryCommisionService implements ICategoryCommision
         public function getN11CategoryCommisionsFromN11(){
 
             $client = new Client([
+                'cookies' => true,
                 'headers' => [
                     'User-Agent' => 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/123.0.0.0 Safari/537.36',
                     'Accept-Charset' => 'utf-8',
@@ -31,7 +33,10 @@ class CategoryCommisionService implements ICategoryCommision
                 'decode_content' => 'utf-8',
             ]);
 
+
+
             try {
+
                 $client->request('GET', 'https://magazadestek.n11.com/s/komisyon-oranlari');
             } catch (ClientException $e) {
                 echo Psr7\Message::toString($e->getRequest());
