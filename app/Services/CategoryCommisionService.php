@@ -28,8 +28,7 @@ class CategoryCommisionService implements ICategoryCommision
                 'headers' => [
                     'User-Agent' => 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/123.0.0.0 Safari/537.36',
                     'Accept-Charset' => 'utf-8',
-                    'accept' => 'text/html,application/xhtml+xml,application/xml;q=0.9,image/avif,image/webp,image/apng,*/*;q=0.8,application/signed-exchange;v=b3;q=0.9'
-                ],
+                 ],
                 'decode_content' => 'utf-8',
             ]);
 
@@ -42,18 +41,16 @@ class CategoryCommisionService implements ICategoryCommision
 
 
             try {
-                // CURL isteğini gönderme
+
                 $response = $client->request('GET', 'https://magazadestek.n11.com/s/komisyon-oranlari');
-                //$response = Http::get('https://magazadestek.n11.com/s/komisyon-oranlari');
-                // Yanıtı alma ve işleme
+
                 $statusCode = $response->getStatusCode();
-                $html = (string)$response->getBody(true)->getContents();
                 $html=mb_convert_encoding($response->getBody(true)->getContents(), 'HTML-ENTITIES', 'UTF-8');
 
 
 
 
-                $html=mb_convert_encoding($output,'HTML-ENTITIES', 'UTF-8');
+                $html=mb_convert_encoding($html,'HTML-ENTITIES', 'UTF-8');
 
                 $dom = new DOMDocument();
                 libxml_use_internal_errors(true);
