@@ -54,41 +54,39 @@ class CategoryCommisionService implements ICategoryCommision
 
 
 
-                $useragent = "Mozilla/5.0 (Linux; Android 6.0.1; Nexus 5X Build/MMB29P) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/W.X.Y.Z‡ Mobile Safari/537.36 (compatible; Googlebot/2.1; +http://www.google.com/bot.html)";
 
-                    $ct = curl_init();
+$url = 'https://magazadestek.n11.com/s/komisyon-oranlari';
+// get cookie
+$headers = array(
+    // cookies
+    "Cookie: key=value",
+    "Cookie: key2=value2",
+    "Cookie: key3=value3",
+    // other headers
+    'sec-ch-ua: "Google Chrome";v="107", "Chromium";v="107", "Not=A?Brand";v="24"',
+    'sec-ch-ua-mobile: ?0',
+    'sec-ch-ua-platform: "Windows"',
+    'DNT: 1',
+    'Upgrade-Insecure-Requests: 1',
+    'Content-Type: application/x-www-form-urlencoded',
+    'User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/123.0.0.0 Safari/537.36', // change it
+    'Accept: text/html,application/xhtml+xml,application/xml;q=0.9,image/avif,image/webp,image/apng,*/*;q=0.8,application/signed-exchange;v=b3;q=0.9',
+    'Sec-Fetch-Site: same-origin',
+    'Sec-Fetch-Mode: navigate',
+    'Sec-Fetch-User: ?1',
+    'Sec-Fetch-Dest: document',
+    'host: google.com',
+);
 
-                    curl_setopt_array($ct, Array(
-                        CURLOPT_URL => 'https://magazadestek.n11.com/s/komisyon-oranlari',
-                        CURLOPT_SSL_VERIFYPEER => false,
-                        CURLOPT_RETURNTRANSFER => true,
-                        CURLOPT_HTTPHEADER => array("X-Requested-With: XMLHttpRequest"),
-                        CURLOPT_REFERER => 'https://magazadestek.n11.com/s/komisyon-oranlari',
-                        CURLOPT_USERAGENT =>  $useragent,
-                        CURLOPT_HEADER => false,
-                        CURLOPT_POST => true,
-                        CURLOPT_POSTFIELDS => 'schn=csrf'
-                    ));
-
-                    $html = curl_exec($ct);
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+$ch = curl_init ($url);
+curl_setopt($ch, CURLOPT_HTTPHEADER, $headers);
+curl_setopt($ch, CURLOPT_URL, $url);
+curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, false);
+curl_setopt ($ch, CURLOPT_REFERER, $url);
+curl_setopt($ch, CURLOPT_HEADER, true);
+$output = curl_exec ($ch);
+curl_close($ch);
 
 
 
@@ -96,7 +94,21 @@ class CategoryCommisionService implements ICategoryCommision
 
 
 
-                $html=mb_convert_encoding($html,'HTML-ENTITIES', 'UTF-8');
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+                $html=mb_convert_encoding($output,'HTML-ENTITIES', 'UTF-8');
 
                 $dom = new DOMDocument();
                 libxml_use_internal_errors(true);
