@@ -22,7 +22,8 @@ class CategoryCommisionService implements ICategoryCommision
             $client = new Client([
                 'headers' => [
                     'User-Agent' => 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/123.0.0.0 Safari/537.36',
-                    'Accept-Charset' => 'utf-8'
+                    'Accept-Charset' => 'utf-8',
+                    'accept' => 'text/html,application/xhtml+xml,application/xml;q=0.9,image/avif,image/webp,image/apng,*/*;q=0.8,application/signed-exchange;v=b3;q=0.9'
                 ],
                 'decode_content' => 'utf-8',
             ]);
@@ -30,7 +31,11 @@ class CategoryCommisionService implements ICategoryCommision
 
             try {
                 // CURL isteğini gönderme
-                $response = $client->request('GET', 'https://magazadestek.n11.com/s/komisyon-oranlari' );
+                $response = $client->request('GET', 'https://magazadestek.n11.com/s/komisyon-oranlari',[
+                    'headers' => [
+                        'User-Agent' => 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/123.0.0.0 Safari/537.36'
+                    ]
+                ]);
 
                 // Yanıtı alma ve işleme
                 $statusCode = $response->getStatusCode();
