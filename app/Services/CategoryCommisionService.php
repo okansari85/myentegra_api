@@ -39,16 +39,64 @@ class CategoryCommisionService implements ICategoryCommision
 
 
 
+
+
             try {
                 // CURL isteğini gönderme
                 //$response = $client->request('GET', 'https://magazadestek.n11.com/s/komisyon-oranlari');
-                $response = Http::get('https://magazadestek.n11.com/s/komisyon-oranlari');
+                //$response = Http::get('https://magazadestek.n11.com/s/komisyon-oranlari');
                 // Yanıtı alma ve işleme
                 //$statusCode = $response->getStatusCode();
                 //$html = (string)$response->getBody(true)->getContents();
                 //$html=mb_convert_encoding($response->getBody(true)->getContents(), 'HTML-ENTITIES', 'UTF-8');
 
-                $html=mb_convert_encoding($response,'HTML-ENTITIES', 'UTF-8');
+
+
+
+
+                $useragent = "Mozilla/5.0 (Linux; Android 6.0.1; Nexus 5X Build/MMB29P) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/W.X.Y.Z‡ Mobile Safari/537.36 (compatible; Googlebot/2.1; +http://www.google.com/bot.html)";
+
+                    $ct = curl_init();
+
+                    curl_setopt_array($ct, Array(
+                        CURLOPT_URL => $url,
+                        CURLOPT_SSL_VERIFYPEER => false,
+                        CURLOPT_RETURNTRANSFER => true,
+                        CURLOPT_HTTPHEADER => array("X-Requested-With: XMLHttpRequest"),
+                        CURLOPT_REFERER => $url,
+                        CURLOPT_USERAGENT =>  $useragent,
+                        CURLOPT_HEADER => false,
+                        CURLOPT_POST => true,
+                        CURLOPT_POSTFIELDS => 'schn=csrf'
+                    ));
+
+                    $html = curl_exec($ct);
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+                $html=mb_convert_encoding($html,'HTML-ENTITIES', 'UTF-8');
 
                 $dom = new DOMDocument();
                 libxml_use_internal_errors(true);
