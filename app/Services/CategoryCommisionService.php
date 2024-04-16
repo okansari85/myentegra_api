@@ -44,10 +44,11 @@ class CategoryCommisionService implements ICategoryCommision
                 //$response = $client->request('GET', 'https://magazadestek.n11.com/s/komisyon-oranlari');
                 $response = Http::get('https://magazadestek.n11.com/s/komisyon-oranlari');
                 // Yanıtı alma ve işleme
-                $statusCode = $response->getStatusCode();
+                //$statusCode = $response->getStatusCode();
                 //$html = (string)$response->getBody(true)->getContents();
-                $html=mb_convert_encoding($response->getBody(true)->getContents(), 'HTML-ENTITIES', 'UTF-8');
+                //$html=mb_convert_encoding($response->getBody(true)->getContents(), 'HTML-ENTITIES', 'UTF-8');
 
+                $html=mb_convert_encoding($response,'HTML-ENTITIES', 'UTF-8');
 
                 $dom = new DOMDocument();
                 libxml_use_internal_errors(true);
