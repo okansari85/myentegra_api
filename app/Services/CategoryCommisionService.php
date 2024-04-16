@@ -43,67 +43,12 @@ class CategoryCommisionService implements ICategoryCommision
 
             try {
                 // CURL isteğini gönderme
-                //$response = $client->request('GET', 'https://magazadestek.n11.com/s/komisyon-oranlari');
+                $response = $client->request('GET', 'https://magazadestek.n11.com/s/komisyon-oranlari');
                 //$response = Http::get('https://magazadestek.n11.com/s/komisyon-oranlari');
                 // Yanıtı alma ve işleme
-                //$statusCode = $response->getStatusCode();
-                //$html = (string)$response->getBody(true)->getContents();
-                //$html=mb_convert_encoding($response->getBody(true)->getContents(), 'HTML-ENTITIES', 'UTF-8');
-
-
-
-
-
-
-$url = 'https://magazadestek.n11.com/s/komisyon-oranlari';
-// get cookie
-$headers = array(
-    // cookies
-    "Cookie: key=value",
-    "Cookie: key2=value2",
-    "Cookie: key3=value3",
-    // other headers
-    'sec-ch-ua: "Google Chrome";v="107", "Chromium";v="107", "Not=A?Brand";v="24"',
-    'sec-ch-ua-mobile: ?0',
-    'sec-ch-ua-platform: "Windows"',
-    'DNT: 1',
-    'Upgrade-Insecure-Requests: 1',
-    'Content-Type: application/x-www-form-urlencoded',
-    'User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/123.0.0.0 Safari/537.36', // change it
-    'Accept: text/html,application/xhtml+xml,application/xml;q=0.9,image/avif,image/webp,image/apng,*/*;q=0.8,application/signed-exchange;v=b3;q=0.9',
-    'Sec-Fetch-Site: same-origin',
-    'Sec-Fetch-Mode: navigate',
-    'Sec-Fetch-User: ?1',
-    'Sec-Fetch-Dest: document',
-    'host: google.com',
-);
-
-$ch = curl_init ($url);
-curl_setopt($ch, CURLOPT_HTTPHEADER, $headers);
-curl_setopt($ch, CURLOPT_URL, $url);
-curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
-curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, false);
-curl_setopt ($ch, CURLOPT_REFERER, $url);
-curl_setopt($ch, CURLOPT_HEADER, true);
-$output = curl_exec ($ch);
-curl_close($ch);
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+                $statusCode = $response->getStatusCode();
+                $html = (string)$response->getBody(true)->getContents();
+                $html=mb_convert_encoding($response->getBody(true)->getContents(), 'HTML-ENTITIES', 'UTF-8');
 
 
 
