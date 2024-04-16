@@ -59,11 +59,11 @@ class CategoryCommisionService implements ICategoryCommision
                     $ct = curl_init();
 
                     curl_setopt_array($ct, Array(
-                        CURLOPT_URL => $url,
+                        CURLOPT_URL => 'https://magazadestek.n11.com/s/komisyon-oranlari',
                         CURLOPT_SSL_VERIFYPEER => false,
                         CURLOPT_RETURNTRANSFER => true,
                         CURLOPT_HTTPHEADER => array("X-Requested-With: XMLHttpRequest"),
-                        CURLOPT_REFERER => $url,
+                        CURLOPT_REFERER => 'https://magazadestek.n11.com/s/komisyon-oranlari',
                         CURLOPT_USERAGENT =>  $useragent,
                         CURLOPT_HEADER => false,
                         CURLOPT_POST => true,
