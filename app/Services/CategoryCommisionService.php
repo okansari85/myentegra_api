@@ -17,11 +17,123 @@ use GuzzleHttp\Exception\ClientException;
 use GuzzleHttp\Cookie\CookieJar;
 use Illuminate\Support\Facades\Http;
 
+use Spatie\Browsershot\Browsershot;
+use HeadlessChromium\BrowserFactory;
+
+use HeadlessChromium\Cookies\Cookie;
+use HeadlessChromium\Page;
+
+
 class CategoryCommisionService implements ICategoryCommision
 {
 
 
         public function getN11CategoryCommisionsFromN11(){
+
+
+            $browserFactory = new BrowserFactory();
+            // starts headless Chrome
+            $browser = $browserFactory->createBrowser();
+
+
+            try {
+
+                $page = $browser->createPage();
+                $page->setUserAgent('Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/105.0.0.0 Safari/537.36');
+
+                $page->navigate('https://magazadestek.n11.com/s/komisyon-oranlari')->waitForNavigation(Page::DOM_CONTENT_LOADED, 10000);
+
+                $html = $page->getHtml();
+                $html=mb_convert_encoding($html,'HTML-ENTITIES', 'UTF-8');
+
+                $dom = new DOMDocument();
+                libxml_use_internal_errors(true);
+                $dom->validateOnParse = true;
+                $dom->loadHTML($html);
+
+                $tables = $dom->getElementsByTagName('table')->item(0);
+
+
+                $data = [];
+                $timestamp = Carbon::now();
+
+                $trs = $tables->getElementsByTagName('tr');
+                $data = [];
+
+                //sql den al kategorileri arraya at
+                foreach($trs as $tr){
+
+                    if ($tr->getElementsByTagName('td')->length){
+                        $cat4 = $tr->getElementsByTagName('td')->item(0)->nodeValue;
+                        $cat3 = $tr->getElementsByTagName('td')->item(1)->nodeValue;
+                        $cat2 = $tr->getElementsByTagName('td')->item(2)->nodeValue;
+                        $cat1 = $tr->getElementsByTagName('td')->item(3)->nodeValue;
+
+                        //kategori node oluştur
+                        $combined = $this->createCategoryNode($cat4,$cat3,$cat2,$cat1);
+                        $komsiyon_orani = $tr->getElementsByTagName('td')->item(4)->nodeValue;
+                        $pazarlama_hizmet_orani = $this->format_and_add_kdv($tr->getElementsByTagName('td')->item(5)->nodeValue);
+                        $pazaryeri_hizmet_orani = $this->format_and_add_kdv($tr->getElementsByTagName('td')->item(6)->nodeValue);
+
+
+                    $data[] = [
+                        'category_name' => $combined,
+                        'komsiyon_orani' => number_format((float)$komsiyon_orani, 2, '.', ''),
+                        'pazarlama_hizmet_orani' => $pazarlama_hizmet_orani,
+                        'pazaryeri_hizmet_orani' => $pazaryeri_hizmet_orani,
+                    ];
+
+                    }
+
+                }
+
+                N11CategoryCommission::truncate();
+                N11CategoryCommission::insert($data);
+
+
+                $categories = DB::table('n11_category_commision')
+                ->leftJoin('n11_category_ids', 'n11_category_ids.name', '=', 'n11_category_commision.category_name')
+                ->select("n11_category_commision.*","n11_category_ids.n11_category_id")
+                ->get();
+
+                return response()->json(['status' => 'success'],200);
+
+            } catch (\Exception $e) {
+                // Hata durumunda işlemler
+                return response()->json(['status' => 'error', 'message' => $e->getMessage()]);
+            } finally {
+                // bye
+                $browser->close();
+            }
+
+
+/*
+
+            $browserFactory = new BrowserFactory();
+
+            // starts headless chrome
+            $browser = $browserFactory->createBrowser([
+                'windowSize'   => [1920, 1000],
+            ]);
+
+
+
+                $browser->setPagePreScript('
+                // Simulate navigator permissions;
+                const originalQuery = window.navigator.permissions.query;
+                window.navigator.webdriver = false;
+
+                );');
+
+                $page = $browser->createPage();
+                $page->setUserAgent('Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/105.0.0.0 Safari/537.36');
+
+                $page->navigate('https://bot.sannysoft.com/')->waitForNavigation(Page::DOM_CONTENT_LOADED, 10000);
+
+                $html = $page->getHtml();
+                echo $html;
+
+
 
             $client = new Client([
                 'cookies' => true,
@@ -31,12 +143,6 @@ class CategoryCommisionService implements ICategoryCommision
                  ],
                 'decode_content' => 'utf-8',
             ]);
-
-
-
-
-
-
 
 
 
@@ -108,6 +214,8 @@ class CategoryCommisionService implements ICategoryCommision
                 // Hata durumunda işlemler
                 return response()->json(['status' => 'error', 'message' => $e->getMessage()]);
             }
+
+            */
 
         }
 
