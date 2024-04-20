@@ -31,7 +31,7 @@ class CategoryCommisionService implements ICategoryCommision
         public function getN11CategoryCommisionsFromN11(){
 
 
-            $browserFactory = new BrowserFactory();
+            $browserFactory = new BrowserFactory('chrome');
             // starts headless Chrome
             $browser = $browserFactory->createBrowser();
 
