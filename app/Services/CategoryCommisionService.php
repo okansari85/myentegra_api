@@ -31,7 +31,6 @@ class CategoryCommisionService implements ICategoryCommision
         public function getN11CategoryCommisionsFromN11(){
 
 
-
             $client = new Client([
                 'cookies' => true,
                 'headers' => [
@@ -111,7 +110,6 @@ class CategoryCommisionService implements ICategoryCommision
                 // Hata durumunda işlemler
                 return response()->json(['status' => 'error', 'message' => $e->getMessage()]);
             }
-
 
 
         }
