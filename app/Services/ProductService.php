@@ -45,9 +45,11 @@ class ProductService implements IProducts
 
     public function matchN11Product($n11_product, $db_product){
 
-        $n11_product = N11Products::updateOrCreate([
+        $n11_product = N11Products::updateOrCreate(
+            [
             'n11_id' =>  $n11_product['id']
-            ],[
+            ],
+            [
             'title' => $n11_product['title'],
             'display_price' => $n11_product['displayPrice'],
             'price' => $n11_product['price'],

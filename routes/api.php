@@ -14,24 +14,14 @@ use App\Http\Controllers\CategoryComissionController;
 use App\Http\Controllers\N11ProductController;
 use App\Http\Controllers\ApiJobsController;
 use App\Http\Controllers\ImageController;
-
+use App\Http\Controllers\OrderListController;
+use App\Http\Controllers\DepoController;
 
 use Illuminate\Bus\Batch;
 use Illuminate\Support\Facades\Bus;
 use App\Jobs\SendProductsPriceToN11;
 use Illuminate\Support\Facades\Queue;
 use Illuminate\Support\Facades\Schedule;
-
-/*
-|--------------------------------------------------------------------------
-| API Routes
-|--------------------------------------------------------------------------
-|
-| Here is where you can register API routes for your application. These
-| routes are loaded by the RouteServiceProvider and all of them will
-| be assigned to the "api" middleware group. Make something great!
-|
-*/
 
 
 Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
@@ -49,6 +39,12 @@ Route::apiResource('products',ProductController::class);
 
 Route::post('addCategory', [ProductCategoryController::class, 'addCategory']);
 Route::resource('product_categories', ProductCategoryController::class)->shallow();
+
+Route::resource('get_depos', DepoController::class)->shallow();
+
+Route::post('addDepo', [DepoController::class, 'addCategory']);
+
+
 Route::post('addProductCoverImage', [ProductController::class, 'addProductCoverImage']);
 Route::post('matchN11Product', [ProductController::class, 'matchN11Product']);
 
@@ -73,3 +69,5 @@ Route::get('products-price-update-to-n11-quee',[ApiJobsController::class, 'updat
 Route::post('uploadProductImages', [ImageController::class, 'uploadImages']);
 Route::delete('deleteProductImages/{image_id}', [ImageController::class, 'deleteImages']);
 Route::post('changeImageOrder', [ImageController::class, 'changeImageOrder']);
+
+Route::get('getOrderListFromN11', [OrderListController::class, 'getOrderListFromN11']);

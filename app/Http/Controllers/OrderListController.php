@@ -9,6 +9,12 @@ use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Response;
 use Carbon\Carbon;
 
+use Illuminate\Bus\Batch;
+use Illuminate\Support\Facades\Bus;
+use Illuminate\Support\Facades\DB;
+
+use App\Jobs\GetAndUpdateOrders;
+
 class OrderListController extends Controller
 {
     private IOrder $orderservice;
@@ -35,23 +41,23 @@ class OrderListController extends Controller
                 "startDate"  => $edate,
                 "endDate"    => $sdate
             ),
-            'sortForUpdateDate' => 'false',
-            'updateDateSortOrder'=>'asc',
+            'sortForUpdateDate' => 'true',
+            'updateDateSortOrder'=>'desc',
         );
 
-        $n11_orders= $this->orderservice->getDetailedOrders($searchData);
+        $n11_orders= $this->orderservice->getOrders($searchData);
         $orders = $n11_orders->orderList->order;
 
-        dd($orders);
-        //sipariş sayısı 0 dan büyükse
-        if (count($orders)>0){
-            //tüm orderleri chekck et
-            $this->getN11OrderDetails($orders,0);
-        }
+        $batch = Bus::batch([])->name('getandupdateorders')->dispatch();
+
+        $props = array_map(function($order){
+            $order_status = $order->status;
+                return new GetAndUpdateOrders($order);
+        }, $orders);
+
+        $batch->add($props);
+        return $batch;
+
     }
 
-    public function getN11OrderDetails($orders,$i){
-        //$this->orderservice->orderDetail($orders[$i]->id);
-        return response()->json($orders[$i]);
-    }
 }

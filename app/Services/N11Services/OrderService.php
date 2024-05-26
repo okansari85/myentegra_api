@@ -54,7 +54,7 @@ class OrderService extends N11Service implements IOrder
         $this->_parameters["orderRequest"] = [
             "id" => $orderId
         ];
-        $this->_client->OrderDetail($this->_parameters);
+        return $this->_client->OrderDetail($this->_parameters);
     }
 
     /**

@@ -20,6 +20,9 @@ use App\Services\CategoryCommisionService;
 use App\Interfaces\IImages;
 use App\Services\ImageService;
 
+use App\Interfaces\IDepo;
+use App\Services\DepoService;
+
 
 use GuzzleHttp\BodySummarizer;
 use GuzzleHttp\Client;
@@ -46,6 +49,7 @@ class AppServiceProvider extends ServiceProvider
         $this->app->bind(ICargo::class, CargoService::class);
         $this->app->bind(ICategoryCommision::class, CategoryCommisionService::class);
         $this->app->bind(IImages::class, ImageService::class);
+        $this->app->bind(IDepo::class, DepoService::class);
     }
 
     /**
