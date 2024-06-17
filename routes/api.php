@@ -16,6 +16,8 @@ use App\Http\Controllers\ApiJobsController;
 use App\Http\Controllers\ImageController;
 use App\Http\Controllers\OrderListController;
 use App\Http\Controllers\DepoController;
+use App\Http\Controllers\MalzemosController;
+use App\Http\Controllers\StockMovementsController;
 
 use Illuminate\Bus\Batch;
 use Illuminate\Support\Facades\Bus;
@@ -37,10 +39,11 @@ Route::group(['middleware' => ['auth:sanctum']], function () {
 
 Route::apiResource('products',ProductController::class);
 
+
 Route::post('addCategory', [ProductCategoryController::class, 'addCategory']);
 Route::resource('product_categories', ProductCategoryController::class)->shallow();
 
-Route::resource('get_depos', DepoController::class)->shallow();
+
 
 Route::post('addDepo', [DepoController::class, 'addCategory']);
 
@@ -71,3 +74,15 @@ Route::delete('deleteProductImages/{image_id}', [ImageController::class, 'delete
 Route::post('changeImageOrder', [ImageController::class, 'changeImageOrder']);
 
 Route::get('getOrderListFromN11', [OrderListController::class, 'getOrderListFromN11']);
+
+
+//DEPO PROGRAMI ROUTES
+Route::apiResource('malzemos',MalzemosController::class);
+Route::resource('get_depos', DepoController::class)->shallow();
+Route::get('getMalzemosByProductCode',[MalzemosController::class, 'getMalzemosByProductCode']);
+Route::post('addProductStock',[MalzemosController::class, 'addProductStock']);
+Route::delete('deleteStockMovement/{id}',[MalzemosController::class, 'deleteStockMovement']);
+Route::post('removeProductStock',[MalzemosController::class, 'removeProductStock']);
+Route::apiResource('stockmovements',StockMovementsController::class);
+
+Route::post('newProduct',[MalzemosController::class, 'newProduct']);

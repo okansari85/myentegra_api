@@ -23,6 +23,13 @@ use App\Services\ImageService;
 use App\Interfaces\IDepo;
 use App\Services\DepoService;
 
+use App\Interfaces\IMalzemos;
+use App\Services\MalzemosService;
+
+use App\Interfaces\IStockMovements;
+use App\Services\StockMovementsService;
+
+
 
 use GuzzleHttp\BodySummarizer;
 use GuzzleHttp\Client;
@@ -50,6 +57,8 @@ class AppServiceProvider extends ServiceProvider
         $this->app->bind(ICategoryCommision::class, CategoryCommisionService::class);
         $this->app->bind(IImages::class, ImageService::class);
         $this->app->bind(IDepo::class, DepoService::class);
+        $this->app->bind(IMalzemos::class, MalzemosService::class);
+        $this->app->bind(IStockMovements::class, StockMovementsService::class);
     }
 
     /**
