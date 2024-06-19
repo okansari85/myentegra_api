@@ -117,8 +117,8 @@ class GetAndUpdateOrders implements ShouldQueue
                 ]);
 
                 //order shipments
-                $orderShipments = $order->orderDetail->itemList;
-                $orderShipmentsArray = (array) $orderShipments;
+                $orderItems = $order->orderDetail->itemList;
+                $orderShipmentsArray = (array) $orderItems;
 
                 foreach ($orderShipmentsArray as $item) {
 
