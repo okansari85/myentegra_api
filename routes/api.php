@@ -14,7 +14,10 @@ use App\Http\Controllers\CategoryComissionController;
 use App\Http\Controllers\N11ProductController;
 use App\Http\Controllers\ApiJobsController;
 use App\Http\Controllers\ImageController;
-use App\Http\Controllers\OrderListController;
+
+use App\Http\Controllers\N11OrderListController;
+use App\Http\Controllers\HBOrderListController;
+
 use App\Http\Controllers\DepoController;
 use App\Http\Controllers\MalzemosController;
 use App\Http\Controllers\StockMovementsController;
@@ -73,7 +76,8 @@ Route::post('uploadProductImages', [ImageController::class, 'uploadImages']);
 Route::delete('deleteProductImages/{image_id}', [ImageController::class, 'deleteImages']);
 Route::post('changeImageOrder', [ImageController::class, 'changeImageOrder']);
 
-Route::get('getOrderListFromN11', [OrderListController::class, 'getOrderListFromN11']);
+Route::get('getOrderListFromN11', [N11OrderListController::class, 'getOrderListFromN11']);
+Route::get('getOrderListFromHB', [HBOrderListController::class, 'getOrderListFromHB']);
 
 
 //DEPO PROGRAMI ROUTES

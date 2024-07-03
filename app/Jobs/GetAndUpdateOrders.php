@@ -16,6 +16,9 @@ use App\Models\BuyerAdress;
 use App\Models\Orders;
 use App\Models\OrderShipments;
 
+use Carbon\Carbon;
+use App\Enum\OrderStatusEnum;
+
 class GetAndUpdateOrders implements ShouldQueue
 {
     use Batchable,Dispatchable, InteractsWithQueue, Queueable, SerializesModels;
@@ -23,6 +26,7 @@ class GetAndUpdateOrders implements ShouldQueue
     private $order;
     public $tries = 3;
     private IOrder $orderService;
+
 
     /**
      * Create a new job instance.
@@ -42,7 +46,35 @@ class GetAndUpdateOrders implements ShouldQueue
         try {
 
                 $order = $orderService->orderDetail($this->order->id);
-                $order_status = $this->order->status;
+
+                $createdate = $order->orderDetail->createDate ?? '';
+                $order_status = $order->orderDetail->itemList->item->status;
+
+                if ($createdate != '') {
+                    $createdate = Carbon::createFromFormat('d/m/Y H:i', $createdate);
+                    $createdate = $createdate->format('Y-m-d H:i:s');
+                }
+
+                switch ($order_status)
+                {
+                    case '5':
+                        $order_status = OrderStatusEnum::NEW_ORDER;
+                        break;
+                    case '6':
+                        $order_status = OrderStatusEnum::SHIPPED;
+                        break;
+                    case '7':
+                        $order_status = OrderStatusEnum::SHIPPED;
+                        break;
+                    case '10':
+                        $order_status = OrderStatusEnum::COMPLETED;
+                        break;
+
+                    default:
+                        $order_status = 0;
+                        break;
+                }
+
 
                 //buyer yoksa ekle firstorCreate
                 $buyer = Buyers::firstOrCreate(
@@ -52,11 +84,11 @@ class GetAndUpdateOrders implements ShouldQueue
                         'taxId' => $order->orderDetail->buyer->taxId,
                         'taxOffice' => $order->orderDetail->buyer->taxOffice,
                         'email' => $order->orderDetail->buyer->email,
-                        'tcId' => $order->orderDetail->buyer->tcId,
+                        'tcId' => $order->orderDetail->buyer->tcId ?? '',
                     ]
                 );
 
-                //echo $buyer->id;
+
 
                 $buyer_adress = BuyerAdress::firstOrCreate(
                     [
@@ -71,7 +103,7 @@ class GetAndUpdateOrders implements ShouldQueue
                         'neighborhood' => $order->orderDetail->shippingAddress->neighborhood,
                         'postalCode' => $order->orderDetail->shippingAddress->postalCode,
                         'gsm' => $order->orderDetail->shippingAddress->gsm,
-                        'tcId' => $order->orderDetail->shippingAddress->tcId,
+                        'tcId' => $order->orderDetail->shippingAddress->tcId ?? '',
                         'taxId' => $order->orderDetail->shippingAddress->taxId,
                         'taxHouse' => $order->orderDetail->shippingAddress->taxHouse,
                     ]
@@ -90,7 +122,7 @@ class GetAndUpdateOrders implements ShouldQueue
                         'neighborhood' => $order->orderDetail->billingAddress->neighborhood,
                         'postalCode' => $order->orderDetail->billingAddress->postalCode,
                         'gsm' => $order->orderDetail->billingAddress->gsm,
-                        'tcId' => $order->orderDetail->billingAddress->tcId,
+                        'tcId' => $order->orderDetail->billingAddress->tcId ?? '',
                         'taxId' => $order->orderDetail->billingAddress->taxId,
                         'taxHouse' => $order->orderDetail->billingAddress->taxHouse,
                     ]
@@ -103,21 +135,36 @@ class GetAndUpdateOrders implements ShouldQueue
                     'market_order_id' =>  $order->orderDetail->id
                     ],
                     [
-                        'orderDate' => $order->orderDetail->createDate,
+                        'orderDate' => $createdate, //"createDate": "22/06/2024 18:42",
                         'platformId' => 1,
-                        'isPaymentMade' => 0,
-                        'market_order_id' => $order->orderDetail->id,
-                        'market_order_number' => $order->orderDetail->orderNumber,
-                        'is_confirmed' => 0,
-                        'is_invoice_issued' => 0,
-                        'status' => $order->orderDetail->status,
-                        'invoiceType' => $order->orderDetail->invoiceType,
-                        'paymentType' => $order->orderDetail->paymentType,
+                        'market_order_id' => $order->orderDetail->id ?? '', //"id": 353469682,
+                        'market_order_number' => $order->orderDetail->orderNumber ?? '', //"orderNumber": "202669423236",
+                        'status' => $order_status, // "status": 2,
+                        'invoiceType' => $order->orderDetail->invoiceType ?? '', //"invoiceType": "2",
+                        'paymentType' => $order->orderDetail->paymentType ?? '', //"paymentType": 8,
                         'buyer_id' => $buyer->id
                 ]);
 
+
+
+
+
+
+
+
+
+
+
+
+                $orderItems = (array) $order->orderDetail->itemList;
+
+
+
+/*
+
+
                 //order shipments
-                $orderItems = $order->orderDetail->itemList;
+
                 $orderShipmentsArray = (array) $orderItems;
 
                 foreach ($orderShipmentsArray as $item) {
@@ -144,7 +191,7 @@ class GetAndUpdateOrders implements ShouldQueue
                 }
 
 
-
+*/
 
 
         }

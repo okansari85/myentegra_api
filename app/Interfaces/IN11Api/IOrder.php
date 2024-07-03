@@ -10,6 +10,8 @@ interface IOrder
     public const OTHER = "OTHER";
 
 
+
+
     public function getOrderDetail(array $searchData = []): object;
     public function getOrders(array $searchData = []): object;
     public function getDetailedOrders(array $searchData = []): object;

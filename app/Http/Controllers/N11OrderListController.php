@@ -15,7 +15,7 @@ use Illuminate\Support\Facades\DB;
 
 use App\Jobs\GetAndUpdateOrders;
 
-class OrderListController extends Controller
+class N11OrderListController extends Controller
 {
     private IOrder $orderservice;
     //
@@ -28,7 +28,7 @@ class OrderListController extends Controller
 
         //today
         $sdate = Carbon::now('UTC')->setTimezone('Europe/Istanbul')->format('d/m/Y H:i');
-        $edate = Carbon::now('UTC')->setTimezone('Europe/Istanbul')->subMonths(1)->format('d/m/Y H:i');
+        $edate = Carbon::now('UTC')->setTimezone('Europe/Istanbul')->subDays(5)->format('d/m/Y H:i');
 
         $searchData = array(
             'productId'         => '',
@@ -46,17 +46,25 @@ class OrderListController extends Controller
         );
 
         $n11_orders= $this->orderservice->getOrders($searchData);
+
         $orders = $n11_orders->orderList->order;
+
+
+        //return response()->json($this->orderservice->orderDetail($orders[6]->id));//$this->$orderService->orderDetail($orders[0]->id));
+
+        //return response()->json($orders,200);
+
+
 
         $batch = Bus::batch([])->name('getandupdateorders')->dispatch();
 
         $props = array_map(function($order){
-            $order_status = $order->status;
-                return new GetAndUpdateOrders($order);
+               return new GetAndUpdateOrders($order);
         }, $orders);
 
         $batch->add($props);
         return $batch;
+
 
     }
 
