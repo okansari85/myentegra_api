@@ -14,6 +14,7 @@ use Illuminate\Support\Facades\Bus;
 use Illuminate\Support\Facades\DB;
 
 use App\Jobs\GetAndUpdateOrders;
+use App\Models\Orders;
 
 class N11OrderListController extends Controller
 {
@@ -27,8 +28,8 @@ class N11OrderListController extends Controller
     public function getOrderListFromN11(){
 
         //today
-        $sdate = Carbon::now('UTC')->setTimezone('Europe/Istanbul')->format('d/m/Y H:i');
-        $edate = Carbon::now('UTC')->setTimezone('Europe/Istanbul')->subDays(5)->format('d/m/Y H:i');
+            $sdate = Carbon::now('UTC')->setTimezone('Europe/Istanbul')->format('d/m/Y H:i');
+            $edate = Carbon::now('UTC')->setTimezone('Europe/Istanbul')->subDays(5)->format('d/m/Y H:i');
 
         $searchData = array(
             'productId'         => '',
@@ -46,15 +47,19 @@ class N11OrderListController extends Controller
         );
 
         $n11_orders= $this->orderservice->getOrders($searchData);
-
         $orders = $n11_orders->orderList->order;
 
 
-        //return response()->json($this->orderservice->orderDetail($orders[6]->id));//$this->$orderService->orderDetail($orders[0]->id));
+        //return response()->json($this->orderservice->orderDetail($orders[5]->id));//$this->$orderService->orderDetail($orders[0]->id));
 
         //return response()->json($orders,200);
 
+        //update order status to 0 from database
+        $startDate = Carbon::now('UTC')->setTimezone('Europe/Istanbul')->subDays(5)->format('Y-m-d H:i');
+        $endDate   = Carbon::now('UTC')->setTimezone('Europe/Istanbul')->format('Y-m-d H:i');
 
+
+        Orders::whereBetween('orderDate', [$startDate, $endDate])->update(['status' => 0]);
 
         $batch = Bus::batch([])->name('getandupdateorders')->dispatch();
 

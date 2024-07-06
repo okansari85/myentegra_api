@@ -8,6 +8,7 @@ use App\Models\Products;
 use App\Http\Resources\UserResource;
 
 use App\Http\Controllers\ProductController;
+use App\Http\Controllers\OrderController;
 use App\Http\Controllers\ProductCategoryController;
 use App\Http\Controllers\CargoController;
 use App\Http\Controllers\CategoryComissionController;
@@ -41,6 +42,7 @@ Route::group(['middleware' => ['auth:sanctum']], function () {
 });
 
 Route::apiResource('products',ProductController::class);
+Route::apiResource('orders',OrderController::class);
 
 
 Route::post('addCategory', [ProductCategoryController::class, 'addCategory']);
@@ -88,5 +90,4 @@ Route::post('addProductStock',[MalzemosController::class, 'addProductStock']);
 Route::delete('deleteStockMovement/{id}',[MalzemosController::class, 'deleteStockMovement']);
 Route::post('removeProductStock',[MalzemosController::class, 'removeProductStock']);
 Route::apiResource('stockmovements',StockMovementsController::class);
-
 Route::post('newProduct',[MalzemosController::class, 'newProduct']);

@@ -45,10 +45,20 @@ class GetAndUpdateOrders implements ShouldQueue
         //
         try {
 
-                $order = $orderService->orderDetail($this->order->id);
 
+                $order = $orderService->orderDetail($this->order->id);
                 $createdate = $order->orderDetail->createDate ?? '';
-                $order_status = $order->orderDetail->itemList->item->status;
+
+
+                $item_is_array = is_array ($order->orderDetail->itemList->item);
+
+                $order_status = $item_is_array ? $order->orderDetail->itemList->item[0]->status : $order->orderDetail->itemList->item->status;
+                $shippingCompanyName = $item_is_array ? $order->orderDetail->itemList->item[0]->shipmentInfo->shipmentCompany->name : $order->orderDetail->itemList->item->shipmentInfo->shipmentCompany->name;
+                $campaignNumber  = $item_is_array ? $order->orderDetail->itemList->item[0]->shipmentInfo->campaignNumber : $order->orderDetail->itemList->item->shipmentInfo->campaignNumber;
+
+                $dueAmount = $order->orderDetail->billingTemplate->sellerInvoiceAmount;
+
+
 
                 if ($createdate != '') {
                     $createdate = Carbon::createFromFormat('d/m/Y H:i', $createdate);
@@ -68,6 +78,9 @@ class GetAndUpdateOrders implements ShouldQueue
                         break;
                     case '10':
                         $order_status = OrderStatusEnum::COMPLETED;
+                        break;
+                    case '15':
+                        $order_status = OrderStatusEnum::DELAYED_SHIPPING;
                         break;
 
                     default:
@@ -142,7 +155,10 @@ class GetAndUpdateOrders implements ShouldQueue
                         'status' => $order_status, // "status": 2,
                         'invoiceType' => $order->orderDetail->invoiceType ?? '', //"invoiceType": "2",
                         'paymentType' => $order->orderDetail->paymentType ?? '', //"paymentType": 8,
-                        'buyer_id' => $buyer->id
+                        'buyer_id' => $buyer->id,
+                        'shippingCompanyName' => $shippingCompanyName,
+                        'campaignNumber' => $campaignNumber,
+                        'dueAmount' => number_format((float)$dueAmount, 2, '.', '')
                 ]);
 
 

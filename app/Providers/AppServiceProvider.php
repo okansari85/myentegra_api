@@ -29,6 +29,9 @@ use App\Services\MalzemosService;
 use App\Interfaces\IStockMovements;
 use App\Services\StockMovementsService;
 
+use App\Interfaces\IOrder;
+use App\Services\OrderService;
+
 
 
 use GuzzleHttp\BodySummarizer;
@@ -59,11 +62,9 @@ class AppServiceProvider extends ServiceProvider
         $this->app->bind(IDepo::class, DepoService::class);
         $this->app->bind(IMalzemos::class, MalzemosService::class);
         $this->app->bind(IStockMovements::class, StockMovementsService::class);
+        $this->app->bind(IOrder::class, OrderService::class);
     }
 
-    /**
-     * Bootstrap any application services.
-     */
     public function boot(): void
     {
         //
