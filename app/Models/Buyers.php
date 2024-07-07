@@ -11,15 +11,19 @@ class Buyers extends Model
 
     protected $table = 'buyers';
 
-    protected $fillable = [
-        'created_at',
-        'updated_at',
-        'buyer_id',
-        'fullName',
-        'taxId',
-        'taxOffice',
-        'email',
-        'tcId'
-    ];
+    protected $guarded = ['id'];
+
+    public function adresses()
+    {
+        return $this->hasMany(BuyerAdress::class, 'buyer_id');
+    }
+
+    public function order(): BelongsTo
+    {
+        return $this->belongsTo(Orders::class, 'buyer_id');
+    }
+
+
+
 }
 

@@ -14,7 +14,8 @@ class OrderService implements IOrder
 
         $status = [$status,5];
 
-        return Orders::where(function ($query) use ($search,$status) {
+        return Orders::with('buyer')
+            ->where(function ($query) use ($search,$status) {
             $query->where(DB::raw('lower(market_order_number)'), 'like', '%' . mb_strtolower($search) . '%');
             $query->whereIn('status', $status);
             })
