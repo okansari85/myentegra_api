@@ -13,7 +13,7 @@ class Orders extends Model
     protected $guarded = ['id'];
 
     public function buyer(){
-        return  $this->hasOne(Buyers::class,'order_id');
+        return  $this->belongsTo(Buyers::class,'buyer_id');
     }
 
 }

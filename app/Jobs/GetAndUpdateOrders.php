@@ -89,40 +89,15 @@ class GetAndUpdateOrders implements ShouldQueue
                 }
 
 
-
-                $order_record = Orders::updateOrCreate(
-                    [
-                    'market_order_id' =>  $order->orderDetail->id
-                    ],
-                    [
-                        'orderDate' => $createdate, //"createDate": "22/06/2024 18:42",
-                        'platformId' => 1,
-                        'market_order_id' => $order->orderDetail->id ?? '', //"id": 353469682,
-                        'market_order_number' => $order->orderDetail->orderNumber ?? '', //"orderNumber": "202669423236",
-                        'status' => $order_status, // "status": 2,
-                        'invoiceType' => $order->orderDetail->invoiceType ?? '', //"invoiceType": "2",
-                        'paymentType' => $order->orderDetail->paymentType ?? '', //"paymentType": 8,
-                        'shippingCompanyName' => $shippingCompanyName,
-                        'campaignNumber' => $campaignNumber,
-                        'dueAmount' => number_format((float)$dueAmount, 2, '.', '')
-                ]);
-
-
-                $order_id = $order_record->id;
-
                 //buyer yoksa ekle firstorCreate
-                $buyer = Buyers::updateOrCreate(
-                    [
-
-                        'buyer_id' => $order->orderDetail->buyer->id,
-                    ],
+                $buyer = Buyers::firstOrCreate(
+                    ['buyer_id' => $order->orderDetail->buyer->id],
                     [
                         'fullName' => $order->orderDetail->shippingAddress->fullName,
                         'taxId' => $order->orderDetail->buyer->taxId,
                         'taxOffice' => $order->orderDetail->buyer->taxOffice,
                         'email' => $order->orderDetail->buyer->email,
                         'tcId' => $order->orderDetail->buyer->tcId ?? '',
-                        'order_id' => $order_id,
                     ]
                 );
 
@@ -165,6 +140,75 @@ class GetAndUpdateOrders implements ShouldQueue
                         'taxHouse' => $order->orderDetail->billingAddress->taxHouse,
                     ]
                 );
+
+
+
+                $order_record = Orders::updateOrCreate(
+                    [
+                    'market_order_id' =>  $order->orderDetail->id
+                    ],
+                    [
+                        'orderDate' => $createdate, //"createDate": "22/06/2024 18:42",
+                        'platformId' => 1,
+                        'market_order_id' => $order->orderDetail->id ?? '', //"id": 353469682,
+                        'market_order_number' => $order->orderDetail->orderNumber ?? '', //"orderNumber": "202669423236",
+                        'status' => $order_status, // "status": 2,
+                        'invoiceType' => $order->orderDetail->invoiceType ?? '', //"invoiceType": "2",
+                        'paymentType' => $order->orderDetail->paymentType ?? '', //"paymentType": 8,
+                        'buyer_id' => $buyer->id,
+                        'shippingCompanyName' => $shippingCompanyName,
+                        'campaignNumber' => $campaignNumber,
+                        'dueAmount' => number_format((float)$dueAmount, 2, '.', '')
+                ]);
+
+
+
+
+
+
+
+
+
+
+
+
+                $orderItems = (array) $order->orderDetail->itemList;
+
+
+
+/*
+
+
+                //order shipments
+
+                $orderShipmentsArray = (array) $orderItems;
+
+                foreach ($orderShipmentsArray as $item) {
+
+
+                    $order_shipment_record = OrderShipments::updateOrCreate(
+                        [
+                        'order_id' =>  $order_record->id
+                        ],
+                        [
+                            'order_id' => $order_record->id,
+                            'trackingNumber' => '',
+                            'shipmentCompanyName' => $item->shipmentInfo->shipmentCompany->name,
+                            'shipmentCompanyShortName' => $item->shipmentInfo->shipmentCompany->shortName,
+                            'shipmentCode' => $item->shipmentInfo->shipmentCode,
+                            'shipmentMethod' => $item->shipmentInfo->shipmentMethod,
+                            'campaignNumberStatus' => $item->shipmentInfo->campaignNumberStatus,
+                            'shippedDate' => $item->shippingDate,
+                            'campaginNumber' =>  $item->shipmentInfo->campaignNumber,
+                    ]);
+
+
+
+                }
+
+
+*/
+
 
         }
         catch (\Exception $e){
