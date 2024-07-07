@@ -47,6 +47,9 @@ class GetAndUpdateOrders implements ShouldQueue
 
 
                 $order = $orderService->orderDetail($this->order->id);
+
+
+
                 $createdate = $order->orderDetail->createDate ?? '';
 
 

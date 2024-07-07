@@ -29,7 +29,7 @@ class UpdateN11Orders extends Command
     {
         $this->orderService = $_orderService;
         $this->info('N11 sipariş durumlarını güncelliyor...');
-        $subdays=30;
+        $subdays=7;
 
 
         //today
@@ -54,6 +54,12 @@ class UpdateN11Orders extends Command
 
         $n11_orders= $this->orderService->getOrders($searchData);
         $orders = $n11_orders->orderList->order;
+
+
+        /*
+        print_r($this->orderService->orderDetail($orders[0]->id));
+        return;
+        */
 
 
         //api order ids
