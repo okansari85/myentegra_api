@@ -14,7 +14,8 @@ use App\Interfaces\IN11Api\IOrder;
 use App\Models\Buyers;
 use App\Models\BuyerAdress;
 use App\Models\Orders;
-use App\Models\OrderShipments;
+use App\Models\N11OrderItems;
+use App\Models\N11Products;
 
 use Carbon\Carbon;
 use App\Enum\OrderStatusEnum;
@@ -26,7 +27,6 @@ class GetAndUpdateOrders implements ShouldQueue
     private $order;
     public $tries = 3;
     private IOrder $orderService;
-
 
     /**
      * Create a new job instance.
@@ -92,6 +92,7 @@ class GetAndUpdateOrders implements ShouldQueue
                 }
 
 
+
                 //buyer yoksa ekle firstorCreate
                 $buyer = Buyers::firstOrCreate(
                     ['buyer_id' => $order->orderDetail->buyer->id],
@@ -103,7 +104,6 @@ class GetAndUpdateOrders implements ShouldQueue
                         'tcId' => $order->orderDetail->buyer->tcId ?? '',
                     ]
                 );
-
 
 
                 $buyer_adress = BuyerAdress::firstOrCreate(
@@ -147,10 +147,10 @@ class GetAndUpdateOrders implements ShouldQueue
 
 
                 $order_record = Orders::updateOrCreate(
-                    [
-                    'market_order_id' =>  $order->orderDetail->id
-                    ],
-                    [
+                        [
+                        'market_order_id' =>  $order->orderDetail->id
+                        ],
+                         [
                         'orderDate' => $createdate, //"createDate": "22/06/2024 18:42",
                         'platformId' => 1,
                         'market_order_id' => $order->orderDetail->id ?? '', //"id": 353469682,
@@ -165,57 +165,87 @@ class GetAndUpdateOrders implements ShouldQueue
                 ]);
 
 
+                $order_record_id= $order_record->id;
 
+                if ($item_is_array){
+                    foreach ($order->orderDetail->itemList->item as $item) {
+                        $product_id = $item->productId;
+                        $n11_product_id = $this->checkProductExistAndReturnId($product_id);
+                        $this->addOrder($item, $order_record_id, $n11_product_id);
 
-
-
-
-
-
-
-
-
-                $orderItems = (array) $order->orderDetail->itemList;
-
-
-
-/*
-
-
-                //order shipments
-
-                $orderShipmentsArray = (array) $orderItems;
-
-                foreach ($orderShipmentsArray as $item) {
-
-
-                    $order_shipment_record = OrderShipments::updateOrCreate(
-                        [
-                        'order_id' =>  $order_record->id
-                        ],
-                        [
-                            'order_id' => $order_record->id,
-                            'trackingNumber' => '',
-                            'shipmentCompanyName' => $item->shipmentInfo->shipmentCompany->name,
-                            'shipmentCompanyShortName' => $item->shipmentInfo->shipmentCompany->shortName,
-                            'shipmentCode' => $item->shipmentInfo->shipmentCode,
-                            'shipmentMethod' => $item->shipmentInfo->shipmentMethod,
-                            'campaignNumberStatus' => $item->shipmentInfo->campaignNumberStatus,
-                            'shippedDate' => $item->shippingDate,
-                            'campaginNumber' =>  $item->shipmentInfo->campaignNumber,
-                    ]);
-
+                    }
 
 
                 }
-
-
-*/
+                else {
+                    $product_id = $order->orderDetail->itemList->item->productId;
+                    $n11_product_id = $this->checkProductExistAndReturnId($product_id);
+                    $this->addOrder($order->orderDetail->itemList->item, $order_record_id, $n11_product_id);
+                }
 
 
         }
         catch (\Exception $e){
             \Log::error('Error updating order: ' . $e->getMessage());
         }
+    }
+
+
+
+    public function checkProductExistAndReturnId($product_id){
+
+        $is_product_exist = N11Products::where('n11_id', $product_id)->first();
+
+        if (!$is_product_exist) {
+            return 0;
+        }
+        else
+        {
+            return $is_product_exist->id;
+        }
+
+    }
+
+    public function addOrder($item,$order_id,$n11_product_id){
+
+        try{
+        $orderItem = N11OrderItems::updateOrCreate(
+            [
+                'item_id' =>  $item->id
+            ],
+            [
+            'order_id' => $order_id ?? 0,
+            'n11_product_id' =>  $n11_product_id ?? 0,
+
+            'productId' =>  $item->productId,
+            //'deliveryFeeType' => $item->deliveryFeeType ?? 0,
+            'productSellerCode' => $item->productSellerCode ?? '',
+            'status' => $item->status ?? 0,
+            //'approvedDate' => Carbon::createFromFormat('d/m/Y', $item->approvedDate)->format('Y-m-d'),
+            //'dueAmount' =>  $item->dueAmount ?? 0.00,
+            //'installmentChargeWithVAT' => $item->installmentChargeWithVAT ?? 0.00,
+            'price' => $item->price ?? 0.00,
+            //'totalMallDiscountPrice' => $item->totalMallDiscountPrice ?? 0.00,
+            'quantity' => $item->quantity ?? 0,
+            //'sellerCouponDiscount' => $item->sellerCouponDiscount ?? null,
+            //'sellerStockCode' => $item->sellerStockCode ?? '',
+            //'version' => $item->version ?? 0,
+            //'attributes' => $item->attributes ?? {},
+            'sellerDiscount' => $item->sellerDiscount,
+            //'mallDiscount' => $item->mallDiscount,
+            'commission' => $item->commission,
+            'sellerInvoiceAmount' => $item->sellerInvoiceAmount,
+            'productName' => $item->productName,
+            'shippingDate' => $item->shippingDate ?? Carbon::createFromFormat('d/m/Y', $item->shippingDate)->format('Y-m-d'),
+            //'customTextOptionValues' => $item->customTextOptionValues,
+            //'shipmenCompanyCampaignNumber' => $item->shipmenCompanyCampaignNumber,
+            // Eğer varsa diğer tüm sütunları buraya ekleyin
+        ]);
+        }
+        catch (\Exception $e){
+            return $e->getMessage();
+            echo  $e->getMessage();
+        }
+
     }
 }

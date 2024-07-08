@@ -16,6 +16,8 @@ use Illuminate\Support\Facades\Bus;
 use Illuminate\Support\Facades\DB;
 
 use App\Jobs\GetAndUpdateOrders;
+use App\Jobs\AddProductToN11ProductBySellerCode;
+
 use App\Models\Orders;
 
 class UpdateN11Orders extends Command
@@ -29,7 +31,7 @@ class UpdateN11Orders extends Command
     {
         $this->orderService = $_orderService;
         $this->info('N11 sipariş durumlarını güncelliyor...');
-        $subdays=7;
+        $subdays=5;
 
 
         //today
@@ -52,8 +54,9 @@ class UpdateN11Orders extends Command
         );
 
 
-        $n11_orders= $this->orderService->getOrders($searchData);
+        $n11_orders= $this->orderService->getDetailedOrders($searchData);
         $orders = $n11_orders->orderList->order;
+
 
 
         /*
@@ -78,11 +81,13 @@ class UpdateN11Orders extends Command
         //update it
         Orders::whereIn('market_order_id', $notInApiIds)->update(['status' => 6]);
 
-
         $batch = Bus::batch([])->name('getandupdateorders')->dispatch();
 
-        $props = array_map(function($order){
-               return new GetAndUpdateOrders($order);
+        $props = array_map(function($order) {
+            return [
+                new AddProductToN11ProductBySellerCode($order),
+                new GetAndUpdateOrders($order)
+            ];
         }, $orders);
 
         $batch->add($props);
