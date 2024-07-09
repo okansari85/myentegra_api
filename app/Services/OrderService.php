@@ -20,8 +20,8 @@ class OrderService implements IOrder
             $query->whereIn('status', $status);
             })
             ->orderBy('id','desc')
-           ->paginate($per_page)
-           ->appends(request()->query());
+            ->paginate($per_page)
+            ->appends(request()->query());
 
     }
 
