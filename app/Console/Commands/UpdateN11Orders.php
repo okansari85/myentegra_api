@@ -31,7 +31,7 @@ class UpdateN11Orders extends Command
     {
         $this->orderService = $_orderService;
         $this->info('N11 sipariş durumlarını güncelliyor...');
-        $subdays=5;
+        $subdays=10;
 
 
         //today
@@ -54,10 +54,9 @@ class UpdateN11Orders extends Command
         );
 
 
-        $n11_orders= $this->orderService->getDetailedOrders($searchData);
+        $n11_orders= $this->orderService->getOrders($searchData);
         $orders = $n11_orders->orderList->order;
 
-        print_r($n11_orders);
 
         /*
         print_r($this->orderService->orderDetail($orders[0]->id));
@@ -86,7 +85,7 @@ class UpdateN11Orders extends Command
         $batch = Bus::batch([])->name('getandupdateorders')->dispatch();
         $props = array_map(function($order) {
             return [
-                new AddProductToN11ProductBySellerCode($order),
+               // new AddProductToN11ProductBySellerCode($order),
                 new GetAndUpdateOrders($order)
             ];
         }, $orders);
