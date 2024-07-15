@@ -15,6 +15,7 @@ use Illuminate\Support\Facades\Bus;
 use Illuminate\Support\Facades\DB;
 
 use App\Jobs\GetAndUpdateOrdersFromHb;
+use App\Jobs\AddHbListingRecorIfNotExist;
 
 class UpdateHBOrders extends Command
 {
@@ -42,21 +43,18 @@ class UpdateHBOrders extends Command
         $searchData = array(
             'offset'=> '0',
             'limit'=> '100',
-            /*
             'begindate'=> $edate,
             'enddate'=>$sdate,
             'timespan'=>'24'
-            */
         );
 
         $hb_orders= $this->orderService->getOrders($searchData);
         $hb_orders = json_decode($hb_orders, true);
 
-
-
         $batch = Bus::batch([])->name('getandupdateordersfromhb')->dispatch();
         $props = array_map(function($order) {
             return [
+                new AddHbListingRecorIfNotExist($order),
                 new GetAndUpdateOrdersFromHb($order)
             ];
         }, $hb_orders);

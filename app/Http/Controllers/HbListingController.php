@@ -20,18 +20,16 @@ class HbListingController extends Controller
         $this->listingService = $_listingService;
     }
 
-    public function getListingFromHb(){
+    public function getListingFromHb($hbSku=''){
 
         $searchData = array(
             'offset'=> '0',
             'limit'=> '5000',
-            'hbSkuList'=> '',
+            'hbSkuList'=> $hbSku,
         );
 
         $hb_listings= $this->listingService->getListings($searchData);
         $hb_listings = json_decode($hb_listings, true);
-
-
 
         return response()->json($hb_listings,200);
     }
