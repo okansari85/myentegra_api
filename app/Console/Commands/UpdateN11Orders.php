@@ -54,9 +54,8 @@ class UpdateN11Orders extends Command
         );
 
 
-        $n11_orders= $this->orderService->getOrders($searchData);
+        $n11_orders= $this->orderService->getDetailedOrders($searchData);
         $orders = $n11_orders->orderList->order;
-
 
         /*
         print_r($this->orderService->orderDetail($orders[0]->id));
@@ -85,7 +84,7 @@ class UpdateN11Orders extends Command
         $batch = Bus::batch([])->name('getandupdateorders')->dispatch();
         $props = array_map(function($order) {
             return [
-               // new AddProductToN11ProductBySellerCode($order),
+                new AddProductToN11ProductBySellerCode($order),
                 new GetAndUpdateOrders($order)
             ];
         }, $orders);
