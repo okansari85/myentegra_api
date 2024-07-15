@@ -16,7 +16,7 @@ class HBService
 
         if (is_null(config("laravel-hb.username")) || is_null(config("laravel-hb.password" )) | is_null(config("laravel-hb.merchantId" ))) {
             {
-                throw new N11Exception("Some Credientals Not Provideds");
+                throw new HBException("Some Credientals Not Provideds");
             }
         }
 
