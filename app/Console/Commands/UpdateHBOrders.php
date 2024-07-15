@@ -42,9 +42,11 @@ class UpdateHBOrders extends Command
         $searchData = array(
             'offset'=> '0',
             'limit'=> '100',
+            /*
             'begindate'=> $edate,
             'enddate'=>$sdate,
             'timespan'=>'24'
+            */
         );
 
         $hb_orders= $this->orderService->getOrders($searchData);
