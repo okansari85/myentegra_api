@@ -31,7 +31,7 @@ class UpdateN11Orders extends Command
     {
         $this->orderService = $_orderService;
         $this->info('N11 sipariş durumlarını güncelliyor...');
-        $subdays=10;
+        $subdays=5;
 
 
         //today
@@ -54,14 +54,17 @@ class UpdateN11Orders extends Command
         );
 
 
-        $n11_orders= $this->orderService->getDetailedOrders($searchData);
+        $n11_orders= $this->orderService->getOrders($searchData);
         $orders = $n11_orders->orderList->order;
 
-        /*
+/*
         print_r($this->orderService->orderDetail($orders[0]->id));
         return;
-        */
-
+*/
+/*
+        print_r($orders);
+        return;
+*/
         /* İPTAL EDİLEN SİPARİŞLERİ BULAN KOD BLOĞU*/
         //api order ids
         $apiOrderIds  = array_map(function($order) {
