@@ -37,7 +37,8 @@ class AddHbListingRecorIfNotExist implements ShouldQueue
         $orderItems = $order['items'];
 
         foreach ($orderItems as $orderItem) {
-            if (!HBListings::where('listing_id', $orderItem['listingId'])->first()) {
+            $is_product_exist = HBListings::where('listing_id', $orderItem['listingId'])->first();
+            if (!$is_product_exist) {
                 // Kayıt mevcut değilse yapılacak işlemler
                 $hbSku =$orderItem['hbSku'];
                 $this->addHbListing($hbSku,$hbListingService);
