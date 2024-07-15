@@ -22,6 +22,9 @@ use App\Http\Controllers\HBOrderListController;
 use App\Http\Controllers\DepoController;
 use App\Http\Controllers\MalzemosController;
 use App\Http\Controllers\StockMovementsController;
+use App\Http\Controllers\HbListingController;
+use App\Http\Controllers\HbCatalogController;
+
 
 use Illuminate\Bus\Batch;
 use Illuminate\Support\Facades\Bus;
@@ -81,6 +84,10 @@ Route::post('changeImageOrder', [ImageController::class, 'changeImageOrder']);
 Route::get('getOrderListFromN11', [N11OrderListController::class, 'getOrderListFromN11']);
 Route::get('getOrderListFromHB', [HBOrderListController::class, 'getOrderListFromHB']);
 
+Route::get('getListingsFromHB', [HbListingController::class, 'getListingFromHb']);
+Route::get('getHBOrderDetailByOrderNumber/{ordernumber}',[HBOrderListController::class, 'getHBOrderDetailByOrderNumber']);
+Route::get('getAllProductsFromHB', [HbCatalogController::class, 'getAllProductsFromHB']);
+Route::get('getAllProductsFromHBByStatus',[HbCatalogController::class, 'getAllProductsFromHBByStatus']);
 
 //DEPO PROGRAMI ROUTES
 Route::apiResource('malzemos',MalzemosController::class);

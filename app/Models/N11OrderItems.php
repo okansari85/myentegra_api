@@ -12,8 +12,10 @@ class N11OrderItems extends Model
     protected $table = 'n11_order_items';
     protected $guarded = ['id'];
 
-    public function orders (){
-        return $this->belongsTo(Orders::class, 'order_id');
+
+    public function orderItem()
+    {
+        return $this->morphOne(OrderItems::class, 'orderable');
     }
 
 }

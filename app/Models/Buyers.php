@@ -23,6 +23,11 @@ class Buyers extends Model
         return $this->belongsTo(Orders::class, 'buyer_id');
     }
 
+    public function n11_order()
+    {
+        return $this->morphOne(Orders::class, 'buyerable');
+    }
+
 
 
 }

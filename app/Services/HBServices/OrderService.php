@@ -25,5 +25,14 @@ class OrderService extends HBService implements IOrder
         return $response->getBody();
     }
 
+    public function getOrderDetail($orderNumber){
+    //orders/merchantid/{merchantId}/ordernumber/{orderNumber}
+        $url = self::END_POINT.'/orders/merchantid/'.$this->_merchantID.'/ordernumber/'.$orderNumber;
+        $response = $this->_client->request('GET',$url);
+        return $response->getBody();
+    }
+
+
+
 
 }

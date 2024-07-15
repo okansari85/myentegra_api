@@ -7,6 +7,13 @@ use Illuminate\Support\ServiceProvider;
 use App\Interfaces\IHBApi\IOrder;
 use App\Services\HBServices\OrderService;
 
+use App\Interfaces\IHBApi\IListing;
+use App\Services\HBServices\ListingService;
+
+use App\Interfaces\IHBApi\ICatalog;
+use App\Services\HBServices\CatalogService;
+
+
 
 class HBServiceProvider extends ServiceProvider
 {
@@ -17,6 +24,8 @@ class HBServiceProvider extends ServiceProvider
     {
         //
         $this->app->bind(IOrder::class, OrderService::class);
+        $this->app->bind(IListing::class, ListingService::class);
+        $this->app->bind(ICatalog::class, CatalogService::class);
 
 
         $this->mergeConfigFrom(

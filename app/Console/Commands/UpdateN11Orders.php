@@ -31,7 +31,7 @@ class UpdateN11Orders extends Command
     {
         $this->orderService = $_orderService;
         $this->info('N11 sipariş durumlarını güncelliyor...');
-        $subdays=5;
+        $subdays=10;
 
 
         //today
@@ -57,14 +57,12 @@ class UpdateN11Orders extends Command
         $n11_orders= $this->orderService->getDetailedOrders($searchData);
         $orders = $n11_orders->orderList->order;
 
-
-
         /*
         print_r($this->orderService->orderDetail($orders[0]->id));
         return;
         */
 
-
+        /* İPTAL EDİLEN SİPARİŞLERİ BULAN KOD BLOĞU*/
         //api order ids
         $apiOrderIds  = array_map(function($order) {
             return $order->id;
@@ -73,7 +71,7 @@ class UpdateN11Orders extends Command
         //database order ids
         $startdate = Carbon::now('UTC')->setTimezone('Europe/Istanbul')->subDays($subdays)->format('Y-m-d H:i');
         $enddate = Carbon::now('UTC')->setTimezone('Europe/Istanbul')->format('Y-m-d H:i');
-        $databaseOrderIds = Orders::whereBetween('orderDate', [$startdate, $enddate])->pluck('market_order_id')->toArray();
+        $databaseOrderIds = Orders::where('platformId',1)->whereBetween('orderDate', [$startdate, $enddate])->pluck('market_order_id')->toArray();
 
         //compare it
         $notInApiIds = array_diff($databaseOrderIds, $apiOrderIds);
@@ -81,18 +79,17 @@ class UpdateN11Orders extends Command
         //update it
         Orders::whereIn('market_order_id', $notInApiIds)->update(['status' => 6]);
 
-        $batch = Bus::batch([])->name('getandupdateorders')->dispatch();
+        /* İPTAL EDİLEN SİPARİŞLERİ BULAN KOD BLOĞU*/
 
+        $batch = Bus::batch([])->name('getandupdateorders')->dispatch();
         $props = array_map(function($order) {
             return [
                 new AddProductToN11ProductBySellerCode($order),
                 new GetAndUpdateOrders($order)
             ];
         }, $orders);
-
         $batch->add($props);
         //return $batch;
-
         $this->info('N11 sipariş durumları güncellendi.');
 
     }

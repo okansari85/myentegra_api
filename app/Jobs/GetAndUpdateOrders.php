@@ -16,6 +16,7 @@ use App\Models\BuyerAdress;
 use App\Models\Orders;
 use App\Models\N11OrderItems;
 use App\Models\N11Products;
+use App\Models\OrderItems;
 
 use Carbon\Carbon;
 use App\Enum\OrderStatusEnum;
@@ -48,8 +49,6 @@ class GetAndUpdateOrders implements ShouldQueue
 
                 $order = $orderService->orderDetail($this->order->id);
 
-
-
                 $createdate = $order->orderDetail->createDate ?? '';
 
 
@@ -67,6 +66,8 @@ class GetAndUpdateOrders implements ShouldQueue
                     $createdate = Carbon::createFromFormat('d/m/Y H:i', $createdate);
                     $createdate = $createdate->format('Y-m-d H:i:s');
                 }
+
+                /*item eğer array ise item statuslerini kontrol et eğer faklı ise siparişi mükkerer olarak kaydet*/
 
                 switch ($order_status)
                 {
@@ -161,7 +162,9 @@ class GetAndUpdateOrders implements ShouldQueue
                         'buyer_id' => $buyer->id,
                         'shippingCompanyName' => $shippingCompanyName,
                         'campaignNumber' => $campaignNumber,
-                        'dueAmount' => number_format((float)$dueAmount, 2, '.', '')
+                        'dueAmount' => number_format((float)$dueAmount, 2, '.', ''),
+                        'buyerable_id' => $buyer->id,
+                        'buyerable_type' => Buyers::class,
                 ]);
 
 
@@ -171,7 +174,7 @@ class GetAndUpdateOrders implements ShouldQueue
                     foreach ($order->orderDetail->itemList->item as $item) {
                         $product_id = $item->productId;
                         $n11_product_id = $this->checkProductExistAndReturnId($product_id);
-                        $this->addOrder($item, $order_record_id, $n11_product_id);
+                        $this->addN11OrderItem($item, $order_record_id, $n11_product_id);
 
                     }
 
@@ -180,7 +183,7 @@ class GetAndUpdateOrders implements ShouldQueue
                 else {
                     $product_id = $order->orderDetail->itemList->item->productId;
                     $n11_product_id = $this->checkProductExistAndReturnId($product_id);
-                    $this->addOrder($order->orderDetail->itemList->item, $order_record_id, $n11_product_id);
+                    $this->addN11OrderItem($order->orderDetail->itemList->item, $order_record_id, $n11_product_id);
                 }
 
 
@@ -206,10 +209,10 @@ class GetAndUpdateOrders implements ShouldQueue
 
     }
 
-    public function addOrder($item,$order_id,$n11_product_id){
+    public function addN11OrderItem($item,$order_id,$n11_product_id){
 
         try{
-        $orderItem = N11OrderItems::updateOrCreate(
+        $n11OrderItem = N11OrderItems::updateOrCreate(
             [
                 'item_id' =>  $item->id
             ],
@@ -241,6 +244,20 @@ class GetAndUpdateOrders implements ShouldQueue
             //'shipmenCompanyCampaignNumber' => $item->shipmenCompanyCampaignNumber,
             // Eğer varsa diğer tüm sütunları buraya ekleyin
         ]);
+
+        $orderItem = OrderItems::updateOrCreate(
+            [
+                'orderable_id' => $n11OrderItem->id,
+                'orderable_type' => N11OrderItems::class,
+            ],
+            [
+                'order_id' => $order_id
+            ]
+        );
+
+        $n11OrderItem->orderItem()->save($orderItem);
+
+
         }
         catch (\Exception $e){
             return $e->getMessage();
