@@ -13,10 +13,10 @@ class Kernel extends ConsoleKernel
     protected function schedule(Schedule $schedule): void
     {
         $schedule->command('delete:unused-files')->daily();
-        $schedule->command('update:n11-price')->hourly();
+      //  $schedule->command('update:n11-price')->hourly();
         $schedule->command('update:n11-orders')->everyFiveMinutes();
-        $schedule->command('queue:work')->everyMinute();
         $schedule->command('update:hb-orders')->everyFiveMinutes();
+        $schedule->command('queue:work')->everyMinute();
     }
 
     /**
