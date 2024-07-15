@@ -11,7 +11,7 @@ use Illuminate\Bus\Batchable;
 
 use App\Interfaces\IHBApi\IListing;
 
-use App\Models\HbListings;
+use App\Models\HBListings;
 use Carbon\Carbon;
 
 class AddHbListingRecorIfNotExist implements ShouldQueue
