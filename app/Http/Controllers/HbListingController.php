@@ -31,6 +31,8 @@ class HbListingController extends Controller
         $hb_listings= $this->listingService->getListings($searchData);
         $hb_listings = json_decode($hb_listings, true);
 
+
+
         return response()->json($hb_listings,200);
     }
 }

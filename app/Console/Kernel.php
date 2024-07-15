@@ -14,7 +14,7 @@ class Kernel extends ConsoleKernel
     {
         $schedule->command('delete:unused-files')->daily();
       //  $schedule->command('update:n11-price')->hourly();
-        $schedule->command('update:n11-orders')->everyFiveMinutes();
+        $schedule->command('update:n11-orders')->everyFifteenMinutes();
         $schedule->command('update:hb-orders')->everyFiveMinutes();
         $schedule->command('queue:work')->everyMinute();
     }

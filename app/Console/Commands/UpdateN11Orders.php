@@ -31,7 +31,7 @@ class UpdateN11Orders extends Command
     {
         $this->orderService = $_orderService;
         $this->info('N11 sipariş durumlarını güncelliyor...');
-        $subdays=10;
+        $subdays=2;
 
 
         //today
