@@ -13,6 +13,10 @@ use App\Models\Buyers;
 use App\Models\BuyerAdress;
 use App\Models\Orders;
 
+use App\Models\HBListings;
+use App\Models\HbOrderItems;
+use App\Models\OrderItems;
+
 use Carbon\Carbon;
 use App\Enum\OrderStatusEnum;
 
@@ -118,13 +122,84 @@ class GetAndUpdateOrdersFromHb implements ShouldQueue
                 'buyerable_type' => Buyers::class,
         ]);
 
+        $order_record_id= $order_record->id;
 
+        $order_items = $order['items'];
 
+        foreach ($order_items as $item) {
+            $list_id = $this->checkProductExistAndReturnId($item['listingId']);
+            $this->addHBOrderItem($item, $order_record_id, $list_id);
+        }
 
 
         }
         catch (\Exception $e) {
             \Log::error('Error updating order: ' . $e->getMessage());
         }
+    }
+
+    public function addHBOrderItem($item,$order_id,$list_id){
+
+        $hbOrderItem = HbOrderItems::updateOrCreate(
+            [
+                'lineItemId' => $item['lineItemId']
+            ],
+            [
+            'order_id' => $order_id,
+            'hb_listing_id' => $list_id,
+            'productName' => $item['productName'] ?? '',
+            'orderDate' => $item['orderDate'] ?  Carbon::createFromFormat('Y-m-d\TH:i:s', $item['orderDate'])->format('Y-m-d H:i:s') : '',
+            'listing_id' => $item['listingId'] ?? '',
+            'lineItemId'=> $item['lineItemId'] ?? '',
+            'merchantId'=> $item['merchantId'] ?? '',
+            'hbSku'=> $item['hbSku'] ?? '',
+            'merchantSku'=> $item['merchantSku'] ?? '',
+            'quantity' => (int)$item['quantity'],
+            'price' => number_format((float)$item['price']['amount'], 2, '.', ''),
+            'vat'=> number_format((float)$item['vat'], 2, '.', ''),
+            'totalPrice'=> number_format((float)$item['totalPrice']['amount'], 2, '.', ''),
+            'commission'=> number_format((float)$item['commission']['amount'], 2, '.', ''),
+            'commissionRate'=> number_format((float)$item['commissionRate'], 2, '.', ''),
+            'unitHBDiscount'=> number_format((float)$item['unitHBDiscount']['amount'], 2, '.', ''),
+            'totalHBDiscount'=> number_format((float)$item['totalHBDiscount']['amount'], 2, '.', ''),
+            'unitMerchantDiscount'=> number_format((float)$item['unitMerchantDiscount']['amount'], 2, '.', ''),
+            'totalMerchantDiscount'=> number_format((float)$item['totalMerchantDiscount']['amount'], 2, '.', ''),
+            'merchantUnitPrice'=> number_format((float)$item['merchantUnitPrice']['amount'], 2, '.', ''),
+            'merchantTotalPrice'=> number_format((float)$item['merchantTotalPrice']['amount'], 2, '.', ''),
+            'cargoPaymentInfo'=>$item['cargoPaymentInfo'] ?? '',
+            'deliveryType'=>$item['deliveryType'] ?? '',
+            'vatRate'=> number_format((float)$item['vatRate'], 2, '.', ''),
+            'warehouse'=>$item['warehouse']['shippingAddressLabel'] ?? '',
+            'productBarcode'=> $item['productBarcode'] ?? '',
+            'orderNumber'=> $item['orderNumber'] ?? '',
+        ]);
+
+        $orderItem = OrderItems::updateOrCreate(
+            [
+                'orderable_id' => $hbOrderItem->id,
+                'orderable_type' => HbOrderItems::class,
+            ],
+            [
+                'order_id' => $order_id
+            ]
+        );
+
+        $hbOrderItem->orderItem()->save($orderItem);
+
+
+    }
+
+    public function checkProductExistAndReturnId($listing_id){
+
+        $is_product_exist = HBListings::where('listing_id', $listing_id)->first();
+
+        if ($is_product_exist) {
+            return $is_product_exist->id;
+        }
+        else
+        {
+            return 0;
+        }
+
     }
 }

@@ -10,8 +10,6 @@ class HBListings extends Model
     use HasFactory;
 
     protected $table = 'hb_listings';
-    protected $primaryKey = 'id';
-
 
     protected $fillable = [
         'listing_id',
@@ -49,6 +47,7 @@ class HBListings extends Model
         'price_decrease_disabled',
         'stock_decrease_disabled'
     ];
+
 
     protected $casts = [
         'customizable_properties' => 'array',
