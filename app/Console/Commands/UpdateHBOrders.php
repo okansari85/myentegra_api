@@ -35,7 +35,7 @@ class UpdateHBOrders extends Command
         //
         $this->orderService = $_orderService;
         $this->info('HB sipariş durumlarını güncelliyor...');
-        $subdays=0;
+        $subdays=1;
 
         $sdate = Carbon::now('UTC')->setTimezone('Europe/Istanbul')->format('Y-m-d H:i');
         $edate = Carbon::now('UTC')->setTimezone('Europe/Istanbul')->subDays($subdays)->format('Y-m-d H:i');
@@ -43,11 +43,9 @@ class UpdateHBOrders extends Command
         $searchData = array(
             'offset'=> '0',
             'limit'=> '100',
-            /*
             'begindate'=> $edate,
             'enddate'=>$sdate,
             'timespan'=>'24'
-            */
         );
 
         $hb_orders= $this->orderService->getOrders($searchData);
