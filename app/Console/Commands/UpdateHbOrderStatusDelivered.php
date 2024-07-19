@@ -49,8 +49,6 @@ class UpdateHbOrderStatusDelivered extends Command
             return (int)$item['OrderNumber'];
         }, $hb_delivered_orders['items']);
 
-        print_r($hb_delivered_orders);
-
         // orders tablosundaki status'u 4 yap
         Orders::whereIn('market_order_number', $orderIds)
             ->update(['status' => 4]);
