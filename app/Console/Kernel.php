@@ -17,6 +17,7 @@ class Kernel extends ConsoleKernel
         $schedule->command('update:n11-orders')->everyFifteenMinutes();
         $schedule->command('update:hb-orders')->everyFiveMinutes();
         $schedule->command('update:hb-orders-shipped')->everyFiveMinutes();
+        $schedule->command('update:hb-orders-delivered')->everyFiveMinutes();
         $schedule->command('queue:work')->everyMinute();
     }
 

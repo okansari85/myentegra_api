@@ -40,6 +40,14 @@ class OrderService extends HBService implements IOrder
         return $response->getBody();
     }
 
+    public function getDeliveredOrders(array $data = []){
+        $queryString = Arr::query($data);
+        //packages/merchantid/merchantId/delivered?offset=0&limit=100
+        $url = self::END_POINT.'/packages/merchantid/'.$this->_merchantID.'/delivered?'.$queryString;
+        $response = $this->_client->request('GET',$url);
+        return $response->getBody();
+    }
+
 
 
 
