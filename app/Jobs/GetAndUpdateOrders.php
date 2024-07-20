@@ -150,27 +150,34 @@ class GetAndUpdateOrders implements ShouldQueue
                 );
 
 
+                $order_data =  [
+                    'orderDate' => $createdate, //"createDate": "22/06/2024 18:42",
+                    'platformId' => 1,
+                    'market_order_id' => $order->orderDetail->id ?? '', //"id": 353469682,
+                    'market_order_number' => $order->orderDetail->orderNumber ?? '', //"orderNumber": "202669423236",
+                    'status' => $order_status, // "status": 2,
+                    'invoiceType' => $order->orderDetail->invoiceType ?? '', //"invoiceType": "2",
+                    'paymentType' => $order->orderDetail->paymentType ?? '', //"paymentType": 8,
+                    'buyer_id' => $buyer->id,
+                    'shippingCompanyName' => $shippingCompanyName,
+                    'campaignNumber' => $campaignNumber,
+                    'dueAmount' => number_format((float)$dueAmount, 2, '.', ''),
+                    'buyerable_id' => $buyer->id,
+                    'buyerable_type' => Buyers::class,
+                ];
+
+                if ($order_status == OrderStatusEnum::SHIPPED){
+                    $orderData['shippedDate'] = $shippedDate;
+                }
+
+
 
                 $order_record = Orders::updateOrCreate(
                         [
                         'market_order_id' =>  $order->orderDetail->id
                         ],
-                         [
-                        'orderDate' => $createdate, //"createDate": "22/06/2024 18:42",
-                        'platformId' => 1,
-                        'market_order_id' => $order->orderDetail->id ?? '', //"id": 353469682,
-                        'market_order_number' => $order->orderDetail->orderNumber ?? '', //"orderNumber": "202669423236",
-                        'status' => $order_status, // "status": 2,
-                        'invoiceType' => $order->orderDetail->invoiceType ?? '', //"invoiceType": "2",
-                        'paymentType' => $order->orderDetail->paymentType ?? '', //"paymentType": 8,
-                        'buyer_id' => $buyer->id,
-                        'shippingCompanyName' => $shippingCompanyName,
-                        'campaignNumber' => $campaignNumber,
-                        'dueAmount' => number_format((float)$dueAmount, 2, '.', ''),
-                        'buyerable_id' => $buyer->id,
-                        'buyerable_type' => Buyers::class,
-                        'shippedDate' => $shippedDate
-                ]);
+                        $order_data
+            );
 
 
                 $order_record_id= $order_record->id;

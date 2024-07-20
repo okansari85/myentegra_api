@@ -57,6 +57,7 @@ class UpdateN11Orders extends Command
         $n11_orders= $this->orderService->getDetailedOrders($searchData);
         $orders = $n11_orders->orderList->order;
 
+
         /*
         print_r($this->orderService->orderDetail($orders[0]->id));
         return;
