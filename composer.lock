@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "486dbcfb5ea8eb02b6f06e578f54aa63",
+    "content-hash": "2c1eaeaf2469316c82c582ef7415de55",
     "packages": [
         {
             "name": "brick/math",
@@ -2540,16 +2540,16 @@
         },
         {
             "name": "mavinoo/laravel-batch",
-            "version": "v2.4",
+            "version": "v2.3.6",
             "source": {
                 "type": "git",
                 "url": "https://github.com/mavinoo/laravelBatch.git",
-                "reference": "133e2781f13ac2a7455fa28323cd7f4b3bf76f74"
+                "reference": "3fc44da87d0785f67e1a3eb15a034d6b82e2a58f"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/mavinoo/laravelBatch/zipball/133e2781f13ac2a7455fa28323cd7f4b3bf76f74",
-                "reference": "133e2781f13ac2a7455fa28323cd7f4b3bf76f74",
+                "url": "https://api.github.com/repos/mavinoo/laravelBatch/zipball/3fc44da87d0785f67e1a3eb15a034d6b82e2a58f",
+                "reference": "3fc44da87d0785f67e1a3eb15a034d6b82e2a58f",
                 "shasum": ""
             },
             "require": {
@@ -2590,9 +2590,9 @@
             "description": "Insert and update batch (bulk) in laravel",
             "support": {
                 "issues": "https://github.com/mavinoo/laravelBatch/issues",
-                "source": "https://github.com/mavinoo/laravelBatch/tree/v2.4"
+                "source": "https://github.com/mavinoo/laravelBatch/tree/v2.3.6"
             },
-            "time": "2024-07-14T13:39:15+00:00"
+            "time": "2023-11-21T06:12:51+00:00"
         },
         {
             "name": "mikehaertl/php-shellcommand",

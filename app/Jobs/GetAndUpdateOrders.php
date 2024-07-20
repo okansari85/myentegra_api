@@ -50,7 +50,6 @@ class GetAndUpdateOrders implements ShouldQueue
                 $order = $orderService->orderDetail($this->order->id);
 
                 $createdate = $order->orderDetail->createDate ?? '';
-                $shippedDate = '';
 
 
                 $item_is_array = is_array ($order->orderDetail->itemList->item);
@@ -58,7 +57,6 @@ class GetAndUpdateOrders implements ShouldQueue
                 $order_status = $item_is_array ? $order->orderDetail->itemList->item[0]->status : $order->orderDetail->itemList->item->status;
                 $shippingCompanyName = $item_is_array ? $order->orderDetail->itemList->item[0]->shipmentInfo->shipmentCompany->name : $order->orderDetail->itemList->item->shipmentInfo->shipmentCompany->name;
                 $campaignNumber  = $item_is_array ? $order->orderDetail->itemList->item[0]->shipmentInfo->campaignNumber : $order->orderDetail->itemList->item->shipmentInfo->campaignNumber;
-                $shippedDate = $item_is_array ? $order->orderDetail->itemList->item[0]->shippingDate : $order->orderDetail->itemList->item->shippingDate;
 
                 $dueAmount = $order->orderDetail->billingTemplate->sellerInvoiceAmount;
 
@@ -67,10 +65,6 @@ class GetAndUpdateOrders implements ShouldQueue
                 if ($createdate != '') {
                     $createdate = Carbon::createFromFormat('d/m/Y H:i', $createdate);
                     $createdate = $createdate->format('Y-m-d H:i:s');
-                }
-
-                if ($shippedDate != '') {
-                    $shippedDate = Carbon::createFromFormat('d/m/Y', $shippedDate)->format('Y-m-d');
                 }
 
                 /*item eğer array ise item statuslerini kontrol et eğer faklı ise siparişi mükkerer olarak kaydet*/
@@ -97,7 +91,6 @@ class GetAndUpdateOrders implements ShouldQueue
                         $order_status = 0;
                         break;
                 }
-
 
 
 
@@ -172,7 +165,6 @@ class GetAndUpdateOrders implements ShouldQueue
                         'dueAmount' => number_format((float)$dueAmount, 2, '.', ''),
                         'buyerable_id' => $buyer->id,
                         'buyerable_type' => Buyers::class,
-                        'shippedDate' => $shippedDate
                 ]);
 
 
