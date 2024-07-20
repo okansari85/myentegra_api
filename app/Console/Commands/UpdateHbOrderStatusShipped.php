@@ -10,6 +10,7 @@ use Illuminate\Http\Response;
 use Carbon\Carbon;
 
 use App\Models\Orders;
+use Mavinoo\Batch\Batch;
 
 class UpdateHbOrderStatusShipped extends Command
 {
@@ -31,14 +32,15 @@ class UpdateHbOrderStatusShipped extends Command
         $hb_shipped_orders= $this->orderService->getShippedOrders($searchData);
         $hb_shipped_orders = json_decode($hb_shipped_orders, true);
 
-
-        $orderIds = array_map(function($item) {
-            return (int)$item['OrderNumber'];
+        $payload = array_map(function($item) {
+            return [
+                'market_order_number' => (int)$item['OrderNumber'],
+                'shippedDate' => Carbon::createFromFormat('Y-m-d\TH:i:s', $item['ShippedDate'])->format('Y-m-d H:i:s'),
+                'status' => 3
+            ];
         }, $hb_shipped_orders['items']);
 
-        // orders tablosundaki status'u 3 yap
-        Orders::whereIn('market_order_number', $orderIds)
-            ->update(['status' => 3]);
+        batch()->update(new Orders, $payload, 'market_order_number');
 
         $this->info('Hb kargolanan siparişler tespit edildi');
 
