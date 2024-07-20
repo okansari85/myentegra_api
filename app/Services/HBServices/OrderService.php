@@ -48,7 +48,12 @@ class OrderService extends HBService implements IOrder
         return $response->getBody();
     }
 
-
-
+    public function getCancelledOrders(array $data = []){
+    //orders/merchantid/merchantId/cancelled
+         $queryString = Arr::query($data);
+        $url = self::END_POINT.'/orders/merchantid/'.$this->_merchantID.'/cancelled?'.$queryString;
+        $response = $this->_client->request('GET',$url);
+        return $response->getBody();
+    }
 
 }
