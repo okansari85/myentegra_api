@@ -18,4 +18,9 @@ class N11OrderItems extends Model
         return $this->morphOne(OrderItems::class, 'orderable');
     }
 
+    public function product()
+    {
+        return $this->belongsTo(N11Products::class, 'n11_product_id');
+    }
+
 }

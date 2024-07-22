@@ -17,6 +17,7 @@ use App\Models\Orders;
 use App\Models\N11OrderItems;
 use App\Models\N11Products;
 use App\Models\OrderItems;
+use App\Models\RelProductsN11Products;
 
 use Carbon\Carbon;
 use App\Enum\OrderStatusEnum;
@@ -216,6 +217,7 @@ class GetAndUpdateOrders implements ShouldQueue
         }
         else
         {
+
             return $is_product_exist->id;
         }
 
@@ -257,14 +259,28 @@ class GetAndUpdateOrders implements ShouldQueue
             // Eğer varsa diğer tüm sütunları buraya ekleyin
         ]);
 
+        //n11 item asıl producta bağlı mı ?
+        $n11_product = RelProductsN11Products::where('n11_id', $n11_product_id)->first();
+
+
+        $orderItemData = [
+            'order_id' => $order_id,
+            'is_confirmed' => 0
+            // Buraya OrderItem için diğer gerekli alanları ekleyebilirsiniz
+        ];
+
+        // Asıl product mevcutsa, product_id'yi ekle
+        if (!is_null($n11_product)) {
+            $orderItemData['product_id'] = $n11_product->product_id;
+        }
+
+
         $orderItem = OrderItems::updateOrCreate(
             [
                 'orderable_id' => $n11OrderItem->id,
                 'orderable_type' => N11OrderItems::class,
             ],
-            [
-                'order_id' => $order_id
-            ]
+            $orderItemData
         );
 
         $n11OrderItem->orderItem()->save($orderItem);

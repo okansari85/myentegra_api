@@ -47,9 +47,9 @@ class HbOrderItems extends Model
         return $this->belongsTo(Order::class);
     }
 
-    public function hbListing()
+    public function product()
     {
-        return $this->belongsTo(HBListing::class);
+        return $this->belongsTo(HBListings::class,'hb_listing_id');
     }
 
     public function orderItem()
