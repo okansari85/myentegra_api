@@ -63,14 +63,13 @@ class GetAndUpdateOrders implements ShouldQueue
 
 
 
+
                 if ($createdate != '') {
                     $createdate = Carbon::createFromFormat('d/m/Y H:i', $createdate);
                     $createdate = $createdate->format('Y-m-d H:i:s');
                 }
 
-                if ($shippedDate != '') {
-                    $shippedDate = Carbon::createFromFormat('d/m/Y', $shippedDate)->format('Y-m-d');
-                }
+
 
                 /*item eğer array ise item statuslerini kontrol et eğer faklı ise siparişi mükkerer olarak kaydet*/
 
@@ -150,6 +149,10 @@ class GetAndUpdateOrders implements ShouldQueue
                     ]
                 );
 
+                if ($shippedDate != '' && $order_status == OrderStatusEnum::SHIPPED) {
+                    $shippedDate = Carbon::createFromFormat('d/m/Y', $shippedDate)->format('Y-m-d');
+                }
+
 
                 $order_data =  [
                     'orderDate' => $createdate, //"createDate": "22/06/2024 18:42",
@@ -168,8 +171,10 @@ class GetAndUpdateOrders implements ShouldQueue
                 ];
 
                 if ($order_status == OrderStatusEnum::SHIPPED){
-                    $orderData['shippedDate'] = $shippedDate;
+                    $order_data['shippedDate'] = $shippedDate;
                 }
+
+
 
 
 
