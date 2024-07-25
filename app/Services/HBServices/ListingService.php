@@ -18,6 +18,7 @@ class ListingService extends HBService implements IListing
     }
 
     public function getListings(array $data=[]){
+
         $queryString = Arr::query($data);
         $url = self::END_POINT.'/listings/merchantid/'.$this->_merchantID.'?'.$queryString;
         $response = $this->_client->request('GET',$url);

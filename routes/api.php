@@ -58,6 +58,8 @@ Route::post('addDepo', [DepoController::class, 'addCategory']);
 
 Route::post('addProductCoverImage', [ProductController::class, 'addProductCoverImage']);
 Route::post('matchN11Product', [ProductController::class, 'matchN11Product']);
+Route::post('matchHbProduct', [ProductController::class, 'matchHbProduct']);
+
 
 Route::post('importHbCargoPricesFromFile', [CargoController::class, 'importHbCargoPricesFromFile']);
 
@@ -88,6 +90,10 @@ Route::get('getListingsFromHB', [HbListingController::class, 'getListingFromHb']
 Route::get('getHBOrderDetailByOrderNumber/{ordernumber}',[HBOrderListController::class, 'getHBOrderDetailByOrderNumber']);
 Route::get('getAllProductsFromHB', [HbCatalogController::class, 'getAllProductsFromHB']);
 Route::get('getAllProductsFromHBByStatus',[HbCatalogController::class, 'getAllProductsFromHBByStatus']);
+
+
+Route::get('getHbListingFromHbBySku/{hbSku}',[HbListingController::class, 'getHbListingFromHbBySku']);
+Route::get('getHbListingByMerchantSku/{merchantSku?}',[HbListingController::class, 'getHbListingByMerchantSku']);
 
 //DEPO PROGRAMI ROUTES
 Route::apiResource('malzemos',MalzemosController::class);

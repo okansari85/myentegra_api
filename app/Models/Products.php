@@ -48,7 +48,9 @@ class Products extends Model
         return  $this->hasOne(RelProductsN11Products::class,"product_id");
     }
 
-
+    public function hb_product(){
+        return  $this->hasOne(RelProductsHbListings::class,"product_id");
+    }
 
     public function next(){
         // get next user

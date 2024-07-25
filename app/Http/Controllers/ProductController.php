@@ -45,6 +45,15 @@ class ProductController extends Controller
 
     }
 
+    public function matchHbProduct(Request $request){
+
+        $hb_product_id= $request->hb_product_id;
+        $db_product_id= $request->db_product_id;
+
+        return response()->json($this->productservice->matchHbProduct($hb_product_id, $db_product_id));
+
+    }
+
     /**
      * Show the form for creating a new resource.
      */

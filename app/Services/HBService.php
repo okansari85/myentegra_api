@@ -5,6 +5,7 @@ use App\Exceptions\HBException;
 use GuzzleHttp\Client;
 
 
+
 class HBService
 {
     protected $_parameters = null;
