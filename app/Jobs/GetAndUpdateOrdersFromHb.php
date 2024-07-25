@@ -12,7 +12,7 @@ use Illuminate\Queue\SerializesModels;
 use App\Models\Buyers;
 use App\Models\BuyerAdress;
 use App\Models\Orders;
-
+use App\Models\RelProductsHbListings;
 use App\Models\HBListings;
 use App\Models\HbOrderItems;
 use App\Models\OrderItems;
