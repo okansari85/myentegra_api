@@ -174,14 +174,25 @@ class GetAndUpdateOrdersFromHb implements ShouldQueue
             'orderNumber'=> $item['orderNumber'] ?? '',
         ]);
 
+        $orderItemData = [
+            'order_id' => $order_id,
+            'is_confirmed' => 0
+            // Buraya OrderItem için diğer gerekli alanları ekleyebilirsiniz
+        ];
+
+            // Asıl product mevcutsa, product_id'yi ekle
+            $hb_product = RelProductsHbListings::where('hb_listing_id', $list_id)->first();
+            if (!is_null($hb_product)) {
+                $orderItemData['product_id'] = $hb_product->product_id;
+            }
+
+
         $orderItem = OrderItems::updateOrCreate(
             [
                 'orderable_id' => $hbOrderItem->id,
                 'orderable_type' => HbOrderItems::class,
             ],
-            [
-                'order_id' => $order_id
-            ]
+            $orderItemData
         );
 
         $hbOrderItem->orderItem()->save($orderItem);

@@ -264,9 +264,6 @@ class GetAndUpdateOrders implements ShouldQueue
             // Eğer varsa diğer tüm sütunları buraya ekleyin
         ]);
 
-        //n11 item asıl producta bağlı mı ?
-        $n11_product = RelProductsN11Products::where('n11_id', $n11_product_id)->first();
-
 
         $orderItemData = [
             'order_id' => $order_id,
@@ -275,6 +272,7 @@ class GetAndUpdateOrders implements ShouldQueue
         ];
 
         // Asıl product mevcutsa, product_id'yi ekle
+        $n11_product = RelProductsN11Products::where('n11_id', $n11_product_id)->first();
         if (!is_null($n11_product)) {
             $orderItemData['product_id'] = $n11_product->product_id;
         }
