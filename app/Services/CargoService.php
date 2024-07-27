@@ -25,7 +25,13 @@ class CargoService implements ICargo
     public function getCargoPricesFromN11(){
 
         $client = new Client([
-            'headers' => ['content-type' => 'application/json', 'Accept' => 'applicatipon/json', 'charset' => 'utf-8']
+            'headers' => [
+                'content-type' => 'application/json',
+                'Accept' => '*/*',
+                'charset' => 'utf-8',
+                'User-Agent' => 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/127.0.0.0 Safari/537.36',
+                'Origin' => 'https://www.n11.com',
+                ]
             ]);
 
 
