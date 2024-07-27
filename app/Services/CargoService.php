@@ -40,6 +40,8 @@ class CargoService implements ICargo
             // CURL isteğini gönderme
             $response = $client->request('GET', 'https://www.n11.com/kampanyalar/ozel-kargo-kampanyasi');
 
+            print_r($response);
+            return;
             // Yanıtı alma ve işleme
             $statusCode = $response->getStatusCode();
             $html = (string)$response->getBody(true)->getContents();
