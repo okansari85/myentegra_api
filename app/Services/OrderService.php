@@ -6,7 +6,7 @@ use App\Interfaces\IOrder;
 use App\Models\Orders;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Bus;
-
+use App\Models\OrderItems;
 
 class OrderService implements IOrder
 {
@@ -22,6 +22,53 @@ class OrderService implements IOrder
             ->orderBy('id','desc')
             ->paginate($per_page)
             ->appends(request()->query());
+
+    }
+
+    public function confirmItem($item_id,$product_id){
+
+        $response = DB::transaction(function () use ($item_id, $product_id) {
+            // OrderItems kaydını alın
+            $order_item = OrderItems::find($item_id);
+
+            if ($order_item) {
+                // OrderItems kaydından order_id değerini alın
+                $order_id = $order_item->order_id;
+
+                // OrderItems kaydını güncelleyin
+                $order_item->product_id = $product_id;
+                $order_item->is_confirmed = 1;
+                $order_item->save();
+
+                // Aynı order_id'ye sahip ve is_confirmed = 0 olan başka kayıtlar olup olmadığını kontrol edin
+                $unconfirmedItems = OrderItems::where('order_id', $order_id)
+                                              ->where('is_confirmed', 0)
+                                              ->count();
+
+                if ($unconfirmedItems === 0) {
+                    // Eğer is_confirmed = 0 olan başka kayıt yoksa, Orders tablosunu güncelleyin
+                    $order = Orders::find($order_id);
+                    if ($order) {
+                        $order->is_confirmed = 1;
+                        $order->save();
+                        // Başarı mesajı döndür
+                        return ['status' => 200, 'message' => 'Sipariş öğesi ve sipariş başarıyla onaylandı'];
+                    } else {
+                        // Sipariş bulunamazsa hata mesajı döndür
+                        return ['status' => 404, 'message' => 'Sipariş bulunamadı'];
+                    }
+                } else {
+                    // Diğer öğeler hala beklemede mesajı döndür
+                    return ['status' => 200, 'message' => 'Sipariş öğesi onaylandı, ancak diğer öğeler hala beklemede'];
+                }
+            } else {
+                // OrderItems kaydı bulunamazsa hata mesajı döndür
+                return ['status' => 404, 'message' => 'Sipariş öğesi bulunamadı'];
+            }
+        });
+
+        return response()->json(['message' => $response['message']], $response['status']);
+
 
     }
 

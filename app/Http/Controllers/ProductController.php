@@ -103,4 +103,16 @@ class ProductController extends Controller
     {
         //
     }
+
+    public function getProductBySellerCode(Request $request){
+
+        $product_code=$request->query('product_code');
+        $product = $this->productservice->getProductBySellerCode($product_code);
+
+        if (!$product) {
+            abort(404, 'Ürün bulunamadı');
+        }
+
+        return response()->json($product,200);
+    }
 }

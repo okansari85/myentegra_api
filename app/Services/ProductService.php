@@ -182,4 +182,17 @@ class ProductService implements IProducts
 
         return response()->json($product,200);
     }
+
+    public function getProductBySellerCode($product_code){
+        $product = Products::where('productCode',$product_code)->first();
+
+        if (!is_null($product) || !empty($product)) {
+            return Products::with('coverImage','category.descendants','n11_product.n11_product','hb_product.hb_listing')->get()->find($product->id);
+        }
+        else
+        {
+            return $product;
+        }
+
+    }
 }

@@ -35,4 +35,13 @@ class OrderController extends Controller
 
         return response()->json($this->orderService->getAllOrders($search,$per_page,$status));
     }
+
+    public function confirmItem(Request $request) {
+
+        $item_id = $request->input('item_id');
+        $product_id = $request->input('product_id');
+
+        // ProductService içindeki confirmItem metodunu çağır
+        return $this->orderService->confirmItem($item_id, $product_id);
+    }
 }

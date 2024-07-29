@@ -59,7 +59,7 @@ Route::post('addDepo', [DepoController::class, 'addCategory']);
 Route::post('addProductCoverImage', [ProductController::class, 'addProductCoverImage']);
 Route::post('matchN11Product', [ProductController::class, 'matchN11Product']);
 Route::post('matchHbProduct', [ProductController::class, 'matchHbProduct']);
-
+Route::get('getProductBySellerCode',[ProductController::class, 'getProductBySellerCode']);
 
 Route::post('importHbCargoPricesFromFile', [CargoController::class, 'importHbCargoPricesFromFile']);
 
@@ -77,7 +77,7 @@ Route::get('batches/{batch_id}',[ApiJobsController::class, 'addUpdateN11Products
 Route::get('findBatchIdByName/{name}',[ApiJobsController::class, 'findBatchIdByName']);
 Route::get('products-price-update-to-n11-quee',[ApiJobsController::class, 'updateN11Prices']);
 
-
+Route::post('/confirm-item', [OrderController::class, 'confirmItem']);
 
 Route::post('uploadProductImages', [ImageController::class, 'uploadImages']);
 Route::delete('deleteProductImages/{image_id}', [ImageController::class, 'deleteImages']);
