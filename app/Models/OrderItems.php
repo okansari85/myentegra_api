@@ -21,4 +21,8 @@ class OrderItems extends Model
         return $this->morphTo();
     }
 
+    public function product(){
+        return $this->belongsTo(Products::class,'product_id');
+    }
+
 }

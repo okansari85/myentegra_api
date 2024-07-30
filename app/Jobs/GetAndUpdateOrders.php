@@ -267,7 +267,6 @@ class GetAndUpdateOrders implements ShouldQueue
 
         $orderItemData = [
             'order_id' => $order_id,
-            'is_confirmed' => 0
             // Buraya OrderItem için diğer gerekli alanları ekleyebilirsiniz
         ];
 
