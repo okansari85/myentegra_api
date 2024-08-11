@@ -32,6 +32,8 @@ use App\Services\StockMovementsService;
 use App\Interfaces\IOrder;
 use App\Services\OrderService;
 
+use App\Interfaces\IHakedis;
+use App\Services\HakedisService;
 
 
 use GuzzleHttp\BodySummarizer;
@@ -63,6 +65,7 @@ class AppServiceProvider extends ServiceProvider
         $this->app->bind(IMalzemos::class, MalzemosService::class);
         $this->app->bind(IStockMovements::class, StockMovementsService::class);
         $this->app->bind(IOrder::class, OrderService::class);
+        $this->app->bind(IHakedis::class, HakedisService::class);
     }
 
     public function boot(): void

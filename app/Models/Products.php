@@ -23,8 +23,20 @@ class Products extends Model
     ];
 
     protected $casts = [
-        'price' => 'decimal:2'
+        'price' => 'decimal:2',
+        'profit_rate' => 'decimal:2'
     ];
+
+    public function getPriceAttribute($value)
+    {
+        return (float) $value;
+    }
+
+    public function getProfitRateAttribute($value)
+    {
+        return (float) $value;
+    }
+
 
 
     public function images()
@@ -51,6 +63,7 @@ class Products extends Model
     public function hb_product(){
         return  $this->hasOne(RelProductsHbListings::class,"product_id");
     }
+
 
     public function next(){
         // get next user

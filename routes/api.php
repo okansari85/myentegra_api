@@ -26,6 +26,8 @@ use App\Http\Controllers\HbListingController;
 use App\Http\Controllers\HbCatalogController;
 
 
+use App\Http\Controllers\HakedisController;
+
 use Illuminate\Bus\Batch;
 use Illuminate\Support\Facades\Bus;
 use App\Jobs\SendProductsPriceToN11;
@@ -94,6 +96,10 @@ Route::get('getAllProductsFromHBByStatus',[HbCatalogController::class, 'getAllPr
 
 Route::get('getHbListingFromHbBySku/{hbSku}',[HbListingController::class, 'getHbListingFromHbBySku']);
 Route::get('getHbListingByMerchantSku/{merchantSku?}',[HbListingController::class, 'getHbListingByMerchantSku']);
+
+//HAKEDİŞ
+Route::post('addHakedisItem', [HakedisController::class, 'addHakedisItem']);
+Route::get('hakedis/daily', [HakedisController::class, 'listHakedisByDay']);
 
 //DEPO PROGRAMI ROUTES
 Route::apiResource('malzemos',MalzemosController::class);

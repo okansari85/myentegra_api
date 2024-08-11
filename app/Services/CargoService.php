@@ -25,21 +25,20 @@ class CargoService implements ICargo
     public function getCargoPricesFromN11(){
 
         $client = new Client([
+            'cookies' => true,
             'headers' => [
-                'user-agent' => 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/88.0.4324.104 Safari/537.36',
-                'accept' => 'text/html,application/xhtml+xml,application/xml;q=0.9,image/avif,image/webp,image/apng,*/*;q=0.8,application/signed-exchange;v=b3;q=0.9',
-                'origin' => 'https://www.n11.com',
-                'accept-encoding: gzip, deflate, br',
-            ]
-            ]);
+                'User-Agent' => 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/123.0.0.0 Safari/537.36',
+                'Accept-Charset' => 'utf-8',
+             ],
+            'decode_content' => 'utf-8',
+        ]);
 
 
         try {
             // CURL isteğini gönderme
             $response = $client->request('GET', 'https://www.n11.com/kampanyalar/ozel-kargo-kampanyasi');
 
-            print_r($response);
-            return;
+
             // Yanıtı alma ve işleme
             $statusCode = $response->getStatusCode();
             $html = (string)$response->getBody(true)->getContents();
