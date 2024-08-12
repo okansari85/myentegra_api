@@ -50,6 +50,9 @@ class GetAndUpdateOrders implements ShouldQueue
 
                 $order = $orderService->orderDetail($this->order->id);
 
+
+
+
                 $createdate = $order->orderDetail->createDate ?? '';
 
 
@@ -95,6 +98,8 @@ class GetAndUpdateOrders implements ShouldQueue
                         $order_status = 0;
                         break;
                 }
+
+                //orderstatus new ordersa ve kayıt varsa güncelleme
 
 
 
@@ -178,27 +183,27 @@ class GetAndUpdateOrders implements ShouldQueue
 
                 $order_record = Orders::where('market_order_id', $order->orderDetail->id)->first();
 
-
-                if ($order_record) {
-                    // Kayıt varsa ve status 1 veya 2 değilse güncelle
-                    if (!in_array($order_record->status, [1, 2])) {
+                //order status new order ve veritabanındaki kayıt
+                //$order_status = OrderStatusEnum::NEW_ORDER;
+                if ($order_record){
+                    if (!$order_status == OrderStatusEnum::NEW_ORDER) {
                         $order_record = Orders::updateOrCreate(
-                                [
-                                'market_order_id' =>  $order->orderDetail->id
-                                ],
-                                $order_data
-                        );
+                            [
+                            'market_order_id' =>  $order->orderDetail->id
+                            ],
+                            $order_data
+                         );
                     }
-                } else {
-                    // Kayıt yoksa yeni bir kayıt oluştur
-                        $order_record = Orders::updateOrCreate(
+                }
+                else {
+                     // Kayıt yoksa yeni bir kayıt oluştur
+                     $order_record = Orders::updateOrCreate(
                         [
                         'market_order_id' =>  $order->orderDetail->id
                         ],
                         $order_data
                     );
                 }
-
 
                 $order_record_id= $order_record->id;
 
