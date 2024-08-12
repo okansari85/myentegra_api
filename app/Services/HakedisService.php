@@ -25,6 +25,14 @@ class HakedisService implements IHakedis
         // Siparişleri gün bazlı olarak gruplandır
         $groupedHakedis = $hakedisler->groupBy(function($hakedis) {
             return Carbon::parse($hakedis->created_at)->format('Y-m-d');
+        })->map(function ($hakedisGroup) {
+            // Grup içindeki hakedişlerin toplam tutarını hesapla
+            $totalAmount = $hakedisGroup->sum('total_price'); // 'amount' alanı yerine hakediş toplamını tutan alanı kullanın
+
+            return [
+                'hakedisler' => $hakedisGroup,
+                'totalAmount' => $totalAmount,
+            ];
         });
 
         return $groupedHakedis;
