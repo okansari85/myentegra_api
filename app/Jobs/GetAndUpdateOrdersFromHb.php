@@ -104,7 +104,8 @@ class GetAndUpdateOrdersFromHb implements ShouldQueue
 
             $order_record = Orders::updateOrCreate(
                 [
-                'market_order_id' =>  $order['items'][0]['orderNumber']
+                'market_order_id' =>  $order['items'][0]['orderNumber'],
+                'status' => 1,
                 ],
                  [
                 'orderDate' => $formattedDate, //"createDate": "22/06/2024 18:42",
