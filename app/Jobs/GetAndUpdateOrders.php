@@ -186,13 +186,19 @@ class GetAndUpdateOrders implements ShouldQueue
                 //order status new order ve veritabanındaki kayıt
                 //$order_status = OrderStatusEnum::NEW_ORDER;
                 if ($order_record){
-                    if (!$order_status == OrderStatusEnum::NEW_ORDER) {
-                        $order_record = Orders::updateOrCreate(
-                            [
-                            'market_order_id' =>  $order->orderDetail->id
-                            ],
-                            $order_data
-                         );
+                    if (!$order_status == OrderStatusEnum::NEW_ORDER ) {
+
+                        //gecikmeye düşmüş ama status 2 ise de bişey yapma
+                        if (!($order_status == OrderStatusEnum::DELAYED_SHIPPING && $order_record->status == 2))
+                        {
+                            $order_record = Orders::updateOrCreate(
+                                [
+                                'market_order_id' =>  $order->orderDetail->id
+                                ],
+                                $order_data
+                             );
+                        }
+
                     }
                 }
                 else {
