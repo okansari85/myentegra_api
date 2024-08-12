@@ -176,14 +176,28 @@ class GetAndUpdateOrders implements ShouldQueue
 
 
 
+                $order_record_control = Orders::where('market_order_id', $order->orderDetail->id)->first();
 
 
-                $order_record = Orders::updateOrCreate(
+                if ($order_record_control) {
+                    // Kayıt varsa ve status 1 veya 2 değilse güncelle
+                    if (!in_array($order_record_control->status, [1, 2])) {
+                        $order_record = Orders::updateOrCreate(
+                                [
+                                'market_order_id' =>  $order->orderDetail->id
+                                ],
+                                $order_data
+                        );
+                    }
+                } else {
+                    // Kayıt yoksa yeni bir kayıt oluştur
+                        $order_record = Orders::updateOrCreate(
                         [
                         'market_order_id' =>  $order->orderDetail->id
                         ],
                         $order_data
-            );
+                    );
+                }
 
 
                 $order_record_id= $order_record->id;
