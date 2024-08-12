@@ -107,18 +107,17 @@ class GetAndUpdateOrdersFromHb implements ShouldQueue
 
             if ($order_record) {
                 // Kayıt varsa ve status 1 veya 2 değilse güncelle
-                if (!in_array($order_record->status, [1, 2])) {
 
                     $order_record = Orders::updateOrCreate(
                         [
                         'market_order_id' =>  $order['items'][0]['orderNumber'],
+                        'status' => 1,
                         ],
                          [
                         'orderDate' => $formattedDate, //"createDate": "22/06/2024 18:42",
                         'platformId' => 2,
                         'market_order_id' => $order['items'][0]['orderNumber'], //"id": 353469682,
                         'market_order_number' => $order['items'][0]['orderNumber'], //"orderNumber": "202669423236",
-                        'status' => 1,
                         'invoiceType' => $order['taxNumber'] ? 2 : 1, //"invoiceType": "2",
                         'paymentType' => 0, //"paymentType": 8,
                         'buyer_id' => $buyer->id,
@@ -128,7 +127,7 @@ class GetAndUpdateOrdersFromHb implements ShouldQueue
                         'buyerable_id' => $buyer->id,
                         'buyerable_type' => Buyers::class,
                     ]);
-                }
+
             }
             else{
 
