@@ -106,12 +106,10 @@ class GetAndUpdateOrdersFromHb implements ShouldQueue
 
 
             if ($order_record) {
-                // Kayıt varsa ve status 1 veya 2 değilse güncelle
-
+                // Kayıt varsa ve statusü elleme
                     $order_record = Orders::updateOrCreate(
                         [
                         'market_order_id' =>  $order['items'][0]['orderNumber'],
-                        'status' => 1,
                         ],
                          [
                         'orderDate' => $formattedDate, //"createDate": "22/06/2024 18:42",
