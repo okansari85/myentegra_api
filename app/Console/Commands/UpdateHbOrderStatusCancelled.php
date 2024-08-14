@@ -43,14 +43,17 @@ class UpdateHbOrderStatusCancelled extends Command
 
         $hb_cancelled_orders= $service->getCancelledOrders($searchData);
         $hb_cancelled_orders = json_decode($hb_cancelled_orders, true);
+
+
+
         $page_count = $hb_cancelled_orders['pageCount'];
 
         $orderIds = array_map(function($item) {
-            return (int)$item['orderNumber'];
+            return $item['Id'];
         }, $hb_cancelled_orders['items']);
 
         // orders tablosundaki status'u 6 yap
-        Orders::whereIn('market_order_number', $orderIds)
+        Orders::whereIn('market_order_id', $orderIds)
             ->update(['status' => 6]);
 
         $page+1 < (int)$page_count ? $this->setOrderStatusToCompleted($this->orderService,$page+1) : null;

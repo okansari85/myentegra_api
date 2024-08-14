@@ -46,11 +46,11 @@ class UpdateHbOrderStatusDelivered extends Command
         $page_count = $hb_delivered_orders['pageCount'];
 
         $orderIds = array_map(function($item) {
-            return (int)$item['OrderNumber'];
+            return $item['Id'];
         }, $hb_delivered_orders['items']);
 
         // orders tablosundaki status'u 4 yap
-        Orders::whereIn('market_order_number', $orderIds)
+        Orders::whereIn('market_order_id', $orderIds)
             ->update(['status' => 4]);
 
         $page+1 < (int)$page_count ? $this->setOrderStatusToCompleted($this->orderService,$page+1) : null;

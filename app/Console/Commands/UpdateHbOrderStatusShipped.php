@@ -35,13 +35,13 @@ class UpdateHbOrderStatusShipped extends Command
 
         $payload = array_map(function($item) {
             return [
-                'market_order_number' => (int)$item['OrderNumber'],
+                'market_order_id' => $item['Id'],
                 'shippedDate' => Carbon::createFromFormat('Y-m-d\TH:i:s', $item['ShippedDate'])->format('Y-m-d H:i:s'),
                 'status' => 3
         ];
         }, $hb_shipped_orders['items']);
 
-        batch()->update(new Orders, $payload, 'market_order_number');
+        batch()->update(new Orders, $payload, 'market_order_id');
 
         $this->info('Hb kargolanan siparişler tespit edildi');
 
