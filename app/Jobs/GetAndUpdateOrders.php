@@ -214,6 +214,8 @@ class GetAndUpdateOrders implements ShouldQueue
 
                 $order_record_id= $order_record->id;
 
+
+
                 if ($item_is_array){
                     foreach ($order->orderDetail->itemList->item as $item) {
                         $product_id = $item->productId;
@@ -297,11 +299,13 @@ class GetAndUpdateOrders implements ShouldQueue
         ];
 
         // Asıl product mevcutsa, product_id'yi ekle
+        //otomatik teyit
+        /*
         $n11_product = RelProductsN11Products::where('n11_id', $n11_product_id)->first();
         if (!is_null($n11_product)) {
             $orderItemData['product_id'] = $n11_product->product_id;
         }
-
+        */
 
         $orderItem = OrderItems::updateOrCreate(
             [
