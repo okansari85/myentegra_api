@@ -7,4 +7,5 @@ return [
     "username" => env("HB_API_USERNAME"),
     "password" => env("HB_API_PASSWORD"),
     "merchantId" => env("HB_API_MERCHANTID"),
+    "servisAnahtari" => env("HB_API_SERVIS_ANAHTARI"),
 ];
