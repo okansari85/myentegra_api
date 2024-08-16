@@ -106,58 +106,39 @@ class GetAndUpdateOrdersFromHb implements ShouldQueue
             $order_record_control = Orders::where('market_order_id', $market_order_id)->first();
 
 
+            $order_data =     [
+                'orderDate' => $formattedDate, //"createDate": "22/06/2024 18:42",
+                'platformId' => 2,
+                'status' => 1,
+                'market_order_id' => $market_order_id, //"id": 353469682,
+                'market_order_number' => $order['items'][0]['orderNumber'], //"orderNumber": "202669423236",
+                'invoiceType' => $order['taxNumber'] ? 2 : 1, //"invoiceType": "2",
+                'paymentType' => 0, //"paymentType": 8,
+                'buyer_id' => $buyer->id,
+                'shippingCompanyName' => $order['cargoCompany'],
+                'campaignNumber' => $order['barcode'],
+                'dueAmount' => number_format((float)$order['totalPrice']['amount'], 2, '.', ''),
+                'buyerable_id' => $buyer->id,
+                'buyerable_type' => Buyers::class,
+            ];
+
+
+
             if ($order_record_control) {
                 // Kayıt varsa ve status 2 ise elleme
-
-                if ($order_record_control->status != 2) {
-
-                    $order_record = Orders::updateOrCreate(
-                        [
-                        'market_order_id' =>  $market_order_id,
-                        ],
-                         [
-                        'orderDate' => $formattedDate, //"createDate": "22/06/2024 18:42",
-                        'platformId' => 2,
-                        'status' => 1,
-                        'market_order_id' => $market_order_id, //"id": 353469682,
-                        'market_order_number' => $order['items'][0]['orderNumber'], //"orderNumber": "202669423236",
-                        'invoiceType' => $order['taxNumber'] ? 2 : 1, //"invoiceType": "2",
-                        'paymentType' => 0, //"paymentType": 8,
-                        'buyer_id' => $buyer->id,
-                        'shippingCompanyName' => $order['cargoCompany'],
-                        'campaignNumber' => $order['barcode'],
-                        'dueAmount' => number_format((float)$order['totalPrice']['amount'], 2, '.', ''),
-                        'buyerable_id' => $buyer->id,
-                        'buyerable_type' => Buyers::class,
-                    ]);
-                }
-
+                $order_data['status'] =  $order_record_control->status;
             }
             else{
-
-                $order_record = Orders::updateOrCreate(
-                    [
-                    'market_order_id' => $market_order_id,
-                    ],
-                     [
-                    'orderDate' => $formattedDate, //"createDate": "22/06/2024 18:42",
-                    'platformId' => 2,
-                    'market_order_id' =>$market_order_id, //"id": 353469682,
-                    'market_order_number' => $order['items'][0]['orderNumber'], //"orderNumber": "202669423236",
-                    'status' => 1,
-                    'invoiceType' => $order['taxNumber'] ? 2 : 1, //"invoiceType": "2",
-                    'paymentType' => 0, //"paymentType": 8,
-                    'buyer_id' => $buyer->id,
-                    'shippingCompanyName' => $order['cargoCompany'],
-                    'campaignNumber' => $order['barcode'],
-                    'dueAmount' => number_format((float)$order['totalPrice']['amount'], 2, '.', ''),
-                    'buyerable_id' => $buyer->id,
-                    'buyerable_type' => Buyers::class,
-                ]);
+                $order_data['status'] =  1;
 
             }
 
-
+            $order_record = Orders::updateOrCreate(
+                    [
+                    'market_order_id' =>  $market_order_id,
+                    ],
+                    $order_data
+            );
 
 
         $order_record_id= $order_record->id;
