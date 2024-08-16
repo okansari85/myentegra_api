@@ -27,6 +27,7 @@ class HBService
             'headers' => [
             'accept' => 'application/json',
             'authorization' => 'Basic ' .  base64_encode(config("laravel-hb.merchantId") . ':' . config("laravel-hb.servisAnahtari")),
+            'user-agent' => config("laravel-hb.username")
             ]
         ];
 
