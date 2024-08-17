@@ -299,13 +299,24 @@ class GetAndUpdateOrders implements ShouldQueue
         ];
 
         // Asıl product mevcutsa, product_id'yi ekle
-        //otomatik teyit
-        /*
-        $n11_product = RelProductsN11Products::where('n11_id', $n11_product_id)->first();
-        if (!is_null($n11_product)) {
-            $orderItemData['product_id'] = $n11_product->product_id;
+        // item teyitli değilse ekle
+        // Mevcut sipariş öğesini kontrol et
+        $existingOrderItem = OrderItems::where([
+            'orderable_id' => $n11OrderItem->id,
+            'orderable_type' => N11OrderItems::class
+        ])->first();
+
+
+        // Sipariş öğesi zaten var, ancak onaylanmadı
+        if ($existingOrderItem && $existingOrderItem->is_confirmed == 0) {
+
+            $n11_product = RelProductsN11Products::where('n11_id', $n11_product_id)->first();
+
+            if (!is_null($n11_product)) {
+                $orderItemData['product_id'] = $n11_product->product_id;
+            }
+
         }
-        */
 
         $orderItem = OrderItems::updateOrCreate(
             [

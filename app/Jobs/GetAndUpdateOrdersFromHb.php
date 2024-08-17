@@ -142,7 +142,6 @@ class GetAndUpdateOrdersFromHb implements ShouldQueue
 
 
         $order_record_id= $order_record->id;
-
         $order_items = $order['items'];
 
         foreach ($order_items as $item) {
@@ -198,11 +197,11 @@ class GetAndUpdateOrdersFromHb implements ShouldQueue
             // Buraya OrderItem için diğer gerekli alanları ekleyebilirsiniz
         ];
 
-            // Asıl product mevcutsa, product_id'yi ekle
-            $hb_product = RelProductsHbListings::where('hb_listing_id', $list_id)->first();
-            if (!is_null($hb_product)) {
+        // Asıl product mevcutsa, product_id'yi ekle
+        $hb_product = RelProductsHbListings::where('hb_listing_id', $list_id)->first();
+        if (!is_null($hb_product)) {
                 $orderItemData['product_id'] = $hb_product->product_id;
-            }
+        }
 
 
         $orderItem = OrderItems::updateOrCreate(
