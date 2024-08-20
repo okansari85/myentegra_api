@@ -44,8 +44,7 @@ class UpdateHbOrderStatusCancelled extends Command
         $hb_cancelled_orders= $service->getCancelledOrders($searchData);
         $hb_cancelled_orders = json_decode($hb_cancelled_orders, true);
 
-        print_r( $hb_cancelled_orders);
-        return;
+
 
         $page_count = $hb_cancelled_orders['pageCount'];
 
