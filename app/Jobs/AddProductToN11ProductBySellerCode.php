@@ -44,23 +44,26 @@ class AddProductToN11ProductBySellerCode implements ShouldQueue
 
         if ($item_is_array){
             foreach ($order_items->orderItem as $item){
-                $productSellerCode = $item->productSellerCode;
-                $this->getN11Product($productSellerCode,$n11productService);
+                $product_id = $item->productId;
+                //$productSellerCode = $item->productSellerCode;
+                $this->getN11Product($product_id,$n11productService);
             }
         }
         else{
             //item tekli ise
-            $productSellerCode = $order_items->orderItem->productSellerCode;
-            $this->getN11Product($productSellerCode,$n11productService);
+            //$productSellerCode = $order_items->orderItem->productSellerCode;
+            $product_id = $order->orderDetail->itemList->item->productId;
+            $this->getN11Product($product_id,$n11productService);
         }
 
     }
 
-    public function getN11Product($productSellerCode,IProduct $n11productService){
+    public function getN11Product($product_id,IProduct $n11productService){
 
-        $is_product_exist = N11Products::where('productSellerCode', $productSellerCode)->first();
+        $is_product_exist = N11Products::where('n11_id', $product_id)->first();
+
         if (!$is_product_exist){
-        $n11_products= $n11productService->getProductBySellerCode($productSellerCode);
+        $n11_products= $n11productService->getProductBySellerCode($is_product_exist->productSellerCode);
         $this->addN11Item($n11_products->product);
         }
 
