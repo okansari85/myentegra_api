@@ -28,18 +28,12 @@ use App\Http\Controllers\HbCatalogController;
 
 use App\Http\Controllers\HakedisController;
 
-
-use App\Http\Controllers\PazaramaTestController;
-
-
 use Illuminate\Bus\Batch;
 use Illuminate\Support\Facades\Bus;
 use App\Jobs\SendProductsPriceToN11;
 use Illuminate\Support\Facades\Queue;
 use Illuminate\Support\Facades\Schedule;
 
-
-Route::get('getBrands', [PazaramaTestController::class, 'getBrands']);
 
 Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
     $user = $request->user();

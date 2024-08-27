@@ -171,7 +171,6 @@ return [
         App\Providers\RepositoryServiceProvider::class,
         App\Providers\N11ServiceProvider::class,
         App\Providers\HBServiceProvider::class,
-        App\Providers\PazaramaServiceProvider::class,
         App\Providers\BotServiceProvider::class,
         Mavinoo\Batch\BatchServiceProvider::class,
         Maatwebsite\Excel\ExcelServiceProvider::class,
