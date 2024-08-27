@@ -15,7 +15,7 @@ class HBService
     public function __construct()
     {
 
-        if (is_null(config("laravel-hb.username")) || is_null(config("laravel-hb.servisAnahtari")) || is_null(config("laravel-hb.password" )) | is_null(config("laravel-hb.merchantId" ))) {
+        if (is_null(config("laravel-hb.username")) || is_null(config("laravel-hb.servisAnahtari")) || is_null(config("laravel-hb.password" )) || is_null(config("laravel-hb.merchantId" ))) {
             {
                 throw new HBException("Some Credientals Not Provideds");
             }
