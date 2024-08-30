@@ -108,14 +108,12 @@ class PazaramaService
     protected function setEndPoint(string $endPoint)
     {
         $this->_parameters = [
-            'base_uri' => $this->_baseUri.$endPoint,
+            'base_uri' => rtrim($this->_baseUri, '/') . '/' . ltrim($endPoint, '/'), // URL birleşimini doğrula
             'headers' => [
-            'Authorization' => 'Bearer ' . $this->getAccessToken(),
+                'Content-Type' => 'application/json',
+                'Authorization' => 'Bearer ' . $this->getAccessToken(),
             ]
         ];
-
-
-
 
         return new Client($this->_parameters);
     }

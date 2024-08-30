@@ -10,7 +10,6 @@ use Illuminate\Queue\SerializesModels;
 use Illuminate\Bus\Batchable;
 
 use App\Interfaces\IN11Api\IProduct;
-
 use App\Models\N11Products;
 
 use Carbon\Carbon;
@@ -23,9 +22,7 @@ class AddProductToN11ProductBySellerCode implements ShouldQueue
     private $order;
     public $tries = 3;
 
-    /**
-     * Create a new job instance.
-     */
+
     public function __construct($_order)
     {
         $this->order = $_order;
