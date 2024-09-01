@@ -41,18 +41,20 @@ class UpdateHBOrders extends Command
         $edate = Carbon::now('UTC')->setTimezone('Europe/Istanbul')->subDays($subdays)->format('Y-m-d H:i');
 
         $searchData = array(
-            'offset'=> '0',
-            'limit'=> '100',
-            'begindate'=> $edate,
-            'enddate'=>$sdate,
-            'timespan'=>'24'
+          'offset'=> 2,
+          'limit'=> 100,
+          'begindate'=> $edate,
+          'enddate'=>$sdate,
         );
 
         $hb_orders= $this->orderService->getOrders($searchData);
         $hb_orders = json_decode($hb_orders, true);
 
+
+
         $batch = Bus::batch([])->name('getandupdateordersfromhb')->dispatch();
         $props = array_map(function($order) {
+            $this->info($order['recipientName']);
             return [
                 new AddHbListingRecorIfNotExist($order),
                 new GetAndUpdateOrdersFromHb($order)
