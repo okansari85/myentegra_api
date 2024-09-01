@@ -163,12 +163,14 @@ class MalzemosService implements IMalzemos
         try {
 
             $product = Malzemos::firstOrCreate(
-                ['productCode' => $productData['product_code']], // Arama kriteri
+                [
+                    'productCode' => $productData['product_code'],
+                    'depo_id' => $productData['depo_id']
+                ], // Arama kriteri
                 [                                               // Bulunamadığında eklenecek veri
                     'productDesc' => $productData['product_desc'],
                     'stock' => $productData['stock'],
                     'raf_id' => $productData['raf_id'],
-                    'depo_id' => $productData['depo_id']
                 ]
             );
 
