@@ -42,8 +42,8 @@ class UpdateHBOrders extends Command
 
 
         $searchData = array(
-          'offset'=> 1,
-          'limit'=> 100,
+          'offset'=> 3,
+          'limit'=> 10,
           'begindate'=> $edate,
           'enddate'=>$sdate,
         );
