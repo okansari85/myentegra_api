@@ -40,6 +40,7 @@ class UpdateHBOrders extends Command
         $sdate = Carbon::now('UTC')->setTimezone('Europe/Istanbul')->format('Y-m-d H:i');
         $edate = Carbon::now('UTC')->setTimezone('Europe/Istanbul')->subDays($subdays)->format('Y-m-d H:i');
 
+
         $searchData = array(
           'offset'=> 1,
           'limit'=> 100,
