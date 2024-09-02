@@ -31,8 +31,6 @@ class UpdateHbOrderStatusShipped extends Command
         $hb_shipped_orders= $this->orderService->getShippedOrders($searchData);
         $hb_shipped_orders = json_decode($hb_shipped_orders, true);
 
-
-
         $payload = array_map(function($item) {
             return [
                 'market_order_id' => $item['Id'],

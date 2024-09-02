@@ -143,6 +143,7 @@ class GetAndUpdateOrdersFromPazarama implements ShouldQueue
 
             $market_order_id= $order['orderId'];
 
+            print_r( $order_status );
 
             //orderdata
             $order_data =     [

@@ -25,6 +25,22 @@ class OrderService implements IOrder
 
     }
 
+    public function getConfirmedOrders($search,$per_page,$status){
+
+        $status = [$status,5];
+
+        return Orders::with('items.orderable','buyer.adresses','items.product.coverImage','items.product.category.descendants')
+            ->where(function ($query) use ($search,$status) {
+            $query->where(DB::raw('lower(market_order_number)'), 'like', '%' . mb_strtolower($search) . '%');
+            $query->whereIn('status', $status);
+            })
+            ->where('is_confirmed',1)
+            ->orderBy('id','desc')
+            ->paginate($per_page)
+            ->appends(request()->query());
+
+    }
+
     public function confirmItem($item_id,$product_id){
 
         $response = DB::transaction(function () use ($item_id, $product_id) {

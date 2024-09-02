@@ -54,6 +54,7 @@ Route::group(['middleware' => ['auth:sanctum']], function () {
 
 Route::apiResource('products',ProductController::class);
 Route::apiResource('orders',OrderController::class);
+Route::get('getConfirmedOrders',[OrderController::class, 'getConfirmedOrders']);
 
 
 Route::post('addCategory', [ProductCategoryController::class, 'addCategory']);

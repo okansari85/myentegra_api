@@ -44,4 +44,13 @@ class OrderController extends Controller
         // ProductService içindeki confirmItem metodunu çağır
         return $this->orderService->confirmItem($item_id, $product_id);
     }
+
+    public function getConfirmedOrders(Request $request){
+
+        $search = $request->query('search');
+        $per_page = $request->query('per_page');
+        $status = $request->query('status');
+
+        return response()->json($this->orderService->getConfirmedOrders($search,$per_page,$status));
+    }
 }
