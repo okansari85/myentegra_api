@@ -142,9 +142,6 @@ class GetAndUpdateOrdersFromPazarama implements ShouldQueue
 
 
             $market_order_id= $order['orderId'];
-
-            print_r( $order_status );
-
             //orderdata
             $order_data =     [
                 'orderDate' => $createdate, //"createDate": "22/06/2024 18:42",
