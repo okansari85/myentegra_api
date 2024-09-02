@@ -50,9 +50,8 @@ class UpdateHBOrders extends Command
         $searchData = array(
             'begindate'=>$edate,
             'enddate'=>$sdate,
-            'offset'=> $offset,
+            'offset'=> $offset*10,
             'limit'=> 10,
-            'page'=>$offset,
           );
 
 
@@ -78,6 +77,6 @@ class UpdateHBOrders extends Command
 
         $batch->add($props);
 
-        $offset+1 <= (int)$totalcount ? $this->setOrders($this->orderService,$offset+1) : null;
+        $offset+1 < (int)$page_count ? $this->setOrders($this->orderService,$offset+1) : null;
     }
 }
