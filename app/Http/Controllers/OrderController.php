@@ -53,4 +53,36 @@ class OrderController extends Controller
 
         return response()->json($this->orderService->getConfirmedOrders($search,$per_page,$status));
     }
+
+    public function markAsPrinted(Request $request)
+    {
+        // Validation
+        $request->validate([
+            'orderID' => 'required|integer|exists:orders,id',
+        ]);
+
+        try {
+            // Get the order ID from the request
+            $orderID = $request->input('orderID');
+
+            // Find the order and mark it as printed
+            $order = $this->orderService->markAsPrinted($orderID);
+
+            if (!$order) {
+                return response()->json(['message' => 'Sipariş bulunamadı'], 404);
+            }
+
+            return response()->json($order, 200);
+
+        } catch (\Throwable $e) {
+            // Log the exception
+            \Log::error('Error marking order as printed: '.$e->getMessage(), [
+                'exception' => $e,
+                'orderID' => $request->input('orderID')
+            ]);
+
+            // Return a more descriptive error message
+            return response()->json(['message' => 'Bir hata oluştu. Lütfen tekrar deneyin.'], 500);
+        }
+    }
 }

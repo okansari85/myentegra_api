@@ -88,5 +88,31 @@ class OrderService implements IOrder
 
     }
 
+    public function markAsPrinted($order_id)
+    {
+        DB::beginTransaction();
+
+        try {
+            // Siparişi ID'ye göre bul
+            $order = Orders::findOrFail($order_id);
+            $order->is_printed = 1;
+            $order->save();
+
+            // İşlemi başarılı bir şekilde bitir
+            DB::commit();
+            return $order;
+
+        } catch (\Illuminate\Database\Eloquent\ModelNotFoundException $e) {
+            // Sipariş bulunamadıysa geri al (rollback)
+            DB::rollBack();
+            throw new \Exception("Sipariş bulunamadı: " . $e->getMessage());
+
+        } catch (\Exception $e) {
+            // Diğer hatalar durumunda işlemi geri al (rollback)
+            DB::rollBack();
+            throw new \Exception("Bir hata oluştu: " . $e->getMessage());
+        }
+    }
+
 
 }

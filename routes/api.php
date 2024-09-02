@@ -108,6 +108,8 @@ Route::get('getHbListingByMerchantSku/{merchantSku?}',[HbListingController::clas
 Route::post('addHakedisItem', [HakedisController::class, 'addHakedisItem']);
 Route::get('hakedis/daily', [HakedisController::class, 'listHakedisByDay']);
 
+Route::post('/orders/mark-printed', [OrderController::class, 'markAsPrinted']);
+
 //DEPO PROGRAMI ROUTES
 Route::apiResource('malzemos',MalzemosController::class);
 Route::resource('get_depos', DepoController::class)->shallow();
