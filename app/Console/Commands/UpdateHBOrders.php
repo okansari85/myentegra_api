@@ -35,23 +35,37 @@ class UpdateHBOrders extends Command
         //
         $this->orderService = $_orderService;
         $this->info('HB sipariş durumlarını güncelliyor...');
+        $this->setOrders($this->orderService,0);
+        $this->info('HB sipariş durumları güncellendi.');
+    }
+
+
+    public function setOrders($service,$offset){
+
         $subdays=1;
 
         $sdate = Carbon::now('UTC')->setTimezone('Europe/Istanbul')->format('Y-m-d H:i');
         $edate = Carbon::now('UTC')->setTimezone('Europe/Istanbul')->subDays($subdays)->format('Y-m-d H:i');
 
-
         $searchData = array(
-          'offset'=> 3,
-          'limit'=> 10,
-          'begindate'=> $edate,
-          'enddate'=>$sdate,
-        );
+            'begindate'=>$edate,
+            'enddate'=>$sdate,
+            'offset'=> $offset,
+            'limit'=> 10,
+            'page'=>$offset,
+          );
+
 
         $hb_orders= $this->orderService->getOrders($searchData);
-        $hb_orders = json_decode($hb_orders, true);
 
 
+
+        $page_count = $hb_orders['pagecount'][0];
+        $offset =  $hb_orders['offset'][0];
+        $totalcount= floor($hb_orders['totalcount'][0]-10);
+        $limit = $hb_orders['limit'][0];
+
+        $hb_orders = json_decode($hb_orders['orders'], true);
 
         $batch = Bus::batch([])->name('getandupdateordersfromhb')->dispatch();
         $props = array_map(function($order) {
@@ -64,6 +78,6 @@ class UpdateHBOrders extends Command
 
         $batch->add($props);
 
-        $this->info('HB sipariş durumları güncellendi.');
+        $offset+1 <= (int)$totalcount ? $this->setOrders($this->orderService,$offset+1) : null;
     }
 }

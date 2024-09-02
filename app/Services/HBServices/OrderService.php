@@ -22,7 +22,13 @@ class OrderService extends HBService implements IOrder
         $queryString = Arr::query($data);
         $url = self::END_POINT.'/packages/merchantid/'.$this->_merchantID.'?'.$queryString;
         $response = $this->_client->request('GET',$url);
-        return $response->getBody();
+        return $response = [
+            'pagecount'=> $response->getHeaders()['pagecount'],
+            'offset'=> $response->getHeaders()['offset'],
+            'limit'=> $response->getHeaders()['limit'],
+            'totalcount'=>$response->getHeaders()['totalcount'],
+            'orders'=> $response->getBody()->getContents()
+        ];
     }
 
     public function getOrderDetail($orderNumber){
