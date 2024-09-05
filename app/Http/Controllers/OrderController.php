@@ -85,4 +85,15 @@ class OrderController extends Controller
             return response()->json(['message' => 'Bir hata oluştu. Lütfen tekrar deneyin.'], 500);
         }
     }
+
+    public function markAsChecked(Request $request){
+          // Request'ten ürün kodunu al
+          $productCode = $request->input('productCode');
+
+          // Servis metodunu çağır ve sonucu al
+          $response = $this->orderService->markAsChecked($productCode);
+
+          // Servis metodunun döndürdüğü yanıtı geri döndür
+          return $response;
+    }
 }

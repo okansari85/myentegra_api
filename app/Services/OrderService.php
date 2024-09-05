@@ -3,25 +3,45 @@
 namespace App\Services;
 
 use App\Interfaces\IOrder;
-use App\Models\Orders;
+
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Bus;
+
+
 use App\Models\OrderItems;
+use App\Models\Orders;
+use App\Models\Products;
 
 class OrderService implements IOrder
 {
     public function getAllOrders($search,$per_page,$status){
 
-        $status = $status =="1" ?  [$status,5] : [$status];
+        $status = $status == "1" ? [$status, 5] : [$status];
 
-        return Orders::with('items.orderable','buyer.adresses','items.product.coverImage','items.product.category.descendants')
-            ->where(function ($query) use ($search,$status) {
-            $query->where(DB::raw('lower(market_order_number)'), 'like', '%' . mb_strtolower($search) . '%');
-            $query->whereIn('status', $status);
-            })
-            ->orderBy('id','desc')
-            ->paginate($per_page)
-            ->appends(request()->query());
+        $orders = Orders::with([
+            'items.orderable',
+            'buyer.adresses',
+            'items.product.coverImage',
+            'items.product.category.descendants'
+        ])
+        ->where(function ($query) use ($search, $status) {
+            $query->where(DB::raw('lower(market_order_number)'), 'like', '%' . mb_strtolower($search) . '%')
+                  ->whereIn('status', $status);
+        })
+        ->orderBy('id', 'desc')
+        ->paginate($per_page);
+
+            // `is_checked_count` değerini hesapla ve ekle
+        $orders->each(function ($order) {
+            // Her item için (orderable->quantity - checked_quantity) farkını hesapla ve bu farkların toplamını `is_checked_count` olarak belirle
+            $order->is_checked_count = $order->items->sum(function ($item) {
+                $total_quantity = $item->orderable->quantity ?? 0; // orderable->quantity değeri yoksa varsayılan 0
+                $checked_quantity = $item->checked_quantity ?? 0; // checked_quantity değeri yoksa varsayılan 0
+                return max(0, $total_quantity - $checked_quantity); // Negatif olmaması için max(0, fark) kullan
+            });
+        });
+
+        return $orders->appends(request()->query());
 
     }
 
@@ -116,7 +136,84 @@ class OrderService implements IOrder
 
     public function markAsChecked($product_code){
 
+        DB::beginTransaction();
 
+        try {
+            $targetProduct = $this->findProduct($product_code);
+
+            if (!$targetProduct) {
+                DB::rollBack();
+                return response()->json(['message' => 'Ürün bulunamadı'], 404);
+            }
+
+            $orderItem = $this->findOrderItem($targetProduct);
+            if (!$orderItem) {
+                DB::rollBack();
+                return response()->json(['message' => 'Sipariş öğesi bulunamadı'], 404);
+            }
+
+            $this->updateOrderItem($orderItem);
+            $this->updateOrder($orderItem->order);
+
+            DB::commit();
+
+            return response()->json([
+                'message' => 'Öğe işaretlendi',
+                'order_id' => $orderItem->order->id,
+                'is_checked' => $orderItem->order->is_checked,
+                'is_checked_count' =>  $orderItem->order->items->count() - $orderItem->order->items->where('is_checked', 1)->count(),
+                'product_id' => $targetProduct->id,
+            ], 200);
+        } catch (\Exception $e) {
+            DB::rollBack();
+            return response()->json(['message' => $e->getMessage()], 500);
+        }
+
+    }
+
+
+    private function findProduct($product_code)
+    {
+        return Products::where('productCode', $product_code)->first();
+    }
+
+    private function findOrderItem($product)
+    {
+        return OrderItems::whereHas('order', function ($query) {
+            $query->where('status', 2)
+                  ->where('is_printed', 1)
+                  ->where('is_confirmed', 1);
+        })->where('product_id', $product->id)
+        ->first();
+    }
+
+    private function updateOrderItem($orderItem)
+    {
+        // Polimorfik ilişki üzerinden sipariş miktarını al
+            $quantity = $orderItem->orderable->quantity ?? 0; // `quantity` değeri yoksa varsayılan olarak 0 kullan
+
+            // `checked_quantity`'yi artır ve `quantity`'yi aşmamasını sağla
+            if ($orderItem->checked_quantity < $quantity) {
+                $orderItem->checked_quantity += 1;
+            }
+
+            // `checked_quantity` eşit veya büyükse, item'ı kontrol edilmiş olarak işaretle
+            $orderItem->is_checked = ($orderItem->checked_quantity == $quantity) ? 1 : 0;
+
+            // Değişiklikleri kaydet
+            $orderItem->save();
+    }
+
+    private function updateOrder($order)
+    {
+        $allItemsChecked = $order->items->every(function ($item) {
+            return $item->is_checked == 1;
+        });
+
+        if ($allItemsChecked) {
+            $order->is_checked = 1;
+            $order->save();
+        }
     }
 
 
