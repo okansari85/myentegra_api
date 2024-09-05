@@ -12,9 +12,7 @@ class OrderService implements IOrder
 {
     public function getAllOrders($search,$per_page,$status){
 
-        if ($status=="1"){
-        $status = [$status,5];
-        }
+
 
         return Orders::with('items.orderable','buyer.adresses','items.product.coverImage','items.product.category.descendants')
             ->where(function ($query) use ($search,$status) {
