@@ -183,7 +183,9 @@ class OrderService implements IOrder
             $query->where('status', 2)
                   ->where('is_printed', 1)
                   ->where('is_confirmed', 1);
-        })->where('product_id', $product->id)
+        })
+        ->where('product_id', $product->id)
+        ->where('is_checked',0)
         ->first();
     }
 
