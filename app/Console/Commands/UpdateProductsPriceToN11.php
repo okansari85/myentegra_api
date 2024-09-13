@@ -38,6 +38,7 @@ class UpdateProductsPriceToN11 extends Command
         $batch = Bus::batch([])->name('n11pricestockupdate')->dispatch();
         $products=Products::with('n11_product.n11_product')->has('n11_product')->get()->map(function ($product) {
             return new SendProductsPriceToN11($product);
+            return new SendProductsStockToN11($product);
         });
         $batch->add($products);
      // Batch işlemin durumunu kontrol edelim ve çalıştığında ne yapacağımızı belirtemek için

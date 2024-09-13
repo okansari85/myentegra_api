@@ -51,7 +51,7 @@ class ImportTahtakaleToptanProducts implements ShouldQueue
             'productCode' => $productCode,
             'productTitle' => (string) $product->title,
             'price' => (float) $product->price,
-            //'desi' => 0,
+            'desi' => 1,
             'stock' => (int) $product->quantity,
             'profit_rate' => 4.50,
             'description' => (string) $product->description,
