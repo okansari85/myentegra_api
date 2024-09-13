@@ -19,7 +19,8 @@ class Products extends Model
         'category_id',
         'profit_rate',
         'description',
-        'productTitle'
+        'productTitle',
+        'supplier_id'
     ];
 
     protected $casts = [
@@ -80,12 +81,36 @@ class Products extends Model
         return $this->first();
     }
 
-    public function maliyet(){
-        $price =  $this->price * 1.1 * 1.2;
-        $price = $price + 30 ;
-        $price = $price * $this->profit_rate;
-        return number_format((float)$price, 2, '.', '');
+
+    public function calculateCost()
+    {
+        // supplier_id kontrolü
+        if ($this->supplier_id == 2) {
+            $price =  $this->price * 1.2;
+            return number_format((float)$price, 2, '.', '');
+        }
+        else {
+            $price =  $this->price * 1.1 * 1.2;
+            $price = $price + 30 ;
+            return number_format((float)$price, 2, '.', '');
+        }
     }
+
+    public function calculateProfit()
+    {
+        $cost = $this->calculateCost(); // Maliyeti hesapla
+        $profit = ($this->profit_rate * $cost) - $cost; // Karı hesapla
+        return number_format((float)$profit, 2, '.', ''); // İki ondalık basamaklı döndür
+    }
+
+    public function lastPrice(){
+        $cost = $this->calculateCost();
+        $profit =  $this->calculateProfit();
+        $last = $cost + $profit;
+        return number_format((float)$last, 2, '.', '');
+    }
+
+
 
 
 }

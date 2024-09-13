@@ -72,13 +72,12 @@ Route::get('getProductBySellerCode',[ProductController::class, 'getProductBySell
 
 Route::post('importHbCargoPricesFromFile', [CargoController::class, 'importHbCargoPricesFromFile']);
 
+
 Route::get('getN11CargoPrices', [CargoController::class, 'getN11CargoPrices']);
 Route::get('getCargoPriceFromN11', [CargoController::class, 'getCargoPriceFromN11']);
-
 Route::get('getN11CategoryCommisionsFromN11', [CategoryComissionController::class, 'getN11CategoryCommisionsFromN11']);
 Route::get('getN11CommissionRates', [CategoryComissionController::class, 'getN11CommissionRates']);
 Route::get('getN11CategoryCommissionByCategoryId/{n11CategoryId}', [CategoryComissionController::class, 'getN11CategoryCommissionByCategoryId']);
-
 Route::get('getN11ProductBySellerCode/{sellerCode}',[N11ProductController::class, 'getN11ProductBySellerCode']);
 
 
@@ -95,12 +94,11 @@ Route::post('changeImageOrder', [ImageController::class, 'changeImageOrder']);
 Route::get('getOrderListFromN11', [N11OrderListController::class, 'getOrderListFromN11']);
 Route::get('getOrderListFromHB', [HBOrderListController::class, 'getOrderListFromHB']);
 
+Route::get('getHbCargoPrices', [CargoController::class, 'getHbCargoPrices']);
 Route::get('getListingsFromHB', [HbListingController::class, 'getListingFromHb']);
 Route::get('getHBOrderDetailByOrderNumber/{ordernumber}',[HBOrderListController::class, 'getHBOrderDetailByOrderNumber']);
 Route::get('getAllProductsFromHB', [HbCatalogController::class, 'getAllProductsFromHB']);
 Route::get('getAllProductsFromHBByStatus',[HbCatalogController::class, 'getAllProductsFromHBByStatus']);
-
-
 Route::get('getHbListingFromHbBySku/{hbSku}',[HbListingController::class, 'getHbListingFromHbBySku']);
 Route::get('getHbListingByMerchantSku/{merchantSku?}',[HbListingController::class, 'getHbListingByMerchantSku']);
 

@@ -34,10 +34,11 @@ class CargoController extends Controller
         return $this->cargoservice->getN11CargoPrices();
     }
 
+    public function getHbCargoPrices(){
+        return $this->cargoservice->getHbCargoPrices();
+    }
 
-    /**
-     * Display a listing of the resource.
-     */
+
     public function index()
     {
         //

@@ -20,11 +20,11 @@ class HBCargoPriceImport implements ToModel, WithHeadingRow
         return new HBCargoPrices([
             //
             'desi'     => $row['desi'],
-            'aras_price'    => floatval(preg_replace('/[^\d\.]/', '',  str_replace(",",".",$row['aras']))),
-            'mng_price'    => floatval(preg_replace('/[^\d\.]/', '',  str_replace(",",".",$row['mng']))),
-            'yk_price'    => floatval(preg_replace('/[^\d\.]/', '',  str_replace(",",".",$row['yurtici']))),
-            'surat_price'    => floatval(preg_replace('/[^\d\.]/', '',  str_replace(",",".",$row['surat']))),
-            'ptt_price'    => floatval(preg_replace('/[^\d\.]/', '',  str_replace(",",".",$row['ptt']))),
+            'aras_price'    => floatval(str_replace(['₺', '.', ','], ['', '', '.'], $row['aras'])),
+            'mng_price'    => floatval(str_replace(['₺', '.', ','], ['', '', '.'], $row['mng'])),
+            'yk_price'    => floatval(str_replace(['₺', '.', ','], ['', '', '.'], $row['yurtici'])),
+            'surat_price'    => floatval(str_replace(['₺', '.', ','], ['', '', '.'], $row['surat'])),
+            'ptt_price'    => floatval(str_replace(['₺', '.', ','], ['', '', '.'], $row['ptt'])),
 
         ]);
     }

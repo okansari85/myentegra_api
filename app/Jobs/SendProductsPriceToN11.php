@@ -48,14 +48,14 @@ class SendProductsPriceToN11 implements ShouldQueue
             $desi = $this->product['desi'];
 
 
-
             $totalCommission = $categorycommisionservice->getN11CategoryCommissionByCategoryId($n11CategoryId);
             $desiPrice = number_format((float)$cargoservice->getCargoPriceByDesi($desi), 2, '.', '');
 
 
-
-            $cost = Products::find($this->product['id'])->maliyet();
+            $cost = Products::find($this->product['id'])->lastPrice();
             $commission = number_format((float)(100 - $totalCommission), 2, '.', '');
+
+            if ($cost < 200) $desiPrice = 0;
 
             $displayPrice = ($cost + $desiPrice) / ($commission / 100);
             $displayPrice = number_format((float)$displayPrice, 2, '.', '');

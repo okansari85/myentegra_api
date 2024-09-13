@@ -22,6 +22,13 @@ class CargoService implements ICargo
 
     }
 
+    public function getHbCargoPrices(){
+
+        $hbCargoPrices = HBCargoPrices::all();
+        return response()->json($hbCargoPrices,200);
+
+    }
+
     public function getCargoPricesFromN11(){
 
         $client = new Client([
@@ -103,8 +110,6 @@ class CargoService implements ICargo
     public function getCargoPriceByDesi($desi){
         return N11CargoPrices::where('desi',"=",$desi)->pluck('yk_price')->first();
     }
-
-
 
 
 }

@@ -23,12 +23,21 @@ class ProductService implements IProducts
     public function getAllProducts($search,$per_page){
 
         return response()->json(Products::with('coverImage','category.descendants','n11_product.n11_product','hb_product.hb_listing','images')
-        ->select('id','description', 'category_id','productCode','stock', 'productTitle','profit_rate','price', 'desi', 'created_at', 'updated_at')
+        ->select('id','description', 'category_id','productCode','stock', 'productTitle','profit_rate','price', 'desi', 'created_at', 'updated_at','supplier_id')
         ->where(function ($query) use ($search) {
               $query->where(DB::raw('lower(productCode)'), 'like', '%' . mb_strtolower($search) . '%');
          })->orderBy('id','desc')
            ->paginate($per_page)
-           ->appends(request()->query()),200);
+           ->appends(request()->query())
+           ->through(function ($product) {
+            // Maliyet hesaplamasını modelde tanımlı methoda göre yap
+            $product->cost = $product->calculateCost(); // Örneğin calculateCost() adında bir metot
+            $product->profit = $product->calculateProfit();
+            $product->last = $product->lastPrice();
+
+            return $product;
+            })
+           ,200);
 
     }
 
