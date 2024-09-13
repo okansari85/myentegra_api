@@ -16,6 +16,7 @@ use Illuminate\Support\Facades\DB;
 
 use Illuminate\Support\Facades\Bus;
 use App\Jobs\SendProductsPriceToN11;
+use App\Jobs\SendProductsStocksToN11;
 
 
 class ProductService implements IProducts
@@ -91,7 +92,14 @@ class ProductService implements IProducts
 
     public function addJobUpdateOneProductQuantityAndPrice($product){
         $batch = Bus::batch([])->name('n11pricestockupdate')->dispatch();
-        $batch->add(new SendProductsPriceToN11($product));
+
+        $arr=[
+             new SendProductsPriceToN11($product),
+             new SendProductsStockToN11($product),
+        ];
+
+
+        $batch->add($arr);
         return $batch;
     }
 
