@@ -13,8 +13,9 @@ use App\Models\RelProductsHbListings;
 
 
 use Illuminate\Support\Facades\DB;
-
 use Illuminate\Support\Facades\Bus;
+
+
 use App\Jobs\SendProductsPriceToN11;
 use App\Jobs\SendProductsStocksToN11;
 
@@ -95,7 +96,7 @@ class ProductService implements IProducts
 
         $arr=[
              new SendProductsPriceToN11($product),
-             new SendProductsStockToN11($product),
+             (new SendProductsStocksToN11($product))->delay(60),
         ];
 
 

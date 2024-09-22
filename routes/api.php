@@ -81,6 +81,12 @@ Route::get('getN11CategoryCommissionByCategoryId/{n11CategoryId}', [CategoryComi
 Route::get('getN11ProductBySellerCode/{sellerCode}',[N11ProductController::class, 'getN11ProductBySellerCode']);
 
 
+Route::get('updateStockByStockSellerCode/{sellerCode}',[N11ProductController::class, 'updateStockByStockSellerCode']);
+
+
+
+
+
 Route::get('batches/{batch_id}',[ApiJobsController::class, 'addUpdateN11ProductsPriceStock']);
 Route::get('findBatchIdByName/{name}',[ApiJobsController::class, 'findBatchIdByName']);
 Route::get('products-price-update-to-n11-quee',[ApiJobsController::class, 'updateN11Prices']);
@@ -118,3 +124,6 @@ Route::delete('deleteStockMovement/{id}',[MalzemosController::class, 'deleteStoc
 Route::post('removeProductStock',[MalzemosController::class, 'removeProductStock']);
 Route::apiResource('stockmovements',StockMovementsController::class);
 Route::post('newProduct',[MalzemosController::class, 'newProduct']);
+
+
+

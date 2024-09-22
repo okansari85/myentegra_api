@@ -14,21 +14,21 @@ use Illuminate\Support\Facades\Schedule;
 
 use App\Models\Products;
 
-class UpdateProductsPriceToN11 extends Command
+class UpdateStockToN11 extends Command
 {
     /**
      * The name and signature of the console command.
      *
      * @var string
      */
-    protected $signature = 'update:n11-price';
+    protected $signature = 'update:n11-stocks';
 
     /**
      * The console command description.
      *
      * @var string
      */
-    protected $description = 'N11 Ürün Fiyat Güncellemesi';
+    protected $description = 'N11 stoklarını günceller';
 
     /**
      * Execute the console command.
@@ -36,12 +36,11 @@ class UpdateProductsPriceToN11 extends Command
     public function handle()
     {
         //
+
         $batch = Bus::batch([])->name('n11pricestockupdate')->dispatch();
         $products=Products::with('n11_product.n11_product')->has('n11_product')->get()->map(function ($product) {
-            return new SendProductsPriceToN11($product);
+            return new SendProductsStocksToN11($product);
         });
         $batch->add($products);
-
-
     }
 }

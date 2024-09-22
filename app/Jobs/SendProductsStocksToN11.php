@@ -27,7 +27,7 @@ class SendProductsStocksToN11 implements ShouldQueue
     /**
      * Execute the job.
      */
-    public function handle(IProduct $productStockService): void
+    public function handle(IProductStock $productStockService): void
     {
         //
         try {
@@ -35,8 +35,7 @@ class SendProductsStocksToN11 implements ShouldQueue
             $n11Product = $this->product['n11_product']['n11_product'];
             $n11productSellerCode = $n11Product['productSellerCode'];
 
-            $quantity = $this->product['stock'];
-
+            $quantity = (int) $this->product['stock'];
             $productStockService->updateStockByStockSellerCode($quantity, $n11productSellerCode);
 
         } catch (\Exception $e) {

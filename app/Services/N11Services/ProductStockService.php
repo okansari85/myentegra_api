@@ -7,7 +7,7 @@ use App\Interfaces\IN11Api\IProductStock;
 use App\Services\N11Service;
 use SoapClient;
 
-class ProductService extends N11Service implements IProduct
+class ProductStockService extends N11Service implements IProductStock
 {
     private $_client;
 
@@ -17,14 +17,22 @@ class ProductService extends N11Service implements IProduct
         $this->_client = $this->setEndPoint(self::END_POINT);
     }
 
+
+    public function getProductStockBySellerCode (string $productSellerCode): object
+    {
+        $this->_parameters["productSellerCode"] = $productSellerCode;
+        return $this->_client->GetProductStockBySellerCode($this->_parameters);
+    }
+
     //UpdateStockByStockSellerCode
-    public function updateStockByStockSellerCode(int $quantity,string $sellerStockCode = null,): object
+    public function updateStockByStockSellerCode(int $quantity,string $sellerStockCode = null): object
     {
 
         $this->_parameters["stockItems"] = [
             "stockItem" => [
-                "sellerStockCode" => $productSellerCode,
-                "quantity" => $quantity,
+                "sellerStockCode" => $sellerStockCode,
+                "quantity" => (int) $quantity,
+                "version" => ""
             ]
 
         ];
