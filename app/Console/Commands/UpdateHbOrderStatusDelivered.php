@@ -29,7 +29,7 @@ class UpdateHbOrderStatusDelivered extends Command
 
     public function setOrderStatusToCompleted($service,$page){
 
-        $subdays=1;
+        $subdays=30;
 
         $sdate = Carbon::now('UTC')->setTimezone('Europe/Istanbul')->format('Y-m-d H:i');
         $edate = Carbon::now('UTC')->setTimezone('Europe/Istanbul')->subDays($subdays)->format('Y-m-d H:i');
