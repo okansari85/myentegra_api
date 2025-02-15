@@ -82,8 +82,8 @@ class ProductService implements IProducts
             ['product_id'=>$db_product['id']],
             ['n11_id'=>$n11_product['id']]);
 
-        $product= Products::with('coverImage','category.descendants','n11_product.n11_product','hb_product.hb_listing')->get()->find($db_product['id']);
-
+       // $product= Products::with('coverImage','category.descendants','n11_product.n11_product','hb_product.hb_listing')->get()->find($db_product['id']);
+        $product = $this->getProductWithDetails($db_product['id']);
         //add job
         $this->addJobUpdateOneProductQuantityAndPrice($product);
 
@@ -199,6 +199,22 @@ class ProductService implements IProducts
         //fiyat ve stok için job eklenecek
 
         return response()->json($product,200);
+    }
+
+    private function getProductWithDetails($id)
+    {
+        $product = Products::with('coverImage', 'category.descendants', 'n11_product.n11_product', 'hb_product.hb_listing', 'images')
+            ->select('id', 'description', 'category_id', 'productCode', 'stock', 'productTitle', 'profit_rate', 'price', 'desi', 'created_at', 'updated_at', 'supplier_id')
+            ->where('id', $id) // Dışarıdan gelen id ile sorgu
+            ->first(); // Tek ürün döndürülür
+
+        if ($product) {
+            $product->cost = floatval($product->calculateCost());
+            $product->profit = floatval($product->calculateProfit());
+            $product->last = floatval($product->lastPrice());
+        }
+
+        return $product;
     }
 
     public function getProductBySellerCode($product_code){
