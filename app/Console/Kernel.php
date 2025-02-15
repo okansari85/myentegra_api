@@ -13,9 +13,9 @@ class Kernel extends ConsoleKernel
     protected function schedule(Schedule $schedule): void
     {
         $schedule->command('delete:unused-files')->daily();
-        $schedule->command('fetch:tahtakale-toptan-products')->daily();
-        $schedule->command('update:n11-price')->daily();
-        $schedule->command('update:n11-stocks')->daily();
+        //$schedule->command('fetch:tahtakale-toptan-products')->daily();
+        //$schedule->command('update:n11-price')->daily();
+        //$schedule->command('update:n11-stocks')->daily();
         $schedule->command('update:n11-orders')->everyFifteenMinutes();
         $schedule->command('update:pazarama-orders')->everyFiveMinutes();
         $schedule->command('update:hb-orders')->everyFiveMinutes();
