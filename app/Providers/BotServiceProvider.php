@@ -10,6 +10,9 @@ use App\Services\BotServices\KremplService;
 use App\Interfaces\IBotApi\IBosch;
 use App\Services\BotServices\BoschService;
 
+use App\Interfaces\IBotApi\IIlacFiyati;
+use App\Services\BotServices\IlacFiyatiService;
+
 class BotServiceProvider extends ServiceProvider
 {
     /**
@@ -20,6 +23,7 @@ class BotServiceProvider extends ServiceProvider
         //
         $this->app->bind(IKrempl::class, KremplService::class);
         $this->app->bind(IBosch::class, BoschService::class);
+        $this->app->bind(IIlacFiyati::class, IlacFiyatiService::class);
     }
 
     /**
