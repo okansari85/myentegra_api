@@ -24,22 +24,25 @@ class BotService
             ]
         ];
 
-
         $this->_parameters = [
             'headers' => [
-                'User-Agent' => $randomUserAgent,
+                'User-Agent' => $randomUserAgent, // Random olarak farklı User-Agent kullan
                 'Accept' => 'text/html,application/xhtml+xml,application/xml;q=0.9,image/webp,*/*;q=0.8',
                 'Accept-Encoding' => 'gzip, deflate, br',
                 'Accept-Language' => 'tr-TR,tr;q=0.9,en-US;q=0.8,en;q=0.7',
-                'Referer' => 'https://www.google.com/', // Kaynak siteyi Google gibi gösteriyoruz
+                'Referer' => 'https://www.google.com/',
                 'Connection' => 'keep-alive',
                 'Upgrade-Insecure-Requests' => '1',
                 'Cache-Control' => 'max-age=0',
+                'DNT' => '1', // Do Not Track ekleyelim
+                'Sec-Fetch-Dest' => 'document',
+                'Sec-Fetch-Mode' => 'navigate',
+                'Sec-Fetch-Site' => 'same-origin',
             ],
-            'cookies' => true, // Çerezleri aktif eder
-            'verify' => false, // SSL hatalarına karşı devre dışı bırakır (Güvenlik riskli olabilir)
+            'cookies' => new \GuzzleHttp\Cookie\CookieJar(), // Cookie desteği aktif et
+            'allow_redirects' => true, // Yönlendirmeleri takip et
+            'verify' => false, // SSL hatalarını yok say (Opsiyonel)
         ];
-
 
 
         $this->_client  = new Client($this->_parameters);
