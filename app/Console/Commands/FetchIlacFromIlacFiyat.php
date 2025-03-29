@@ -115,6 +115,16 @@ class FetchIlacFromIlacFiyat extends Command
                     $imageName = basename($imageUrl);  // URL'den dosya adı çıkarılır
 
                     // Resmi indirme ve kaydetme
+
+                    $fileContent = @file_get_contents('https://ilacfiyati.com/'.$imageUrl);
+
+                    if ($fileContent === false) {
+                        $this->error('Dosya alınamadı: ' . $imageUrl);
+                        BotMedicinePages::where('page', $page)->update(['status' => -1]);
+                        DB::commit();
+                        return 1;
+                    }
+
                     $imagePath = Storage::disk('public')->put('medicines/' . $imageName, file_get_contents('https://ilacfiyati.com'.'/'.$imageUrl));
 
                     // İlaç bilgilerini ve resim yolunu diziye ekliyoruz
@@ -155,6 +165,7 @@ class FetchIlacFromIlacFiyat extends Command
 
         } catch (BotException $e) {
             DB::rollBack();
+           //BotMedicinePages::where('page', $page)->update(['status' => -1]);
             $this->error("Error: " . $e->getMessage());
             return 1; // Komut hata kodu döner
         }
