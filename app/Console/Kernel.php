@@ -12,7 +12,7 @@ class Kernel extends ConsoleKernel
      */
     protected function schedule(Schedule $schedule): void
     {
-       // $schedule->command('delete:unused-files')->daily();
+        $schedule->command('delete:unused-files')->daily();
 
 
         //$schedule->command('fetch:tahtakale-toptan-products')->daily();
@@ -20,15 +20,15 @@ class Kernel extends ConsoleKernel
         //$schedule->command('update:n11-stocks')->daily();
 
 
-        // $schedule->command('update:n11-orders')->everyFifteenMinutes();
-       // $schedule->command('update:pazarama-orders')->everyFiveMinutes();
-        //$schedule->command('update:hb-orders')->everyFiveMinutes();
-        //$schedule->command('update:hb-orders-shipped')->everyFiveMinutes();
-        //$schedule->command('update:hb-orders-delivered')->everyFiveMinutes();
-        //$schedule->command('update:hb-orders-cancelled')->everyFiveMinutes();
-        $schedule->command('fetch:ilaclar')->everyFiveMinutes();
-        $schedule->command('queue:restart')->everyFiveMinutes();
-        $schedule->command('queue:work')->name('queue_work_name')->withoutOverlapping()->runInBackground();
+         $schedule->command('update:n11-orders')->everyFifteenMinutes();
+         $schedule->command('update:pazarama-orders')->everyFiveMinutes();
+         $schedule->command('update:hb-orders')->everyFiveMinutes();
+         $schedule->command('update:hb-orders-shipped')->everyFiveMinutes();
+         $schedule->command('update:hb-orders-delivered')->everyFiveMinutes();
+         $schedule->command('update:hb-orders-cancelled')->everyFiveMinutes();
+         $schedule->command('fetch:ilaclar')->everyFiveMinutes();
+         $schedule->command('queue:restart')->everyFiveMinutes();
+         $schedule->command('queue:work')->name('queue_work_name')->withoutOverlapping()->runInBackground();
     }
 
     /**
