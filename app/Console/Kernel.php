@@ -27,6 +27,7 @@ class Kernel extends ConsoleKernel
          $schedule->command('update:hb-orders-delivered')->everyFiveMinutes();
          $schedule->command('update:hb-orders-cancelled')->everyFiveMinutes();
         // $schedule->command('fetch:ilaclar')->everyFiveMinutes();
+         $schedule->command('check:bosch-products')->everyFiveMinutes();
          $schedule->command('queue:restart')->everyFiveMinutes();
          $schedule->command('queue:work')->name('queue_work_name')->withoutOverlapping()->runInBackground();
     }
