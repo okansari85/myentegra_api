@@ -66,5 +66,6 @@ class CheckProuctStockPriceFromBosch implements ShouldQueue
             'price' => $price,
         ]);
 
+
     }
 }

@@ -25,5 +25,20 @@ class ListingService extends HBService implements IListing
         return $response->getBody();
     }
 
+    public function updateStock(array $data=[]){
+
+        $url = self::END_POINT.'/listings/merchantid/'.$this->_merchantID.'/stock-uploads';
+
+        $headers = $this->_parameters['headers'];
+        $headers['content-type'] = 'application/*+json'; // JSON olarak gönderildiğinden emin ol
+
+        $response = $this->_client->request('POST',$url,[
+            'headers' => $headers,
+            'body' => json_encode([$data])
+        ]);
+
+        return json_decode($response->getBody(), true);
+    }
+
 
 }

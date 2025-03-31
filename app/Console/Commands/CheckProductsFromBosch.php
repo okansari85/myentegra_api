@@ -11,6 +11,7 @@ use Illuminate\Support\Facades\Queue;
 use Illuminate\Support\Facades\Schedule;
 
 use App\Jobs\CheckProuctStockPriceFromBosch;
+use App\Jobs\UpdateHbStocksFromListing;
 
 
 class CheckProductsFromBosch extends Command
@@ -28,6 +29,7 @@ class CheckProductsFromBosch extends Command
 
     public function handle()
     {
+        //bosch urunleri supplier id = 1 olanlar bosh.com.tr den kontrol edecek
 
         $products = Products::where('supplier_id', 1)->get();
         $this->info("Toplam " . $products->count() . " ürün bulundu.");
@@ -38,9 +40,16 @@ class CheckProductsFromBosch extends Command
         }
 
         // Her ürün için ayrı job oluştur ve batch'e ekle
-        Bus::batch(
-            $products->map(fn($product) => new CheckProuctStockPriceFromBosch($product))->toArray()
-        )->name('boschstockpriceupdate')->dispatch();
+        $batch = Bus::batch([])->name('boschstockpriceupdate')->dispatch();
+
+        $props=$products->map(function ($product) {
+            return [
+                new CheckProuctStockPriceFromBosch($product),
+                new UpdateHbStocksFromListing($product)
+            ];
+        });
+
+        $batch->add($props);
 
     }
 }
