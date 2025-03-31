@@ -191,8 +191,12 @@ class ProductService implements IProducts
 
 
         $relphb = RelProductsHbListings::updateOrCreate(
-            ['product_id'=>$db_product_id],
-            ['hb_listing_id'=>$hb_product_id]);
+            [
+                'product_id' => $db_product_id,
+                'hb_listing_id' => $hb_product_id // Aranan koşullara dahil edildi
+            ],
+            [] // Güncellenecek bir alan yoksa boş dizi bırakabilirsin
+        );
 
         $product= Products::with('coverImage','category.descendants','n11_product.n11_product','hb_product.hb_listing')->get()->find($db_product_id);
 
