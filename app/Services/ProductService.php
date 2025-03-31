@@ -196,8 +196,6 @@ class ProductService implements IProducts
 
         $product= Products::with('coverImage','category.descendants','n11_product.n11_product','hb_product.hb_listing')->get()->find($db_product_id);
 
-       //job çalıştır
-
         return response()->json($product,200);
     }
 
