@@ -62,7 +62,7 @@ class Products extends Model
     }
 
     public function hb_product(){
-        return  $this->hasOne(RelProductsHbListings::class,"product_id");
+        return  $this->hasMany(RelProductsHbListings::class,"product_id");
     }
 
 

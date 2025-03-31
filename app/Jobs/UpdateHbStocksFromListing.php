@@ -31,20 +31,29 @@ class UpdateHbStocksFromListing implements ShouldQueue
     public function handle(IListing $hbListingService): void
     {
 
-        $hb_listing = $this->product->hb_product;
+        $hb_products = $this->product->hb_product;
 
-        if ($hb_listing) {
+        if ($hb_products->isNotEmpty()) {
 
-          $hb_listing = $hb_listing->hb_listing;
+            foreach ($hb_products as $hb_product) {
 
-          $data = [
-            'hepsiburadaSku' => $hb_listing['hepsiburada_sku'],
-            'merchantSku' => $hb_listing['merchant_sku'],
-            'availableStock' => $this->product->stock,
-            'maximumPurchasableQuantity' => 0
-          ];
+                    $hb_listing = $hb_product->hb_listing;
 
-          $hbListingService->updateStock($data);
+                    if ($hb_listing) {
+
+                    $data = [
+                        'hepsiburadaSku' => $hb_listing['hepsiburada_sku'],
+                        'merchantSku' => $hb_listing['merchant_sku'],
+                        'availableStock' => $this->product->stock,
+                        'maximumPurchasableQuantity' => 0
+                    ];
+
+                    $hbListingService->updateStock($data);
+                    }
+                    else {
+                        echo "İlişkili kayıt yok.";
+                    }
+            }
 
         } else {
             echo "İlişkili kayıt yok.";
