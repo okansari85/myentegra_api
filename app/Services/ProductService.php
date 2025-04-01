@@ -203,6 +203,22 @@ class ProductService implements IProducts
         return response()->json($product,200);
     }
 
+    public function updateSupplierID($product_id){
+
+        // Find the product
+        $product = Products::find($product_id);
+
+        if (!$product) {
+            return response()->json(['error' => 'Product not found'], 404);
+        }
+
+        // supplier_id değerini tersine çevir (1 ise 0, 0 ise 1)
+        $product->supplier_id = $product->supplier_id == 1 ? null : 1;
+        $product->save();
+
+        return $product;
+    }
+
     private function getProductWithDetails($id)
     {
         $product = Products::with('coverImage', 'category.descendants', 'n11_product.n11_product', 'hb_product.hb_listing', 'images')

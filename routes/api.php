@@ -68,6 +68,9 @@ Route::post('addDepo', [DepoController::class, 'addCategory']);
 Route::post('addProductCoverImage', [ProductController::class, 'addProductCoverImage']);
 Route::post('matchN11Product', [ProductController::class, 'matchN11Product']);
 Route::post('matchHbProduct', [ProductController::class, 'matchHbProduct']);
+//updateSupplierID
+Route::post('updateSupplierID', [ProductController::class, 'updateSupplierID']);
+
 Route::get('getProductBySellerCode',[ProductController::class, 'getProductBySellerCode']);
 
 Route::post('importHbCargoPricesFromFile', [CargoController::class, 'importHbCargoPricesFromFile']);

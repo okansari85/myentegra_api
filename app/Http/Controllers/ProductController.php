@@ -54,6 +54,16 @@ class ProductController extends Controller
 
     }
 
+    public function updateSupplierID(Request $request){
+        $product_id = $request->product_id;
+
+
+
+        return response()->json($this->productservice->updateSupplierID($product_id));
+
+
+    }
+
     /**
      * Show the form for creating a new resource.
      */
