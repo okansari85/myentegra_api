@@ -25,15 +25,23 @@ class UpdateHbStocks extends Command
 
         $this->listingService = $_listingService;
 
-        $data = Products::with('hb_product.hb_listing')->has('hb_listing')->get()->map(function ($product) {
-            return [
-                'hepsiburadaSku' => $product->hb_product->hb_listing->hepsiburada_sku ?? null,
-                'merchantSku' => $product->hb_product->hb_listing->merchant_sku?? null,
-                'availableStock' => $product->stock ?? 0,
-                'maximumPurchasableQuantity' => 0
-            ];
-        });
+        $data = Products::with('hb_product.hb_listing')
+        ->has('hb_product') // hb_product ilişkisi olanları filtrele
+        ->get()
+        ->flatMap(function ($product) {
+            // Her bir hb_product için döngü başlatıyoruz
+            return $product->hb_product->map(function ($hb_product) use ($product) {
+                // Her hb_product için hb_listing ilişkisini alıyoruz
+                $hb_listing = $hb_product->hb_listing ?? null;
 
+                return [
+                    'hepsiburadaSku' => $hb_listing->hepsiburada_sku ?? null,
+                    'merchantSku' => $hb_listing->merchant_sku ?? null,
+                    'availableStock' => $product->stock ?? 0,
+                    'maximumPurchasableQuantity' => 0
+                ];
+            });
+        })->toArray();
 
         print_r($data);
 
