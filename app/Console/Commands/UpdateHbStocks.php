@@ -23,6 +23,7 @@ class UpdateHbStocks extends Command
     public function handle(IListing $_listingService)
     {
 
+        $this->info('HB  stokları güncelleniyor...');
         $this->listingService = $_listingService;
 
         $data = Products::with('hb_product.hb_listing')
@@ -50,6 +51,7 @@ class UpdateHbStocks extends Command
             $this->listingService->updateStock($data);
         }
 
+        $this->info('HB  stokları güncellendi...');
 
     }
 }
