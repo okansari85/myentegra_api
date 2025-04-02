@@ -27,6 +27,7 @@ class UpdateHbStocks extends Command
         $this->listingService = $_listingService;
 
         $data = Products::with('hb_product.hb_listing')
+        ->where('supplier_id', 1)
         ->has('hb_product') // hb_product ilişkisi olanları filtrele
         ->get()
         ->flatMap(function ($product) {
