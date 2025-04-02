@@ -41,13 +41,18 @@ class UpdateHbStocks extends Command
                     'maximumPurchasableQuantity' => 0
                 ];
             });
-        })->toArray();
+        })
+        ->values()
+        ->toArray();
+
+
 
 
 
         if (!empty($data)) {
             $this->listingService->updateStock($data);
         }
+
 
     }
 }
