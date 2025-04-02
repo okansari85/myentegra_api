@@ -34,7 +34,7 @@ class ListingService extends HBService implements IListing
 
         $response = $this->_client->request('POST',$url,[
             'headers' => $headers,
-            'body' => json_encode([$data])
+            'body' => json_encode($data)
         ]);
 
         return json_decode($response->getBody(), true);

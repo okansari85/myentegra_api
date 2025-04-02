@@ -46,9 +46,6 @@ class UpdateHbStocks extends Command
         ->toArray();
 
 
-
-
-
         if (!empty($data)) {
             $this->listingService->updateStock($data);
         }
