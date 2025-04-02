@@ -45,7 +45,6 @@ class CheckProductsFromBosch extends Command
         $props=$products->map(function ($product) {
             return [
                 new CheckProuctStockPriceFromBosch($product),
-                new UpdateHbStocksFromListing($product)
             ];
         });
 
