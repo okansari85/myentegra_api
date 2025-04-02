@@ -25,22 +25,15 @@ class UpdateHbStocks extends Command
 
         $this->listingService = $_listingService;
 
-        $data = Products::with('hb_product.hb_listing')
-        ->where('supplier_id', 1)
-        ->whereHas('hb_product.hb_listing')
-        ->get()
-        ->flatMap(function ($product) {
-            return $product->hb_product->map(function ($hb_product) use ($product) {
-                $hb_listing = $hb_product->hb_listing ?? null;
+        $data = Products::with('hb_product.hb_listing')->has('hb_listing')->get()->map(function ($product) {
+            return [
+                'hepsiburadaSku' => $product->hb_product->hb_listing->hepsiburada_sku ?? null,
+                'merchantSku' => $product->hb_product->hb_listing->merchant_sku?? null,
+                'availableStock' => $product->stock ?? 0,
+                'maximumPurchasableQuantity' => 0
+            ];
+        });
 
-                return [
-                    'hepsiburadaSku' => $hb_listing->hepsiburada_sku ?? null,
-                    'merchantSku' => $hb_listing->merchant_sku ?? null,
-                    'availableStock' => $product->stock ?? 0,
-                    'maximumPurchasableQuantity' => 0
-                ];
-            });
-        })->toArray();
 
         print_r($data);
 
