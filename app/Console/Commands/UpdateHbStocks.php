@@ -43,10 +43,10 @@ class UpdateHbStocks extends Command
             });
         })->toArray();
 
-        print_r($data);
+
 
         if (!empty($data)) {
-            //$this->listingService->updateStock($data);
+            $this->listingService->updateStock($data);
         }
 
     }
