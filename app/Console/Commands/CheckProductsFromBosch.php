@@ -40,6 +40,22 @@ class CheckProductsFromBosch extends Command
         }
 
         // Her ürün için ayrı job oluştur ve batch'e ekle
+
+        $props = $products->map(function ($product, $index) {
+            // Her iş için 2 dakika ekliyoruz. İlk iş için 0 dakika, ikinci iş için 2 dakika, vb.
+            $delayTime = now()->addSeconds(2 * $index);  // Her job arasında 2 dakika bekle
+
+            return (new CheckProuctStockPriceFromBosch($product))
+                ->delay($delayTime);  // Her job'a delay ekliyoruz
+        });
+
+        // Batch'i oluşturuyoruz ve job'ları ekliyoruz
+        $batch = Bus::batch($props)
+            ->name('boschstockpriceupdate')
+            ->dispatch();
+
+
+        /*
         $batch = Bus::batch([])->name('boschstockpriceupdate')->dispatch();
 
         $props=$products->map(function ($product) {
@@ -49,6 +65,7 @@ class CheckProductsFromBosch extends Command
         });
 
         $batch->add($props);
+        */
 
     }
 }
