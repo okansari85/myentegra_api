@@ -28,8 +28,8 @@ class Kernel extends ConsoleKernel
          $schedule->command('update:hb-orders-cancelled')->everyFiveMinutes();
         // $schedule->command('fetch:ilaclar')->everyFiveMinutes();
          $schedule->command('update:hb-listing')->everyFifteenMinutes();
-         $schedule->command('check:bosch-products')->everyThreeHours($minutes = 0);
-         $schedule->command('update:hb-stocks')->everyThreeHours($minutes = 20);
+         $schedule->command('check:bosch-products')->everyThreeHours();
+         $schedule->command('update:hb-stocks')->hourly();
          $schedule->command('queue:restart')->everyFiveMinutes();
          $schedule->command('queue:work')->name('queue_work_name')->withoutOverlapping()->runInBackground();
     }

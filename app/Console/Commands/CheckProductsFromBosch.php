@@ -43,7 +43,7 @@ class CheckProductsFromBosch extends Command
 
         $props = $products->map(function ($product, $index) {
             // Her iş için 2 dakika ekliyoruz. İlk iş için 0 dakika, ikinci iş için 2 dakika, vb.
-            $delayTime = now()->addSeconds(2 * $index);  // Her job arasında 2 dakika bekle
+            $delayTime = now()->addSeconds(5 * $index);  // Her job arasında 2 dakika bekle
 
             return (new CheckProuctStockPriceFromBosch($product))
                 ->delay($delayTime);  // Her job'a delay ekliyoruz
