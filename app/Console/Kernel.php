@@ -18,7 +18,7 @@ class Kernel extends ConsoleKernel
         //$schedule->command('fetch:tahtakale-toptan-products')->daily();
         //$schedule->command('update:n11-price')->daily();
         //$schedule->command('update:n11-stocks')->daily();
-
+   // $schedule->command('fetch:ilaclar')->everyFiveMinutes();
 
          $schedule->command('update:n11-orders')->everyFifteenMinutes();
          $schedule->command('update:pazarama-orders')->everyFiveMinutes();
@@ -26,12 +26,12 @@ class Kernel extends ConsoleKernel
          $schedule->command('update:hb-orders-shipped')->everyFiveMinutes();
          $schedule->command('update:hb-orders-delivered')->everyFiveMinutes();
          $schedule->command('update:hb-orders-cancelled')->everyFiveMinutes();
-        // $schedule->command('fetch:ilaclar')->everyFiveMinutes();
+
          $schedule->command('update:hb-listing')->everyFifteenMinutes();
          $schedule->command('check:bosch-products')->everyThreeHours();
          $schedule->command('update:hb-stocks')->hourly();
          $schedule->command('queue:restart')->everyFiveMinutes();
-         $schedule->command('queue:work')->name('queue_work_name')->withoutOverlapping()->runInBackground();
+         $schedule->command('queue:work')->name('queue_work_name')->withoutOverlapping();
     }
 
     /**
